@@ -4,26 +4,28 @@ export default function CollectionCard({ componentData }) {
   const componentCountPluralize = componentData.count > 1 ? 'Components' : 'Component'
   const componentCount = `${componentData.count} ${componentCountPluralize}`
 
+  console.log(componentData)
+
   const hasTag = !!componentData.tag
 
   return (
     <Link href={`/components/${componentData.category}/${componentData.slug}`}>
-      <div className="group relative block h-full bg-white before:absolute before:inset-0 before:rounded-md before:border-2 before:border-dashed before:border-gray-900">
-        <div className="h-full rounded-md border-2 border-gray-900 bg-white transition group-hover:-translate-y-2 ltr:group-hover:-translate-x-2 rtl:group-hover:translate-x-2">
+      <div className="group relative block h-full bg-white before:absolute ">
+        
+        <div className="flex items-center overflow-hidden rounded-xl border border-gray-950/5 bg-gray-50 text-center ring-offset-white transition duration-300 group-hover:border-primary/10 group-hover:bg-gray-100 group-hover:ring-1 group-hover:ring-gray-950/10 group-hover:ring-offset-4 dark:bg-gray-800/70 dark:ring-offset-gray-950 dark:group-hover:border-white/10 dark:group-hover:bg-gray-800 dark:group-hover:ring-white/10">
           <div className="p-4 sm:p-6">
-            <div className="flex items-start justify-between">
-              <span aria-hidden="true" role="img" className="text-lg sm:text-xl">
-                {componentData.emoji}
-              </span>
+          <img
+            src={componentData.image}
+            alt={componentData.title}
+            className="h-auto w-auto  "
+                    />
 
-              {hasTag && <CardTag tagType={componentData.tag} />}
-            </div>
+            <h2 className="font-medium text-gray-900 sm:text-sm">{componentData.title}</h2>
 
-            <h2 className="mt-4 font-medium text-gray-900 sm:text-lg">{componentData.title}</h2>
-
-            <p className="mt-1 text-sm text-gray-700">{componentCount}</p>
+            <p className="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">{componentCount}</p>
           </div>
         </div>
+
       </div>
     </Link>
   )
