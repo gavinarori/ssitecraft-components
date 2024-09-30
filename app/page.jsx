@@ -69,12 +69,7 @@ export default async function Page() {
 
   return (
     <>
-      <HeroBanner title="HyperUI" subtitle="Free Open Source Tailwind CSS Components">
-        HyperUI is a collection of free Tailwind CSS components that can be used in your next
-        project. With a range of components, you can build your next marketing website, admin
-        dashboard, eCommerce store and much more.
-      </HeroBanner>
-
+      <HeroBanner />
       <Container id="mainContent" classNames="pb-8 lg:pb-12">
         <ul className="space-y-8">
           {componentsByCategory.map(({ categoryTitle, componentItems = [] }) => {

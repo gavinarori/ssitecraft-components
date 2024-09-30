@@ -7,9 +7,13 @@
     "format": "prettier . --write"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.9.0",
+    "mini-svg-data-uri": "^1.4.4",
     "next": "14.2.10",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.5.2"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.2.6",

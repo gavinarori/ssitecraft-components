@@ -1,3 +1,5 @@
+ "use client"
+
 import { useEffect, useRef, useState } from 'react'
 
 import { usePathname } from 'next/navigation'
@@ -72,10 +74,10 @@ export default function HeaderSearch() {
   }
 
   return (
-    <div ref={refDropdown} className="relative flex h-16 max-w-[300px] flex-1 items-center">
+    <div ref={refDropdown} className="relative flex h-20 max-w-auto flex-1 items-center w-full">
       <form role="search" className="flex-1">
         <label htmlFor="SiteSearch" className="sr-only">
-          Search
+          Search your component
         </label>
 
         <input
@@ -83,7 +85,7 @@ export default function HeaderSearch() {
           onInput={(e) => setSearchQuery(e.currentTarget.value)}
           onFocus={() => setShowDropdown(true)}
           value={searchQuery}
-          placeholder="Search..."
+          placeholder="Search your component..."
           id="SiteSearch"
           className="w-full rounded-md border-gray-200 sm:text-sm"
         />

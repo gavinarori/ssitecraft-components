@@ -1,7 +1,7 @@
 import IconMenu from '@component/IconMenu'
 import MenuLinks from '@component/HeaderMenuLinks'
 
-export default function HeaderMenu({ showMenu, handleSetShowMenu, menuLinks }) {
+export default function HeaderMenu({ showMenu, handleSetShowMenu}) {
   return (
     <div className="flex items-center md:hidden">
       <button onClick={() => handleSetShowMenu(!showMenu)} className="text-gray-900">
