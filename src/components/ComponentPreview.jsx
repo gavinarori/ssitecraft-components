@@ -134,12 +134,12 @@ export default function ComponentPreview({ componentData, componentContainer }) 
 
         <div className="lg:flex lg:items-center">
           {componentCode && (
-            <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+            <div className="flex flex-wrap items-center  gap-2 sm:gap-4">
               <PreviewView handleSetShowPreview={setShowPreview}  />
 
-              {componentHasDark && (
-                <PreviewDark isDarkMode={isDarkMode} handleSetIsDarkMode={setIsDarkMode} />
-              )}
+              <PreviewType componentId={componentId} handleSetCodeType={setCodeType} />
+
+              <PreviewCopy componentCode={previewCode} codeType={codeType} />
 
               {componentHasInteractive && (
                 <PreviewInteractive
@@ -148,15 +148,6 @@ export default function ComponentPreview({ componentData, componentContainer }) 
                 />
               )}
 
-              <PreviewRtl isRtl={isRtl} handleSetIsRtl={setIsRtl} />
-
-              <div className="hidden items-center sm:flex sm:gap-4">
-                <span className="h-5 w-[2px] rounded-full bg-gray-900"></span>
-
-                <PreviewType componentId={componentId} handleSetCodeType={setCodeType} />
-
-                <PreviewCopy componentCode={previewCode} codeType={codeType} />
-              </div>
             </div>
           )}
 
