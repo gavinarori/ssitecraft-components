@@ -125,8 +125,6 @@ export default function ComponentPreview({ componentData, componentContainer }) 
   return (
     <div ref={ref} id={componentHash}>
       <div className="space-y-4">
-        <PreviewTitle componentTitle={componentTitle} componentHash={componentHash} />
-
         <div className="lg:flex lg:items-center">
           {componentCode && (
             <div className="flex flex-wrap items-center  gap-2 sm:gap-4">
