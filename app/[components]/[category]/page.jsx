@@ -74,7 +74,7 @@ async function getCategory(params) {
           }
         })
     )
-
+console.log(componentItems )
     componentItems.sort((itemA, itemB) => itemA.title.localeCompare(itemB.title))
 
     return {

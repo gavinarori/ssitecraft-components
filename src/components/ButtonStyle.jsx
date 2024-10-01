@@ -23,8 +23,7 @@ export default function ButtonStyle({ buttonEmoji, buttonText, buttonActive, isD
           <span aria-hidden="true" role="img" className="text-sm">
             {buttonEmoji}
           </span>
-
-          <span className="text-sm font-medium">{buttonText}</span>
+        
         </>
       )}
     </span>
