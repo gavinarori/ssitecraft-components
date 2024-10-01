@@ -135,7 +135,7 @@ export default function ComponentPreview({ componentData, componentContainer }) 
         <div className="lg:flex lg:items-center">
           {componentCode && (
             <div className="flex flex-wrap items-center gap-2 sm:gap-4">
-              <PreviewView handleSetShowPreview={setShowPreview} showPreview={showPreview} />
+              <PreviewView handleSetShowPreview={setShowPreview}  />
 
               {componentHasDark && (
                 <PreviewDark isDarkMode={isDarkMode} handleSetIsDarkMode={setIsDarkMode} />
