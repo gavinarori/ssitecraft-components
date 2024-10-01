@@ -21,7 +21,7 @@ export default function PreviewCode({ showPreview, componentCode = '', codeType 
         hidden: true,
       })}
     >
-      <pre className="h-[400px] overflow-auto rounded-md p-4 ring-2 ring-gray-900 lg:h-[600px]">
+      <pre className="h-[400px] overflow-auto rounded-md p-4 font-mono ring-2 ring-gray-100 lg:h-[600px]">
         <code className={prismClass}>{componentCode}</code>
       </pre>
     </div>
