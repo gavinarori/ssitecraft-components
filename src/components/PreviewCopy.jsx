@@ -6,7 +6,6 @@ export default function PreviewCopy({ codeType, componentCode = "" }) {
   const [buttonText, setButtonText] = useState("Copy");
   const [copyStatus, copyToClipboard] = useCopyToClipboard();
   
-  const buttonActive = buttonText === "Copied";
 
   const codeTypeMap = {
     html: "HTML",
@@ -31,7 +30,7 @@ export default function PreviewCopy({ codeType, componentCode = "" }) {
     }, 3000);
   }
 
-  const hasCopied = buttonText === "Copied"; // Check if it's copied
+  const hasCopied = buttonText === "Copied"; 
 
   return (
     <button

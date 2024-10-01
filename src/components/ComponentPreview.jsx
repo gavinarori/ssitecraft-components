@@ -9,10 +9,8 @@ import PreviewCreator from '@component/PreviewCreator'
 import PreviewBreakpoint from '@component/PreviewBreakpoint'
 import PreviewCode from '@component/PreviewCode'
 import PreviewCopy from '@component/PreviewCopy'
-import PreviewDark from '@component/PreviewDark'
 import PreviewIframe from '@component/PreviewIframe'
 import PreviewInteractive from '@component/PreviewInteractive'
-import PreviewRtl from '@component/PreviewRtl'
 import PreviewTitle from '@component/PreviewTitle'
 import PreviewView from '@component/PreviewView'
 import PreviewType from '@component/PreviewType'
@@ -27,7 +25,6 @@ export default function ComponentPreview({ componentData, componentContainer }) 
   const [componentVue, setComponentVue] = useState('')
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [isInteractive, setIsInteractive] = useState(false)
-  const [isRtl, setIsRtl] = useState(false)
   const [previewCode, setPreviewCode] = useState('')
   const [previewWidth, setPreviewWidth] = useState('100%')
   const [showPreview, setShowPreview] = useState(true)
@@ -80,14 +77,13 @@ export default function ComponentPreview({ componentData, componentContainer }) 
         componentCode,
         trueComponentContainer,
         isDarkMode,
-        isRtl
       )
 
       setComponentHtml(transformedHtml)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isRtl])
+  }, [])
 
   useEffect(() => {
     codeType === 'html' && setPreviewCode(componentCode)
@@ -115,7 +111,6 @@ export default function ComponentPreview({ componentData, componentContainer }) 
       textResponse,
       trueComponentContainer,
       useDark,
-      isRtl
     )
     const transformedJsx = componentPreviewJsx(textResponse)
     const transformedVue = componentPreviewVue(textResponse)
@@ -152,18 +147,10 @@ export default function ComponentPreview({ componentData, componentContainer }) 
           )}
 
           <div className="hidden lg:flex lg:flex-1 lg:items-end lg:justify-end lg:gap-4">
-            {componentBreakpoints.map(
-              ({ name: breakpointName, emoji: breakpointEmoji, width: breakpointWidth }) => (
                 <PreviewBreakpoint
-                  key={breakpointName}
-                  breakpointText={breakpointName}
-                  breakpointEmoji={breakpointEmoji}
-                  breakpointWidth={breakpointWidth}
                   handleSetPreviewWidth={setPreviewWidth}
-                  breakpointActive={previewWidth === breakpointWidth}
                 />
-              )
-            )}
+
           </div>
         </div>
 
@@ -189,7 +176,7 @@ export default function ComponentPreview({ componentData, componentContainer }) 
           </div>
         </div>
 
-        {componentCreator && <PreviewCreator creatorGithub={componentCreator} />}
+       
       </div>
     </div>
   )

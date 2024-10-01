@@ -1,27 +1,28 @@
+import { Smartphone, Tablet, Laptop, Monitor } from "lucide-react";
+
 export const componentBreakpoints = [
   {
     name: 'Mobile',
-    emoji: '📱',
+    icon: <Smartphone className="h-3.5 w-3.5" />, 
     width: '340px',
   },
   {
     name: 'Small',
-    emoji: '🐛',
+    icon: <Tablet className="h-3.5 w-3.5" />, 
     width: '640px',
   },
   {
     name: 'Medium',
-    emoji: '🦭',
-    width: '768px',
+    icon: <Laptop className="h-3.5 w-3.5" />, 
   },
   {
     name: 'Large',
-    emoji: '🐴',
+    icon: <Monitor className="h-3.5 w-3.5" />, 
     width: '1024px',
   },
   {
     name: 'Full',
-    emoji: '🌕',
+    icon: <Monitor className="h-3.5 w-3.5" />, 
     width: '100%',
   },
-]
+];
