@@ -10,21 +10,21 @@ import Footer from '@component/Footer'
 import Header from '@component/Header'
 
 export const metadata = {
-  metadataBase: new URL('https://hyperui.dev'),
-  title: 'Free Open Source Tailwind CSS Components | HyperUI',
-  description: 'Free Tailwind CSS components that can be used in your next project.',
+  metadataBase: new URL('https://ssitecraft-components.vercel.app'), 
+  title: 'Welcome to Sitecraft Components',
+  description: 'Copy paste the most trending components and use them in your websites without having to worry about starting from scratch.',
   openGraph: {
-    title: 'Free Open Source Tailwind CSS Components | HyperUI',
-    description: 'Free Tailwind CSS components that can be used in your next project.',
-    url: 'https://www.hyperui.dev/',
-    siteName: 'HyperUI',
+    title: 'Welcome to Sitecraft Components',
+    description: 'Copy paste the most trending components and use them in your websites without having to worry about starting from scratch.',
+    url: 'https://ssitecraft-components.vercel.app', 
+    siteName: 'Sitecraft Components',
     type: 'website',
-    images: ['https://www.hyperui.dev/og.jpg'],
+    images: ['https://ssitecraft-components.vercel.app/og-image.jpg'], 
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Open Source Tailwind CSS Components | HyperUI',
-    description: 'Free Tailwind CSS components that can be used in your next project.',
+    title: 'Welcome to Sitecraft Components',
+    description: 'Copy paste the most trending components and use them in your websites without having to worry about starting from scratch.',
   },
 }
 
