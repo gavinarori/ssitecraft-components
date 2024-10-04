@@ -1,6 +1,6 @@
 export async function generateMetadata() {
   return {
-    title: '404 | HyperUI',
+    title: '404 ',
     description: "Uh-oh! It appears this page doesn't exist.",
   }
 }
