@@ -4,7 +4,6 @@ import { GoogleAnalytics } from '@next/third-parties/google'
 import 'prismjs/themes/prism-okaidia.css'
 import '@style/site.css'
 
-import Ads from '@/ads'
 
 import Footer from '@component/Footer'
 import Header from '@component/Header'
@@ -51,9 +50,8 @@ export default function RootLayout({ children }) {
 
         <Footer />
 
-        <Ads />
 
-        <GoogleAnalytics gaId="G-JKSW02CFZF" />
+        <GoogleAnalytics gaId="" />
       </body>
     </html>
   )
