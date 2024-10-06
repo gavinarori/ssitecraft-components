@@ -14,15 +14,15 @@ export async function generateMetadata({ params }) {
   const { categoryData } = await getCategory(params)
 
   return {
-    title: `Tailwind CSS ${categoryData.title} Components | HyperUI`,
+    title: `Tailwind CSS ${categoryData.title} Components | sitecraft`,
     description: categoryData.description,
     openGraph: {
-      title: `Tailwind CSS ${categoryData.title} Components | HyperUI`,
+      title: `Tailwind CSS ${categoryData.title} Components | sitecraft`,
       description: categoryData.description,
       ...ogMeta,
     },
     twitter: {
-      title: `Tailwind CSS ${categoryData.title} Components | HyperUI`,
+      title: `Tailwind CSS ${categoryData.title} Components | sitecraft`,
       description: categoryData.description,
       ...twitterMeta,
     },
