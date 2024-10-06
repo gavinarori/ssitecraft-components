@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export default function BrandLogo({ fontSize = 'text-sm' }) {
   return (
-    <Link href="https://ssitecraft.vercel.app">
+    <Link href="/">
       <div className="flex lg:flex-1">
           <div className="-m-1.5 p-1.5 inline-flex">
 
