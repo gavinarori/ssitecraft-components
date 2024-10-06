@@ -39,12 +39,12 @@ async function getComponents() {
               id: componentSlugFormatted,
               title: componentData.title,
               slug: componentSlugTrue,
-              emoji: componentData.emoji,
+              image: componentData.image,
               count: componentCount,
               category: {
                 title: categoryData.title,
                 slug: categorySlug,
-                emoji: categoryData.emoji,
+                image: categoryData.image,
               },
             }
           })

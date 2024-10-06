@@ -21,15 +21,15 @@ export async function generateMetadata({ params }) {
   const { collectionData } = await getCollection(params)
 
   return {
-    title: `Tailwind CSS ${collectionData.seo.title} | HyperUI`,
+    title: `Tailwind CSS ${collectionData.seo.title} | sitecraft`,
     description: collectionData.seo.description,
     openGraph: {
-      title: `Tailwind CSS ${collectionData.seo.title} | HyperUI`,
+      title: `Tailwind CSS ${collectionData.seo.title} | sitecraft`,
       description: collectionData.seo.description,
       ...ogMeta,
     },
     twitter: {
-      title: `Tailwind CSS ${collectionData.seo.title} | HyperUI`,
+      title: `Tailwind CSS ${collectionData.seo.title} | sitecraft`,
       description: collectionData.seo.description,
       ...twitterMeta,
     },
