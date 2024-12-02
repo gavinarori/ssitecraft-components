@@ -1,5 +1,5 @@
 import { getColors } from "@util/colors"
-import { ColorPalette } from "@/components/color-palette"
+import { ColorPalette } from "../../src/components/color-palette"
 
 const colors = getColors()
 

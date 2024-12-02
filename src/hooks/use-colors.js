@@ -5,7 +5,7 @@ import { useMounted } from "./use-mounted"
 
 
 
-const colorsAtom = atomWithStorage<Config>("colors", {
+const colorsAtom = atomWithStorage("colors", {
   format: "hsl",
 })
 
