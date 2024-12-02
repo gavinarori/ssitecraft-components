@@ -1,4 +1,4 @@
-import { getColors } from "@/lib/colors"
+import { getColors } from "@util/colors"
 import { ColorPalette } from "@/components/color-palette"
 
 const colors = getColors()
