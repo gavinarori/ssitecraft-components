@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import GradientGenerator from "@component/Generator";
 
 
 export const metadata = {
@@ -9,8 +10,9 @@ export const metadata = {
 const ColorsLayout = ({ children }) => {
   return (
     <div className="relative">
-      <div className="container py-6 flex justify-center items-center">
+      <div className=" py-6 flex justify-center items-center">
         <section id="colors" className="scroll-mt-20">
+          <GradientGenerator />
           {children}
         </section>
       </div>

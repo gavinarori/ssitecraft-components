@@ -40,7 +40,7 @@ export function Color({ color }) {
       )}
       <div className="w-full flex-1 rounded-md bg-[--bg] md:rounded-lg" />
       <div className="flex w-full flex-col items-center justify-center gap-1">
-        <span className="hidden font-mono text-xs tabular-nums text-muted-foreground transition-colors group-hover:text-foreground lg:flex">
+        <span className="hidden font-mono text-xs tabular-nums text-black transition-colors group-hover:text-foreground lg:flex">
           {color.className}
         </span>
         <span className="font-mono text-xs tabular-nums text-muted-foreground transition-colors group-hover:text-foreground lg:hidden">
