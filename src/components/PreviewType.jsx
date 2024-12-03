@@ -28,10 +28,10 @@ export default function PreviewType({ componentId, handleSetCodeType }) {
 
         <SelectContent>
           <SelectGroup >
-            <SelectLabel className="text-xs">Code Type</SelectLabel>
-            <SelectItem className="text-xs" value="html">HTML</SelectItem>
-            <SelectItem className="text-xs" value="jsx">JSX</SelectItem>
-            <SelectItem className="text-xs" value="vue">Vue</SelectItem>
+            <SelectLabel className="text-xs text-black">Code Type</SelectLabel>
+            <SelectItem className="text-xs text-black" value="html">HTML</SelectItem>
+            <SelectItem className="text-xs text-black" value="jsx">JSX</SelectItem>
+            <SelectItem className="text-xs text-black" value="vue">Vue</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

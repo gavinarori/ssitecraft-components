@@ -12,7 +12,7 @@ export default function CollectionCard({ componentData }) {
     <Link href={`/components/${componentData.category}/${componentData.slug}`}>
       <div className="group relative block h-full bg-white before:absolute ">
         
-        <div className="flex items-center overflow-hidden rounded-xl border border-gray-950/5 bg-gray-50 text-center ring-offset-white transition duration-300 group-hover:border-primary/10 group-hover:bg-gray-100 group-hover:ring-1 group-hover:ring-gray-950/10 group-hover:ring-offset-4 dark:bg-gray-800/70 dark:ring-offset-gray-950 dark:group-hover:border-white/10 dark:group-hover:bg-gray-800 dark:group-hover:ring-white/10">
+        <div className="flex items-center overflow-hidden rounded-xl border border-gray-950/5 bg-gray-50 text-center ring-offset-white transition duration-300 group-hover:border-primary/10 group-hover:bg-gray-100 group-hover:ring-1 group-hover:ring-gray-950/10 group-hover:ring-offset-4 ">
           <div className="p-4 sm:p-6">
           <img
             src={componentData.image}
