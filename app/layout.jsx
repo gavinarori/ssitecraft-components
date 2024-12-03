@@ -1,6 +1,5 @@
 import { Inter } from 'next/font/google'
 import { GoogleAnalytics } from '@next/third-parties/google'
-import { ThemeProvider } from "./themeprovider"
 import 'prismjs/themes/prism-okaidia.css'
 import '@style/site.css'
 
@@ -37,19 +36,13 @@ export default function RootLayout({ children }) {
   return (
     <html className="h-full scroll-pt-20 scroll-smooth" lang="en" dir="ltr">
       <body className={`${inter.variable} font-sans antialiased`}>
-      <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
+     
 
         <Header />
 
         <main className="bg-white">{children}</main>
 
         <Footer />
-        </ThemeProvider>
 
         <GoogleAnalytics gaId="G-V2JD5JTN42" />
       </body>

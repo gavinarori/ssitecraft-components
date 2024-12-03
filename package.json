@@ -7,13 +7,16 @@
     "format": "prettier . --write"
   },
   "dependencies": {
-    "@radix-ui/react-select": "^2.1.1",
+    "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-toggle": "^1.1.0",
     "@radix-ui/react-toggle-group": "^1.1.0",
+    "@vercel/analytics": "^1.4.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.9.0",
+    "html-to-image": "^1.11.11",
+    "jotai": "^2.10.3",
     "lucide-react": "^0.446.0",
     "mini-svg-data-uri": "^1.4.4",
     "next": "14.2.10",
@@ -21,7 +24,9 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-resizable-panels": "^2.1.4",
-    "tailwind-merge": "^2.5.2"
+    "sonner": "^1.7.0",
+    "tailwind-merge": "^2.5.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.2.6",

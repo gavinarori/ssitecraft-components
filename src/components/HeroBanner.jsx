@@ -8,7 +8,7 @@ export default function HeroBanner() {
       <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
           <div className="container px-4 md:px-6">
           <div className="mb-4">
-              <p className="inline-flex items-center justify-center whitespace-nowrap rounded-full bg-background px-3 py-1 text-sm font-medium text-foreground shadow-sm shadow-black/[.12] dark:bg-accent">
+              <p className="inline-flex items-center text-black justify-center whitespace-nowrap rounded-full bg-background px-3 py-1 text-sm font-medium text-foreground shadow-sm shadow-black/[.12] dark:bg-accent">
                 <span className="mr-3 flex shrink-0 border-r border-border pr-3">
                   <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="none">
                     <path
@@ -29,7 +29,7 @@ export default function HeroBanner() {
             <div className="flex flex-col items-center  space-y-4 text-center">
             <div className="absolute pointer-events-none inset-0 flex items-center justify-center  bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
               <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+                <h1 className="text-3xl text-black font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
                   Welcome to Sitecraft Components
                 </h1>
                 <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl ">
