@@ -1,63 +1,96 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from 'react'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select"
-import { Input } from "../components/ui/input"
-import { Label } from "../components/ui/label"
-import { Button } from "../components/ui/button"
-import { Card, CardContent } from "../components/ui/card"
+import { useState, useEffect, useRef } from "react";
+import PencilIcon from "../icons/IconPencil";
+import BulbIcon from "../icons/IconBulb";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Card, CardContent } from "../components/ui/card";
+import { themeColors, themeColorShades, themeColorsWithoutShades } from "../data/assests/tailwindColors";
 
-const gradientTypes = ['linear', 'radial', 'conic']
-const tailwindColors = {
-  'red': ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'],
-  'yellow': ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'],
-  'green': ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'],
-  'blue': ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'],
-  'indigo': ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'],
-  'purple': ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'],
-  'pink': ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'],
-}
+const gradientTypes = ["linear", "radial", "conic"];
+
+const tailwindColors = themeColors.reduce((acc, color) => {
+  if (themeColorsWithoutShades.includes(color)) {
+    acc[color] = []; 
+  } else {
+    acc[color] = themeColorShades;
+  }
+  return acc;
+}, {});
 
 export default function GradientGenerator() {
-  const [gradientType, setGradientType] = useState('linear')
-  const [fromColor, setFromColor] = useState('blue-500')
-  const [viaColor, setViaColor] = useState('none')
-  const [toColor, setToColor] = useState('pink-500')
-  const [direction, setDirection] = useState('to-r')
-  const [customGradient, setCustomGradient] = useState('')
-  const [gradientClass, setGradientClass] = useState('')
+  const [gradientType, setGradientType] = useState("linear");
+  const [fromColor, setFromColor] = useState("blue-500");
+  const [viaColor, setViaColor] = useState("none");
+  const [toColor, setToColor] = useState("pink-500");
+  const [direction, setDirection] = useState("to-r");
+  const [customGradient, setCustomGradient] = useState("");
+  const [gradientClass, setGradientClass] = useState("");
+  const [isDark, setIsDark] = useState(false);
+  const textInputRef = useRef(null);
+
+  const backgroundColor = isDark ? "bg-white" : "bg-black";
+
+  const handleDark = () => {
+    setIsDark((prev) => !prev);
+  };
+
+  const handleEdit = () => {
+    textInputRef.current.focus();
+  };
 
   useEffect(() => {
-    updateGradientClass()
-  }, [gradientType, fromColor, viaColor, toColor, direction, customGradient])
+    updateGradientClass();
+  }, [gradientType, fromColor, viaColor, toColor, direction, customGradient]);
 
   const updateGradientClass = () => {
+    let gradientClass = "";
+
     if (customGradient) {
-      setGradientClass(customGradient)
-      return
+      setGradientClass(customGradient);
+      return;
     }
 
-    let gradientClass = ''
-
-    if (gradientType === 'linear') {
-      gradientClass = `bg-gradient-${direction}`
-    } else if (gradientType === 'radial') {
-      gradientClass = 'bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))]'
-    } else if (gradientType === 'conic') {
-      gradientClass = 'bg-[conic-gradient(var(--tw-gradient-stops))]'
+    switch (gradientType) {
+      case "linear":
+        gradientClass = `bg-gradient-${direction}`;
+        break;
+      case "radial":
+        gradientClass =
+          "bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))]";
+        break;
+      case "conic":
+        gradientClass =
+          "bg-[conic-gradient(from_0deg,var(--tw-gradient-stops))]";
+        break;
+      default:
+        gradientClass = "";
     }
 
-    gradientClass += ` from-${fromColor}`
-    if (viaColor && viaColor !== 'none') gradientClass += ` via-${viaColor}`
-    gradientClass += ` to-${toColor}`
+    gradientClass += ` from-${fromColor}`;
+    if (viaColor && viaColor !== "none") {
+      gradientClass += ` via-${viaColor}`;
+    }
+    gradientClass += ` to-${toColor}`;
 
-    setGradientClass(gradientClass)
-  }
+    setGradientClass(gradientClass);
+  };
 
   const ColorDropdown = ({ label, value, onChange, includeNone = false }) => (
     <div className="space-y-2">
       <Label htmlFor={label}>{label}</Label>
-      <Select value={value.split('-')[0]} onValueChange={(color) => onChange(`${color}-500`)}>
+      <Select
+        value={value.split("-")[0]}
+        onValueChange={(color) => onChange(`${color}-500`)}
+      >
         <SelectTrigger className="w-[180px]">
           <SelectValue />
         </SelectTrigger>
@@ -66,32 +99,41 @@ export default function GradientGenerator() {
           {Object.entries(tailwindColors).map(([color, shades]) => (
             <SelectItem key={color} value={color}>
               <div className="flex items-center space-x-2">
-                <div className={`w-4 h-4 rounded-full bg-${color}-500`} />
+                <div
+                  className={`w-4 h-4 rounded-full ${
+                    shades.length ? `bg-${color}-500` : `bg-${color}`
+                  }`}
+                />
                 <span>{color}</span>
               </div>
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
-      {value !== 'none' && (
-        <Select value={value.split('-')[1]} onValueChange={(shade) => onChange(`${value.split('-')[0]}-${shade}`)}>
+      {value !== "none" && tailwindColors[value.split("-")[0]].length > 0 && (
+        <Select
+          value={value.split("-")[1]}
+          onValueChange={(shade) =>
+            onChange(`${value.split("-")[0]}-${shade}`)
+          }
+        >
           <SelectTrigger className="w-[180px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {tailwindColors[value.split('-')[0]].map((shade) => (
+            {tailwindColors[value.split("-")[0]].map((shade) => (
               <SelectItem key={shade} value={shade}>
-                <div className="flex items-center space-x-2">
-                  <div className={`w-4 h-4 rounded-full bg-${value.split('-')[0]}-${shade}`} />
-                  <span>{shade}</span>
-                </div>
+                <div
+                  className={`w-4 h-4 rounded-full bg-${value.split("-")[0]}-${shade}`}
+                />
+                <span>{shade}</span>
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
       )}
     </div>
-  )
+  );
 
   return (
     <div className="space-y-6">
@@ -115,7 +157,7 @@ export default function GradientGenerator() {
                     </SelectContent>
                   </Select>
                 </div>
-                {gradientType === 'linear' && (
+                {gradientType === "linear" && (
                   <div>
                     <Label htmlFor="direction">Direction</Label>
                     <Select value={direction} onValueChange={setDirection}>
@@ -138,9 +180,22 @@ export default function GradientGenerator() {
               </div>
 
               <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                <ColorDropdown label="From Color" value={fromColor} onChange={setFromColor} />
-                <ColorDropdown label="Via Color" value={viaColor} onChange={setViaColor} includeNone={true} />
-                <ColorDropdown label="To Color" value={toColor} onChange={setToColor} />
+                <ColorDropdown
+                  label="From Color"
+                  value={fromColor}
+                  onChange={setFromColor}
+                />
+                <ColorDropdown
+                  label="Via Color"
+                  value={viaColor}
+                  onChange={setViaColor}
+                  includeNone={true}
+                />
+                <ColorDropdown
+                  label="To Color"
+                  value={toColor}
+                  onChange={setToColor}
+                />
               </div>
 
               <div>
@@ -155,7 +210,38 @@ export default function GradientGenerator() {
             </div>
 
             <div className="space-y-4">
-              <div className={`w-full h-64 rounded-lg ${gradientClass}`}></div>
+              <div className={`w-full h-64 rounded-lg  ${gradientClass}`}></div>
+              <div
+                className={`relative w-full h-64  flex items-center rounded-xl p-8 ${backgroundColor}`}
+              >
+                <div className="absolute inset-x-0 top-0 flex items-center justify-end p-4">
+                  <button
+                    className="rounded-xl bg-gray-800 p-2.5 text-white"
+                    onClick={handleEdit}
+                  >
+                    <span className="sr-only">Edit text</span>
+                    <PencilIcon className="h-4 w-4" />
+                  </button>
+                  <button
+                    className="ml-2 rounded-xl bg-gray-800 p-2.5 text-white"
+                    onClick={handleDark}
+                  >
+                    <span className="sr-only">
+                      Toggle {isDark ? "light" : "dark"} theme
+                    </span>
+                    <BulbIcon className="h-4 w-4" />
+                  </button>
+                </div>
+                <p
+                  ref={textInputRef}
+                  className={`min-w-full rounded bg-clip-text p-2 text-center text-2xl font-bold text-transparent ${gradientClass}`}
+                  spellCheck="false"
+                  contentEditable="true"
+                >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                  nec erat in turpis tincidunt mollis.
+                </p>
+              </div>
               <div className="bg-gray-100 p-4 rounded-lg">
                 <p className="font-mono text-sm break-all">{gradientClass}</p>
               </div>
@@ -164,6 +250,5 @@ export default function GradientGenerator() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
-
