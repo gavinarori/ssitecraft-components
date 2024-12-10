@@ -12,13 +12,19 @@ const tailwindConfig = {
   darkMode: ["class"],
   content: ['./app/**/*.jsx', './src/components/**/*.jsx', './src/data/components/*.mdx'],
   safelist: [
-    { pattern: /(from|via|to|bg)-(black|white|transparent)/ },
-    { pattern: /(from|via|to|bg)-(.+)-([1-9]00)/ },
-  ],
+    { pattern: /bg-gradient-to-(t|b|l|r|tl|tr|bl|br)/ },
+    { pattern: /from-(.+)-([1-9]00)/ },
+    { pattern: /via-(.+)-([1-9]00)/ },
+    { pattern: /to-(.+)-([1-9]00)/ },
+    { pattern: /(from|via|to)-(black|white|transparent)/ },
+  ],  
   theme: {
     extend: {
       fontFamily: {
         sans: ['var(--font-inter)', ...defaultTheme.fontFamily.mono],
+      },
+      gradientColorStops: {
+        ...require('tailwindcss/colors'),
       },
     },
   },
