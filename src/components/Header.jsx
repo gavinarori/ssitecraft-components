@@ -13,6 +13,13 @@ import HeaderSearch from '@component/HeaderSearch'
 
 export default function Header() {
   const routerPathname = usePathname()
+  const menuLinks = [
+    {
+      title: 'Tailwind Colors & generator',
+      href: '/colors',
+    },
+   
+  ]
 
   const [showMenu, setShowMenu] = useState(false)
 
@@ -22,10 +29,15 @@ export default function Header() {
       <Container classNames="relative flex h-16 items-center justify-between gap-4 sm:gap-8">
         <div className="flex items-center gap-4">
           <BrandLogo />
-
+          <HeaderMenuLinks menuLinks={menuLinks} navClass="hidden md:block" ulClass="gap-4 flex" />
         </div>
+        <div className="flex flex-1 items-center justify-end gap-2 sm:gap-4">
+          <HeaderSearch />
 
-        
+          <GithubSocial />
+
+          <HeaderMenu showMenu={showMenu} handleSetShowMenu={setShowMenu} menuLinks={menuLinks} />
+        </div>
       </Container>
     </header>
   )
