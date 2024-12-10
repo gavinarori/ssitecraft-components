@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { Check, Clipboard } from "lucide-react";
+import { toast } from "sonner";
 import PencilIcon from "../icons/IconPencil";
 import BulbIcon from "../icons/IconBulb";
+import { useCopyToClipboard } from "../hooks/use-copy-to-clipboard";
 import {
   Select,
   SelectContent,
@@ -13,13 +16,17 @@ import {
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Card, CardContent } from "../components/ui/card";
-import { themeColors, themeColorShades, themeColorsWithoutShades } from "../data/assests/tailwindColors";
+import {
+  themeColors,
+  themeColorShades,
+  themeColorsWithoutShades,
+} from "../data/assests/tailwindColors";
 
 const gradientTypes = ["linear", "radial", "conic"];
 
 const tailwindColors = themeColors.reduce((acc, color) => {
   if (themeColorsWithoutShades.includes(color)) {
-    acc[color] = []; 
+    acc[color] = []; // No shades for 'black', 'white', and 'transparent'
   } else {
     acc[color] = themeColorShades;
   }
@@ -36,6 +43,8 @@ export default function GradientGenerator() {
   const [gradientClass, setGradientClass] = useState("");
   const [isDark, setIsDark] = useState(false);
   const textInputRef = useRef(null);
+
+  const { isCopied, copyToClipboard } = useCopyToClipboard();
 
   const backgroundColor = isDark ? "bg-white" : "bg-black";
 
@@ -75,6 +84,7 @@ export default function GradientGenerator() {
         gradientClass = "";
     }
 
+    // Add colors
     gradientClass += ` from-${fromColor}`;
     if (viaColor && viaColor !== "none") {
       gradientClass += ` via-${viaColor}`;
@@ -83,6 +93,7 @@ export default function GradientGenerator() {
 
     setGradientClass(gradientClass);
   };
+
 
   const ColorDropdown = ({ label, value, onChange, includeNone = false }) => (
     <div className="space-y-2">
@@ -140,6 +151,7 @@ export default function GradientGenerator() {
       <Card>
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Configuration Section */}
             <div className="space-y-6">
               <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                 <div>
@@ -209,8 +221,21 @@ export default function GradientGenerator() {
               </div>
             </div>
 
+            {/* Preview Section */}
             <div className="space-y-4">
-              <div className={`w-full h-64 rounded-lg  ${gradientClass}`}></div>
+              <button
+                onClick={() => {
+                  copyToClipboard(gradientClass);
+                  toast.success(`Copied "${gradientClass}" to clipboard.`);
+                }}
+                className={`w-full h-64 rounded-lg relative group ${gradientClass}`}
+              >
+                {isCopied ? (
+                  <Check className="absolute right-4 top-4 h-6 w-6 text-green-500 opacity-100 transition-opacity" />
+                ) : (
+                  <Clipboard className="absolute right-4 top-4 h-6 w-6 text-gray-500 opacity-0 transition-opacity group-hover:opacity-100" />
+                )}
+              </button>
               <div
                 className={`relative w-full h-64  flex items-center rounded-xl p-8 ${backgroundColor}`}
               >
@@ -242,8 +267,19 @@ export default function GradientGenerator() {
                   nec erat in turpis tincidunt mollis.
                 </p>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
+              <div
+                className="bg-gray-100 p-4 rounded-lg flex items-center justify-between group cursor-pointer"
+                onClick={() => {
+                  copyToClipboard(gradientClass);
+                  toast.success(`Copied "${gradientClass}" to clipboard.`);
+                }}
+              >
                 <p className="font-mono text-sm break-all">{gradientClass}</p>
+                {isCopied ? (
+                  <Check className="h-4 w-4 text-green-500" />
+                ) : (
+                  <Clipboard className="h-4 w-4 text-gray-500 group-hover:text-gray-700" />
+                )}
               </div>
             </div>
           </div>
