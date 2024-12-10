@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import PencilIcon from '../icons/IconPencil';
 import BulbIcon from '../icons/IconBulb';
 
-const GradientSection = ({ gradientStyle = '' }) => {
+const GeneratorPreview = ({ gradientStyle = '' }) => {
   const [isDark, setIsDark] = useState(false);
   const textInputRef = useRef(null);
 
@@ -29,7 +29,6 @@ const GradientSection = ({ gradientStyle = '' }) => {
               <span className="sr-only">Edit text</span>
               <PencilIcon className="h-4 w-4" />
             </button>
-
             <button
               className="ml-2 rounded-xl bg-gray-800 p-2.5 text-white"
               onClick={handleDark}
@@ -42,7 +41,7 @@ const GradientSection = ({ gradientStyle = '' }) => {
           </div>
           <p
             ref={textInputRef}
-            className={`min-w-full rounded bg-clip-text p-2 text-center text-2xl font-bold text-transparent caret-pink-600 ${gradientStyle}`}
+            className={`min-w-full rounded bg-clip-text p-2 text-center text-2xl font-bold text-transparent ${gradientStyle}`}
             spellCheck="false"
             contentEditable="true"
           >
@@ -55,4 +54,5 @@ const GradientSection = ({ gradientStyle = '' }) => {
   );
 };
 
-export default GradientSection;
+export default GeneratorPreview;
+

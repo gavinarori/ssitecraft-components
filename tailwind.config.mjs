@@ -11,6 +11,10 @@ const {
 const tailwindConfig = {
   darkMode: ["class"],
   content: ['./app/**/*.jsx', './src/components/**/*.jsx', './src/data/components/*.mdx'],
+  safelist: [
+    { pattern: /(from|via|to|bg)-(black|white|transparent)/ },
+    { pattern: /(from|via|to|bg)-(.+)-([1-9]00)/ },
+  ],
   theme: {
     extend: {
       fontFamily: {

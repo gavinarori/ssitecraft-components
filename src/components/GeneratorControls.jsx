@@ -4,7 +4,7 @@ import IconRefresh from '../icons/IconRefresh';
 
 const GeneratorControls = ({ gradientStyle = '', gradientType = '', onRandomise, children }) => {
   return (
-    <section className="border-b border-t border-gray-800/75 bg-gray-900 text-white">
+    <section className="border-b border-t border-gray-100 bg-white text-white">
       <div className="mx-auto max-w-screen-xl space-y-4 px-4 py-4 sm:px-6 lg:px-8">
         <div className="lg:grid lg:grid-cols-3">
           <div className="flex items-center">
@@ -27,3 +27,4 @@ const GeneratorControls = ({ gradientStyle = '', gradientType = '', onRandomise,
 };
 
 export default GeneratorControls;
+

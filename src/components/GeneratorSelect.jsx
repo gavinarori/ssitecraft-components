@@ -1,15 +1,13 @@
-import React from 'react';
-
 const SelectInput = ({
   selectId = '',
   selectOptions = [],
   labelKey = '',
   valueKey = '',
-  modelValue = '',
-  onModelValueChange,
+  value = '',
+  onChange,
 }) => {
   const handleChange = (event) => {
-    onModelValueChange(event.target.value);
+    if (onChange) onChange(event.target.value);
   };
 
   return (
@@ -19,9 +17,9 @@ const SelectInput = ({
       </label>
       <select
         id={selectId}
-        value={modelValue}
+        value={value}
         onChange={handleChange}
-        className="w-full rounded-xl border-gray-800/75 bg-gray-900 p-3 font-medium sm:text-sm"
+        className="w-full rounded-xl border-gray-200 bg-white text-black p-3 font-medium sm:text-sm"
       >
         {selectOptions.map((optionItem, itemIndex) => (
           <option
