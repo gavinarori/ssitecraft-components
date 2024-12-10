@@ -11,7 +11,7 @@ const ColorsLayout = ({ children }) => {
   return (
     <div className="relative">
       <div className=" py-6 flex justify-center items-center">
-        <section id="colors" className="scroll-mt-20">
+        <section id="colors" className="scroll-mt-20 border-l-2 border-gray-200">
           <GradientGenerator />
           {children}
         </section>
