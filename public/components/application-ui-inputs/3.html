@@ -1,0 +1,60 @@
+
+<div class="w-full max-w-xs">
+  <label for="phone" class="block text-sm font-medium text-gray-200">
+    Select Country
+  </label>
+  <div class="flex">
+    <div
+      class="relative inline-flex items-center px-3 py-2 border border-gray-600 bg-gray-800 rounded-l-md w-40"
+    >
+      <select
+        class="appearance-none bg-transparent focus:outline-none text-sm text-gray-300 w-full"
+        name="country-code"
+        id="country-code"
+      >
+        <option selected="" value="1" data-countrycode="US">🇺🇸 +1</option>
+        <option value="44" data-countrycode="GB">🇬🇧 +44</option>
+        <option value="1" data-countrycode="CA">🇨🇦 +1</option>
+        <option value="61" data-countrycode="AU">🇦🇺 +61</option>
+        <option value="91" data-countrycode="IN">🇮🇳 +91</option>
+        <option value="49" data-countrycode="DE">🇩🇪 +49</option>
+        <option value="33" data-countrycode="FR">🇫🇷 +33</option>
+        <option value="81" data-countrycode="JP">🇯🇵 +81</option>
+        <option value="55" data-countrycode="BR">🇧🇷 +55</option>
+        <option value="27" data-countrycode="ZA">🇿🇦 +27</option>
+        <option value="86" data-countrycode="CN">🇨🇳 +86</option>
+        <option value="52" data-countrycode="MX">🇲🇽 +52</option>
+        <option value="39" data-countrycode="IT">🇮🇹 +39</option>
+        <option value="34" data-countrycode="ES">🇪🇸 +34</option>
+        <option value="82" data-countrycode="KR">🇰🇷 +82</option>
+        <option value="7" data-countrycode="RU">🇷🇺 +7</option>
+        <option value="54" data-countrycode="AR">🇦🇷 +54</option>
+        <option value="966" data-countrycode="SA">🇸🇦 +966</option>
+        <option value="234" data-countrycode="NG">🇳🇬 +234</option>
+        <option value="46" data-countrycode="SE">🇸🇪 +46</option>
+      </select>
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        fill="none"
+        class="w-4 h-4 ml-2 text-gray-400 absolute right-2 pointer-events-none"
+      >
+        <path
+          d="M19 9l-7 7-7-7"
+          stroke-width="2"
+          stroke-linejoin="round"
+          stroke-linecap="round"
+        ></path>
+      </svg>
+    </div>
+    <input
+      class="w-full px-3 py-2 border border-gray-600 bg-gray-900 text-gray-300 rounded-r-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+      placeholder="Phone number"
+      name="phone"
+      id="phone"
+      type="tel"
+    />
+  </div>
+</div>
