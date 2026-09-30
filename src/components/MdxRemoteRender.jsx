@@ -2,6 +2,8 @@
 
 import { MDXRemote } from 'next-mdx-remote'
 
-export default function MdxContent({ mdxSource, mdxComponents = {}, mdxScope = {} }) {
+export default function MdxRemoteRender({ mdxSource, mdxComponents = {}, mdxScope = {} }) {
+  if (!mdxSource) return null
+
   return <MDXRemote {...mdxSource} components={mdxComponents} scope={mdxScope} />
 }

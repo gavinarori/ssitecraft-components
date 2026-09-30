@@ -1,45 +1,52 @@
-import { useState } from "react";
-import { useCopyToClipboard } from "react-use";
-import { CheckIcon, ClipboardIcon } from "lucide-react";
+import { useEffect, useRef, useState } from 'react'
+import { CheckIcon, ClipboardIcon, XIcon } from 'lucide-react'
 
-export default function PreviewCopy({ codeType, componentCode = "" }) {
-  const [buttonText, setButtonText] = useState("Copy");
-  const [copyStatus, copyToClipboard] = useCopyToClipboard();
-  
+const CODE_TYPE_LABEL = {
+  html: 'HTML',
+  jsx: 'JSX',
+  vue: 'Vue',
+}
 
-  const codeTypeMap = {
-    html: "HTML",
-    jsx: "JSX",
-    vue: "Vue",
-  };
+const LABEL = { idle: 'Copy', copied: 'Copied', error: 'Failed' }
 
-  const codeTypeLabel = codeTypeMap[codeType];
+export default function PreviewCopy({ codeType, componentCode = '' }) {
+  const [status, setStatus] = useState('idle')
+  const timeoutRef = useRef(null)
 
-  function handleCopyToClipboard() {
-    copyToClipboard(componentCode);
+  // Don't leave a pending timer behind if the component unmounts.
+  useEffect(() => () => clearTimeout(timeoutRef.current), [])
 
-    if (copyStatus.error) {
-      setButtonText("Error");
-      return;
+  async function handleCopy() {
+    clearTimeout(timeoutRef.current)
+
+    try {
+      await navigator.clipboard.writeText(componentCode)
+      setStatus('copied')
+    } catch {
+      setStatus('error')
     }
 
-    setButtonText("Copied");
-
-    setTimeout(() => {
-      setButtonText("Copy");
-    }, 3000);
+    timeoutRef.current = setTimeout(() => setStatus('idle'), 2500)
   }
 
-  const hasCopied = buttonText === "Copied"; 
+  const Icon = status === 'copied' ? CheckIcon : status === 'error' ? XIcon : ClipboardIcon
+  const typeLabel = CODE_TYPE_LABEL[codeType] ?? 'code'
 
   return (
     <button
-      className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-      onClick={handleCopyToClipboard}
+      type="button"
+      onClick={handleCopy}
+      className={`inline-flex h-7 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border px-2.5 text-xs font-medium shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 ${
+        status === 'copied'
+          ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+          : status === 'error'
+            ? 'border-red-200 bg-red-50 text-red-700'
+            : 'border-slate-200 bg-white text-slate-700 hover:border-indigo-300 hover:text-indigo-700'
+      }`}
     >
-      <span className="sr-only">Copy {codeTypeLabel}</span>
-      {hasCopied ? <CheckIcon className="mr-2 h-4 w-4" /> : <ClipboardIcon className="mr-2 h-4 w-4" />}
-      {buttonText}
+      <span className="sr-only">Copy {typeLabel}</span>
+      <Icon className="h-3.5 w-3.5" aria-hidden="true" />
+      <span aria-live="polite">{LABEL[status]}</span>
     </button>
-  );
+  )
 }

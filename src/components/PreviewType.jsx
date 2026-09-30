@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import {
   Select,
   SelectContent,
@@ -8,33 +6,48 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from './ui/select'
 
-import { cn } from "../utils/cn";
+import { cn } from '../utils/cn'
 
-export default function PreviewType({ componentId, handleSetCodeType }) {
+const CODE_TYPES = [
+  { value: 'html', label: 'HTML' },
+  { value: 'jsx', label: 'JSX' },
+  { value: 'vue', label: 'Vue' },
+]
+
+// Pass `codeType` to control the select from the parent; omit it and it starts on HTML.
+// (Before, it showed a placeholder even though the code below was already HTML.)
+export default function PreviewType({ componentId, codeType, handleSetCodeType }) {
+  const valueProps = codeType ? { value: codeType } : { defaultValue: 'html' }
+
   return (
-    <div className="border-r border-gray-50">
+    <div>
       <label htmlFor={`CodeType${componentId}`} className="sr-only">
-        Code Type
+        Code type
       </label>
 
-      <Select onValueChange={handleSetCodeType}>
-        <SelectTrigger id={`CodeType${componentId}`}  className={cn(
-          "h-7 w-[145px] text-xs [&_svg]:h-4 [&_svg]:w-4"
-        )}>
-          <SelectValue placeholder="Select Code Type" />
+      <Select onValueChange={handleSetCodeType} {...valueProps}>
+        <SelectTrigger
+          id={`CodeType${componentId}`}
+          className={cn(
+            'h-7 w-[110px] rounded-lg border-slate-200 bg-white text-xs shadow-sm [&_svg]:h-4 [&_svg]:w-4'
+          )}
+        >
+          <SelectValue placeholder="Code type" />
         </SelectTrigger>
 
         <SelectContent>
-          <SelectGroup >
-            <SelectLabel className="text-xs text-black">Code Type</SelectLabel>
-            <SelectItem className="text-xs text-black" value="html">HTML</SelectItem>
-            <SelectItem className="text-xs text-black" value="jsx">JSX</SelectItem>
-            <SelectItem className="text-xs text-black" value="vue">Vue</SelectItem>
+          <SelectGroup>
+            <SelectLabel className="text-xs text-slate-500">Code type</SelectLabel>
+            {CODE_TYPES.map(({ value, label }) => (
+              <SelectItem key={value} className="text-xs" value={value}>
+                {label}
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>
     </div>
-  );
+  )
 }
