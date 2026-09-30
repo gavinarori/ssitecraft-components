@@ -1,30 +1,30 @@
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "./ui/toggle-group";
-import { componentBreakpoints } from "../data/breakpoints"; 
+import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group'
+import { componentBreakpoints } from '../data/breakpoints'
 
-export default function PreviewBreakpoint({
-  handleSetPreviewWidth,
-}) {
+export default function PreviewBreakpoint({ handleSetPreviewWidth }) {
   return (
-    <div className="hidden h-[28px] items-center gap-1.5 rounded-md border p-[2px] shadow-sm md:flex">
+    <div
+      className="hidden items-center rounded-lg border border-slate-200 bg-white p-0.5 shadow-sm md:flex"
+      role="group"
+      aria-label="Preview width"
+    >
       <ToggleGroup
         type="single"
-        onValueChange={(value) => {
-          handleSetPreviewWidth(value); 
-        }}
+        className="gap-0.5"
+        onValueChange={(value) => handleSetPreviewWidth(value)}
       >
         {componentBreakpoints.map((breakpoint) => (
           <ToggleGroupItem
             key={breakpoint.name}
-            value={breakpoint.width} 
-            className="h-[22px] w-[22px] rounded-lg p-0"
+            value={breakpoint.width}
+            aria-label={`${breakpoint.name} width`}
+            title={breakpoint.name}
+            className="grid h-7 w-7 place-items-center rounded-md p-0 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 data-[state=on]:bg-indigo-50 data-[state=on]:text-indigo-700"
           >
-            {breakpoint.icon} 
+            {breakpoint.icon}
           </ToggleGroupItem>
         ))}
       </ToggleGroup>
     </div>
-  );
+  )
 }
