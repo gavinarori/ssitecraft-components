@@ -1,38 +1,30 @@
+import IconClose from '@component/IconClose'
+import IconMenu from '@component/IconMenu'
 import MenuLinks from '@component/HeaderMenuLinks'
 
 export default function HeaderMenu({ showMenu, handleSetShowMenu, menuLinks }) {
   return (
     <div className="flex items-center md:hidden">
-      <button onClick={() => handleSetShowMenu(!showMenu)} className="text-gray-900">
-        <IconMenu />
-
-        <span className="sr-only">Toggle menu</span>
+      <button
+        type="button"
+        onClick={() => handleSetShowMenu(!showMenu)}
+        aria-expanded={showMenu}
+        aria-controls="mobile-menu"
+        className="grid size-9 place-items-center rounded-lg text-slate-700 transition hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+      >
+        {showMenu ? <IconClose /> : <IconMenu />}
+        <span className="sr-only">{showMenu ? 'Close menu' : 'Open menu'}</span>
       </button>
 
       {showMenu && (
-        <div className="absolute inset-x-0 top-14 px-2">
+        <div id="mobile-menu" className="absolute inset-x-0 top-full px-4 pt-2 sm:px-6">
           <MenuLinks
             menuLinks={menuLinks}
-            navClass="bg-white border p-4 border-gray-200 shadow-lg rounded-md"
-            ulClass="space-y-4"
+            navClass="rounded-2xl border border-slate-200 bg-white p-4 shadow-xl"
+            ulClass="space-y-3"
           />
         </div>
       )}
     </div>
-  )
-}
-
-function IconMenu() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="size-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
   )
 }

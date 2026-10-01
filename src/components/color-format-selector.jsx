@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { getColorFormat, } from "../utils/colors"
+import { getColorFormat } from "../utils/colors"
 import { cn } from "../utils/cn"
 import { useColors } from "../hooks/use-colors"
 import {
@@ -13,11 +13,7 @@ import {
 } from "../components/ui/select"
 import { Skeleton } from "../components/ui/skeleton"
 
-export function ColorFormatSelector({
-  color,
-  className,
-  ...props
-}) {
+export function ColorFormatSelector({ color, className, ...props }) {
   const { format, setFormat, isLoading } = useColors()
   const formats = React.useMemo(() => getColorFormat(color), [color])
 
@@ -28,25 +24,27 @@ export function ColorFormatSelector({
   return (
     <Select value={format} onValueChange={setFormat}>
       <SelectTrigger
-        className={cn("h-7 w-auto gap-1.5 rounded-lg pr-2 text-xs", className)}
+        aria-label="Color format"
+        className={cn(
+          "h-8 w-auto gap-1.5 rounded-lg border-slate-200 bg-white pr-2 text-xs shadow-sm",
+          className
+        )}
         {...props}
       >
-        <span className="font-medium">Format: </span>
-        <span className="font-mono text-xs text-muted-foreground">
-          {format}
-        </span>
+        <span className="font-medium text-slate-700">Format:</span>
+        <span className="font-mono text-xs text-slate-500">{format}</span>
       </SelectTrigger>
+
       <SelectContent align="end" className="rounded-xl">
-        {Object.entries(formats).map(([format, value]) => (
+        {/* renamed the loop variable: it used to shadow `format` from the hook */}
+        {Object.entries(formats).map(([formatName, formatValue]) => (
           <SelectItem
-            key={format}
-            value={format}
+            key={formatName}
+            value={formatName}
             className="gap-2 rounded-lg [&>span]:flex [&>span]:items-center [&>span]:gap-2"
           >
-            <span className="font-medium">{format}</span>
-            <span className="font-mono text-xs text-muted-foreground">
-              {value}
-            </span>
+            <span className="font-medium">{formatName}</span>
+            <span className="font-mono text-xs text-slate-500">{formatValue}</span>
           </SelectItem>
         ))}
       </SelectContent>
@@ -54,14 +52,6 @@ export function ColorFormatSelector({
   )
 }
 
-export function ColorFormatSelectorSkeleton({
-  className,
-  ...props
-}) {
-  return (
-    <Skeleton
-      className={cn("h-7 w-[116px] gap-1.5 rounded-lg", className)}
-      {...props}
-    />
-  )
+export function ColorFormatSelectorSkeleton({ className, ...props }) {
+  return <Skeleton className={cn("h-8 w-[116px] rounded-lg", className)} {...props} />
 }

@@ -1,85 +1,50 @@
-import { join } from 'path'
-import { promises as fs } from 'fs'
-import { serialize } from 'next-mdx-remote/serialize'
+import Link from 'next/link'
+
+import { getAllCategories } from '../src/utils/components-data'
 
 import Container from '@component/Container'
 import HeroBanner from '@component/HeroBanner'
 import CollectionGrid from '@component/CollectionGrid'
 
-async function getComponents() {
-  const componentsPath = join(process.cwd(), '/src/data/components')
-  const categoriesPath = join(process.cwd(), '/src/data/categories')
-
-  const categorySlugs = ['application-ui', 'marketing']
-  const componentSlugs = await fs.readdir(componentsPath)
-
-  const componentsByCategory = await Promise.all(
-    categorySlugs.map(async (categorySlug) => {
-      const categoryPath = join(categoriesPath, `${categorySlug}.mdx`)
-      const categoryItem = await fs.readFile(categoryPath, 'utf-8')
-
-      const { frontmatter: categoryData } = await serialize(categoryItem, {
-        parseFrontmatter: true,
-      })
-
-      const componentItems = await Promise.all(
-        componentSlugs
-          .filter((componentSlug) => componentSlug.includes(categorySlug))
-          .map(async (componentSlug) => {
-            const componentPath = join(componentsPath, componentSlug)
-            const componentItem = await fs.readFile(componentPath, 'utf-8')
-
-            const { frontmatter: componentData } = await serialize(componentItem, {
-              parseFrontmatter: true,
-            })
-
-            const componentSlugFormatted = componentSlug.replace('.mdx', '')
-            const componentSlugTrue = componentSlugFormatted.replace(
-              `${componentData.category}-`,
-              ''
-            )
-            const componentCount = Object.values(componentData.components).length
-
-            return {
-              title: componentData.title,
-              slug: componentSlugTrue,
-              category: componentData.category,
-              image: componentData.image,
-              count: componentCount,
-              tag: componentData.tag,
-              id: componentSlugFormatted,
-            }
-          })
-      )
-
-      componentItems.sort((itemA, itemB) => itemA.title.localeCompare(itemB.title))
-
-      return {
-        categoryTitle: categoryData?.title,
-        componentItems,
-      }
-    })
-  )
-
-  return componentsByCategory
-}
-
 export default async function Page() {
-  const componentsByCategory = await getComponents()
+  const categories = await getAllCategories()
 
   return (
     <>
       <HeroBanner />
-      <Container id="mainContent" classNames="pb-8 lg:pb-12">
-        <ul className="space-y-8">
-          {componentsByCategory.map(({ categoryTitle, componentItems = [] }) => {
-            return (
-              <li className="space-y-4" key={categoryTitle}>
-                <CollectionGrid componentItems={componentItems} />
-              </li>
-            )
-          })}
-        </ul>
+
+      <Container id="mainContent" classNames="pb-16 lg:pb-24">
+        <div className="space-y-16">
+          {categories.map(({ slug, title, subtitle, items }) => (
+            <section key={slug} aria-labelledby={`cat-${slug}`} className="space-y-6">
+              <header className="flex flex-wrap items-end justify-between gap-4 border-b border-slate-200 pb-4">
+                <div>
+                  <h2
+                    id={`cat-${slug}`}
+                    className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl"
+                  >
+                    {title}
+                  </h2>
+                  {subtitle ? (
+                    <p className="mt-1 max-w-2xl text-sm text-slate-600 sm:text-base">{subtitle}</p>
+                  ) : null}
+                </div>
+
+                <Link
+                  href={`/${slug}`}
+                  className="group inline-flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-800"
+                >
+                  View all {items.length}
+                  <span aria-hidden="true" className="transition group-hover:translate-x-0.5">
+                    &rarr;
+                  </span>
+                </Link>
+              </header>
+
+              <CollectionGrid componentItems={items} />
+            </section>
+          ))}
+        </div>
       </Container>
     </>
   )
