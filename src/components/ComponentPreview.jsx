@@ -39,8 +39,6 @@ export default function ComponentPreview({ componentData, componentContainer }) 
   const componentWrapper = componentContainer?.previewHeight || 'h-[400px] lg:h-[600px]'
   const componentHash = `component-${componentId}`
 
-  // One effect replaces the three overlapping ones (fetch on view, fetch on toggle,
-  // and a mount-time transform that ran on empty code). It also cancels stale requests.
   useEffect(() => {
     if (!inView) return
 
@@ -86,15 +84,21 @@ export default function ComponentPreview({ componentData, componentContainer }) 
     trueComponentContainer,
   ])
 
-  // Derived, not state: the code shown follows the selected language automatically
   const previewCode = codeType === 'jsx' ? sources.jsx : codeType === 'vue' ? sources.vue : sources.raw
 
   return (
-    <div ref={ref} id={componentHash} className="scroll-mt-24">
-      <div className="space-y-4">
-        <div className="lg:flex lg:items-center">
+    <div ref={ref} id={componentHash} className="scroll-mt-32">
+      {/* One window: title bar carries the name and every control, body is the preview or the code */}
+      <div className="overflow-hidden rounded-2xl bg-white shadow-[0_1px_2px_rgb(10_10_10/0.04)] ring-1 ring-neutral-950/10">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-neutral-950/10 bg-neutral-50 px-3 py-2">
+          <h3 className="mr-auto min-w-0 truncate text-sm font-medium text-neutral-950">
+            <a href={`#${componentHash}`} className="sc-focus rounded-sm hover:underline hover:underline-offset-4">
+              {componentTitle}
+            </a>
+          </h3>
+
           {status === 'ready' && (
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <>
               <PreviewView handleSetShowPreview={setShowPreview} />
 
               <PreviewType
@@ -111,10 +115,10 @@ export default function ComponentPreview({ componentData, componentContainer }) 
                   handleSetIsInteractive={setIsInteractive}
                 />
               )}
-            </div>
+            </>
           )}
 
-          <div className="hidden lg:flex lg:flex-1 lg:items-end lg:justify-end lg:gap-4">
+          <div className="hidden lg:block">
             <PreviewBreakpoint handleSetPreviewWidth={setPreviewWidth} />
           </div>
         </div>
@@ -123,15 +127,17 @@ export default function ComponentPreview({ componentData, componentContainer }) 
           {status === 'error' ? (
             <div
               role="alert"
-              className={`grid place-items-center rounded-xl border border-red-200 bg-red-50 p-6 text-center text-sm text-red-700 ${componentWrapper}`}
+              className={`sc-hatch grid place-items-center p-6 ${componentWrapper}`}
             >
-              Couldn&apos;t load this preview. Refresh the page to try again.
+              <p className="max-w-sm rounded-lg bg-white px-4 py-3 text-center text-sm text-neutral-700 ring-1 ring-neutral-950/10">
+                This preview didn&apos;t load. Refresh the page to try again.
+              </p>
             </div>
           ) : status !== 'ready' ? (
             <div
               aria-busy="true"
               aria-label={`Loading ${componentTitle}`}
-              className={`animate-pulse rounded-xl bg-slate-100 ${componentWrapper}`}
+              className={`sc-hatch animate-pulse ${componentWrapper}`}
             />
           ) : (
             <>

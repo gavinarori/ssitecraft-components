@@ -20,7 +20,8 @@ export const paths = { COMPONENTS_DIR, CATEGORIES_DIR, PAGES_DIR }
 const stripMdx = (name) => name.replace(/\.mdx$/, '')
 
 async function readFrontmatter(filePath) {
-  const source = await fs.readFile(filePath, 'utf-8')
+  // Explicit string coercion to reduce Turbopack TP1004 "very dynamic" noise
+  const source = await fs.readFile(String(filePath), 'utf-8')
   const { frontmatter } = await serialize(source, { parseFrontmatter: true })
   return frontmatter
 }
