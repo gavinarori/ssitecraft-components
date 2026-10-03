@@ -8,59 +8,47 @@ import rehypeExternalLinks from 'rehype-external-links'
 import remarkSlug from 'remark-slug'
 
 import { ogMeta, twitterMeta } from '@data/metadata'
+import { getPageParams, paths } from '@lib/components-data'
 
 import FaqList from '@component/FaqList'
 import Container from '@component/Container'
 import MdxRemoteRender from '@component/MdxRemoteRender'
 
-const mdxComponents = {
-  FaqList,
-}
-
-const pagesPath = join(process.cwd(), '/src/data/pages')
-
-export async function generateMetadata({ params }) {
-  const { pageData } = await getPage(params)
-
-  return {
-    title: `${pageData.title} | sitecraft`,
-    description: pageData.description,
-    openGraph: {
-      title: `${pageData.title} | sitecraft`,
-      description: pageData.description,
-      ...ogMeta,
-    },
-    twitter: {
-      title: `${pageData.title} | sitecraft`,
-      description: pageData.description,
-      ...twitterMeta,
-    },
-  }
-}
+const mdxComponents = { FaqList }
 
 export async function generateStaticParams() {
-  return await fs.readdir(pagesPath)
+  return getPageParams()
 }
 
 async function getPage(params) {
-  try {
-    const pagePath = join(pagesPath, `${params.slug}.mdx`)
-    const pageItem = await fs.readFile(pagePath, 'utf-8')
+  const { slug } = await params
 
-    const mdxSource = await serialize(pageItem, {
+  try {
+    const source = await fs.readFile(join(paths.PAGES_DIR, `${slug}.mdx`), 'utf-8')
+
+    const mdxSource = await serialize(source, {
       parseFrontmatter: true,
       mdxOptions: {
         remarkPlugins: [remarkSlug],
-        rehypePlugins: [[rehypeExternalLinks, { target: '_blank' }]],
+        rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer'] }]],
       },
     })
 
-    return {
-      pageData: mdxSource.frontmatter,
-      pageContent: mdxSource,
-    }
+    return { pageData: mdxSource.frontmatter, pageContent: mdxSource }
   } catch {
     notFound()
+  }
+}
+
+export async function generateMetadata({ params }) {
+  const { pageData } = await getPage(params)
+  const title = `${pageData.title} | sitecraft`
+
+  return {
+    title,
+    description: pageData.description,
+    openGraph: { title, description: pageData.description, ...ogMeta },
+    twitter: { title, description: pageData.description, ...twitterMeta },
   }
 }
 
@@ -68,13 +56,23 @@ export default async function Page({ params }) {
   const { pageData, pageContent } = await getPage(params)
 
   return (
-    <Container id="mainContent" classNames="py-8 lg:py-12 space-y-8">
+    <>
+      <header className="sc-glow border-b border-slate-200">
+        <div className="mx-auto max-w-3xl px-6 py-14 lg:py-20">
+          <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+            {pageData.title}
+          </h1>
+          {pageData.description ? (
+            <p className="mt-4 text-lg leading-8 text-slate-600">{pageData.description}</p>
+          ) : null}
+        </div>
+      </header>
 
-      <article className="prose mx-auto">
-        <h1>{pageData.title}</h1>
-
-        <MdxRemoteRender mdxSource={pageContent} mdxComponents={mdxComponents} />
-      </article>
-    </Container>
+      <Container id="mainContent" classNames="py-10 lg:py-14">
+        <article className="prose prose-slate mx-auto prose-headings:tracking-tight prose-a:text-indigo-600 hover:prose-a:text-indigo-800">
+          <MdxRemoteRender mdxSource={pageContent} mdxComponents={mdxComponents} />
+        </article>
+      </Container>
+    </>
   )
 }
