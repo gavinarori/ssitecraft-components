@@ -144,7 +144,7 @@ export default function HeaderSearch({
       const result = results[activeIndex]
       if (result) {
         event.preventDefault()
-        router.push(`/components/${result.category.slug}/${result.slug}`)
+        router.push(result.href ?? `/components/${result.category.slug}/${result.slug}`)
       }
     }
   }
@@ -160,7 +160,7 @@ export default function HeaderSearch({
     <div ref={refRoot} className={`relative ${className}`}>
       <form role="search" onSubmit={(event) => event.preventDefault()}>
         <label htmlFor={inputId} className="sr-only">
-          Search components
+          Search components and templates
         </label>
 
         <div className="relative">
@@ -192,7 +192,7 @@ export default function HeaderSearch({
             onChange={(event) => setQuery(event.target.value)}
             onFocus={() => setOpen(true)}
             onKeyDown={handleKeyDown}
-            placeholder="Search components"
+            placeholder="Search"
             className={`w-full appearance-none outline-none ring-1 ring-inset transition focus:ring-2 ${inputTone} ${
               isLarge ? 'h-12 rounded-xl pl-12 pr-4 text-base' : 'h-9 rounded-lg pl-9 pr-14 text-sm'
             }`}
@@ -223,7 +223,7 @@ export default function HeaderSearch({
                       aria-selected={isActive}
                     >
                       <Link
-                        href={`/components/${result.category.slug}/${result.slug}`}
+                        href={result.href ?? `/components/${result.category.slug}/${result.slug}`}
                         tabIndex={-1}
                         onMouseMove={() => setActiveIndex(index)}
                         className={`flex items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm text-neutral-800 transition-colors ${
@@ -256,8 +256,8 @@ export default function HeaderSearch({
               {failed
                 ? 'Search is unavailable. Refresh the page and try again.'
                 : !items
-                  ? 'Loading components...'
-                  : `No components match "${query}".`}
+                  ? 'Loading...'
+                  : `Nothing matches "${query}".`}
             </p>
           )}
         </div>
