@@ -11,7 +11,8 @@ import { serialize } from 'next-mdx-remote/serialize'
  * goes through toPublic(), which drops it.
  */
 
-const TEMPLATES_DIR = join(process.cwd(), 'src/data/templates')
+// turbopackIgnore: these are runtime reads, so Turbopack should not trace the whole project (TP1004)
+const TEMPLATES_DIR = join(/* turbopackIgnore: true */ process.cwd(), 'src/data/templates')
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 // Read at call time so tests and the build can change NODE_ENV
@@ -95,7 +96,7 @@ const readTemplateFile = cache(async (slug) => {
   if (typeof slug !== 'string' || !SLUG_PATTERN.test(slug)) return null
 
   try {
-    const source = await fs.readFile(join(TEMPLATES_DIR, `${slug}.mdx`), 'utf-8')
+    const source = await fs.readFile(/* turbopackIgnore: true */ join(/* turbopackIgnore: true */ TEMPLATES_DIR, `${slug}.mdx`), 'utf-8')
     const content = await serialize(source, { parseFrontmatter: true })
     return { template: normalize(slug, content.frontmatter), content }
   } catch (error) {
@@ -106,7 +107,7 @@ const readTemplateFile = cache(async (slug) => {
 
 async function listSlugs() {
   try {
-    const files = await fs.readdir(TEMPLATES_DIR)
+    const files = await fs.readdir(/* turbopackIgnore: true */ TEMPLATES_DIR)
     return files.filter((file) => file.endsWith('.mdx')).map((file) => file.replace(/\.mdx$/, ''))
   } catch (error) {
     if (error.code === 'ENOENT') return []

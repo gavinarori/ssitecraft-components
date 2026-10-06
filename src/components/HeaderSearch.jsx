@@ -14,7 +14,7 @@ function Highlight({ text, query }) {
   return (
     <>
       {text.slice(0, start)}
-      <mark className="bg-transparent text-neutral-950 underline decoration-sky-500 decoration-2 underline-offset-[3px]">
+      <mark className="bg-transparent text-neutral-950 underline decoration-[var(--lf-leaf)] decoration-2 underline-offset-[3px]">
         {text.slice(start, start + needle.length)}
       </mark>
       {text.slice(start + needle.length)}
@@ -26,7 +26,10 @@ function Highlight({ text, query }) {
 export default function HeaderSearch({
   className = '',
   size = 'md',
-  tone = 'light', // 'dark' is for the hero stage
+  tone = 'light', // 'glass' is for the transparent header over the hero photo
+  variant = 'default', // 'hero' is the large field with a round submit button
+  scope = 'all', // 'all' | 'component' | 'template'
+  placeholder = 'Search',
   enableShortcut = false,
 }) {
   const pathname = usePathname()
@@ -111,12 +114,13 @@ export default function HeaderSearch({
   const results = useMemo(() => {
     if (!items) return []
     const needle = query.toLowerCase().trim()
-    if (!needle) return items
-    return items.filter(
+    const inScope = scope === 'all' ? items : items.filter((item) => item.type === scope)
+    if (!needle) return inScope
+    return inScope.filter(
       ({ title, category }) =>
         title.toLowerCase().includes(needle) || category?.title?.toLowerCase().includes(needle)
     )
-  }, [items, query])
+  }, [items, query, scope])
 
   // A new query always starts back at the top result
   useEffect(() => setActiveIndex(0), [query])
@@ -149,22 +153,31 @@ export default function HeaderSearch({
     }
   }
 
-  const isLarge = size === 'lg'
-  const inputTone =
-    tone === 'dark'
-      ? 'bg-[#0e0e14] text-white ring-white/10 placeholder:text-neutral-400 hover:bg-[#13131b] focus:bg-[#13131b] focus:ring-white/70'
-      : 'bg-neutral-50 text-neutral-950 ring-neutral-950/10 placeholder:text-neutral-500 hover:bg-white focus:bg-white focus:ring-neutral-950'
+  const isHero = variant === 'hero'
+  const isLarge = size === 'lg' || isHero
+  const inputTone = isHero
+    ? 'bg-white text-neutral-950 ring-[#c7c7c7] placeholder:text-[#999694] focus:ring-2 focus:ring-[var(--lf-forest)]'
+    : tone === 'glass'
+      ? 'bg-[rgb(255_255_255/0.14)] text-white ring-[rgb(255_255_255/0.28)] placeholder:text-[rgb(255_255_255/0.7)] hover:bg-[rgb(255_255_255/0.2)] focus:bg-white focus:text-neutral-950 focus:ring-white'
+      : 'bg-white/70 text-neutral-950 ring-[rgb(12_42_30/0.14)] placeholder:text-neutral-500 hover:bg-white focus:bg-white focus:ring-[var(--lf-forest)]'
   const optionId = (index) => `${listId}-option-${index}`
 
   return (
     <div ref={refRoot} className={`relative ${className}`}>
-      <form role="search" onSubmit={(event) => event.preventDefault()}>
+      <form
+        role="search"
+        onSubmit={(event) => {
+          event.preventDefault()
+          const result = results[activeIndex]
+          if (result) router.push(result.href ?? `/components/${result.category.slug}/${result.slug}`)
+        }}
+      >
         <label htmlFor={inputId} className="sr-only">
           Search components and templates
         </label>
 
         <div className="relative">
-          <svg
+          {!isHero && <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="none"
@@ -176,7 +189,7 @@ export default function HeaderSearch({
             aria-hidden="true"
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-4.3-4.3M17 10.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0Z" />
-          </svg>
+          </svg>}
 
           <input
             ref={refInput}
@@ -192,11 +205,21 @@ export default function HeaderSearch({
             onChange={(event) => setQuery(event.target.value)}
             onFocus={() => setOpen(true)}
             onKeyDown={handleKeyDown}
-            placeholder="Search"
+            placeholder={placeholder}
             className={`w-full appearance-none outline-none ring-1 ring-inset transition focus:ring-2 ${inputTone} ${
-              isLarge ? 'h-12 rounded-xl pl-12 pr-4 text-base' : 'h-9 rounded-lg pl-9 pr-14 text-sm'
+              isHero ? 'h-16 rounded-xl pl-6 pr-16 text-base' : isLarge ? 'h-12 rounded-xl pl-12 pr-4 text-base' : 'h-9 rounded-lg pl-9 pr-14 text-sm'
             }`}
           />
+
+          {isHero && (
+            <button
+              type="submit"
+              aria-label="Open the top result"
+              className="lf-focus absolute right-3 top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-full bg-[var(--lf-forest)] text-white transition hover:bg-[var(--lf-forest-2)]"
+            >
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-4" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" /></svg>
+            </button>
+          )}
 
           {enableShortcut && !query && (
             <kbd className="sc-mono pointer-events-none absolute right-2 top-1/2 hidden -translate-y-1/2 rounded-md bg-white px-1.5 py-0.5 text-[11px] text-neutral-500 ring-1 ring-neutral-950/10 lg:block">
@@ -210,7 +233,7 @@ export default function HeaderSearch({
         <div className="absolute inset-x-0 top-full z-50 mt-2 overflow-hidden rounded-xl bg-white text-left shadow-[0_20px_50px_-12px_rgb(10_10_10/0.25)] ring-1 ring-neutral-950/10">
           {results.length ? (
             <>
-              <ul ref={refList} id={listId} role="listbox" aria-label="Components" className="max-h-80 overflow-auto p-1">
+              <ul ref={refList} id={listId} role="listbox" aria-label="Results" className="max-h-80 overflow-auto p-1">
                 {results.map((result, index) => {
                   const isActive = index === activeIndex
 

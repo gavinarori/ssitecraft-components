@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-import { formatDate, majorVersion } from '../../../src/lib/format'
-import { getTemplate, getTemplateParams } from '../../../src/lib/templates-data'
+import { formatDate, majorVersion } from '@util/lib/format'
+import { getTemplate, getTemplateParams } from '@util/lib/templates-data'
 
 import { ogMeta, twitterMeta } from '@data/metadata'
 
@@ -99,7 +99,7 @@ export default async function Page({ params }) {
                   <span className="size-2.5 rounded-full bg-neutral-950/15" />
                   <span className="size-2.5 rounded-full bg-neutral-950/15" />
                 </span>
-                <Link href={`/templates/${template.slug}/preview`} className="sc-focus rounded-md px-2 py-1 text-sm font-semibold text-neutral-950 underline decoration-sky-500 decoration-2 underline-offset-4">
+                <Link href={`/templates/${template.slug}/preview`} className="sc-focus rounded-md px-2 py-1 text-sm font-semibold text-neutral-950 underline decoration-[var(--lf-leaf)] decoration-2 underline-offset-4">
                   Open live preview
                 </Link>
               </div>
@@ -127,7 +127,7 @@ export default async function Page({ params }) {
               <ul className="mt-4 grid gap-x-8 gap-y-3 text-sm text-neutral-700 sm:grid-cols-2">
                 {template.features.map((feature) => (
                   <li key={feature} className="flex gap-2 border-t border-neutral-950/10 pt-3">
-                    <span aria-hidden="true" className="mt-1.5 size-1.5 shrink-0 rounded-full bg-sky-500" />
+                    <span aria-hidden="true" className="mt-1.5 size-1.5 shrink-0 rounded-full bg-[var(--lf-leaf)]" />
                     {feature}
                   </li>
                 ))}

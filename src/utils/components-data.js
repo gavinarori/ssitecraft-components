@@ -7,24 +7,31 @@ import { serialize } from 'next-mdx-remote/serialize'
  * Shared data layer for the page files.
  * Before: the same directory-walking + frontmatter parsing was copy-pasted in
  * the home page, category page and /api route. Now it lives here once.
+ *
+ * Free vs Pro: add `access: pro` to a collection's frontmatter to mark it as a paid pack.
+ * Anything without it is free. Optional `price: 29` is carried through for the pack page.
  */
 
-export const CATEGORY_SLUGS = ['application-ui', 'marketing']
+export const CATEGORY_SLUGS = ['application-ui']
 
-const COMPONENTS_DIR = join(process.cwd(), 'src/data/components')
-const CATEGORIES_DIR = join(process.cwd(), 'src/data/categories')
-const PAGES_DIR = join(process.cwd(), 'src/data/pages')
+// The turbopackIgnore comments tell Turbopack these paths are read at runtime, so it stops trying
+// to trace every file under them (that tracing is what produced the TP1004 "very dynamic" warning).
+const COMPONENTS_DIR = join(/* turbopackIgnore: true */ process.cwd(), 'src/data/components')
+const CATEGORIES_DIR = join(/* turbopackIgnore: true */ process.cwd(), 'src/data/categories')
+const PAGES_DIR = join(/* turbopackIgnore: true */ process.cwd(), 'src/data/pages')
 
 export const paths = { COMPONENTS_DIR, CATEGORIES_DIR, PAGES_DIR }
 
 const stripMdx = (name) => name.replace(/\.mdx$/, '')
 
 async function readFrontmatter(filePath) {
-  // Explicit string coercion to reduce Turbopack TP1004 "very dynamic" noise
-  const source = await fs.readFile(String(filePath), 'utf-8')
+  const source = await fs.readFile(/* turbopackIgnore: true */ filePath, 'utf-8')
   const { frontmatter } = await serialize(source, { parseFrontmatter: true })
   return frontmatter
 }
+
+/** Anything that is not exactly "pro" counts as free, so a typo can never lock a collection by accident. */
+const normalizeAccess = (value) => (String(value ?? '').trim().toLowerCase() === 'pro' ? 'pro' : 'free')
 
 /** One category's frontmatter (title, subtitle, description, image...) */
 export const getCategoryData = cache(async (categorySlug) => {
@@ -33,7 +40,7 @@ export const getCategoryData = cache(async (categorySlug) => {
 
 /** Every collection belonging to a category, sorted by title. */
 export const getCollectionsForCategory = cache(async (categorySlug) => {
-  const files = (await fs.readdir(COMPONENTS_DIR)).filter(
+  const files = (await fs.readdir(/* turbopackIgnore: true */ COMPONENTS_DIR)).filter(
     (file) => file.endsWith('.mdx') && file.startsWith(`${categorySlug}-`)
   )
 
@@ -51,6 +58,8 @@ export const getCollectionsForCategory = cache(async (categorySlug) => {
         emoji: data.emoji ?? null,
         tag: data.tag ?? null,
         count: Object.keys(data.components ?? {}).length,
+        access: normalizeAccess(data.access),
+        price: data.price != null && Number(data.price) > 0 ? Number(data.price) : null,
       }
     })
   )
@@ -84,7 +93,7 @@ export async function getFlatCollections() {
 
 /** Params for generateStaticParams on /[category]/[collection]. */
 export async function getCollectionParams() {
-  const files = await fs.readdir(COMPONENTS_DIR)
+  const files = await fs.readdir(/* turbopackIgnore: true */ COMPONENTS_DIR)
   return files
     .filter((f) => f.endsWith('.mdx'))
     .map(stripMdx)
@@ -97,6 +106,6 @@ export async function getCollectionParams() {
 
 /** Params for generateStaticParams on /[slug] content pages. */
 export async function getPageParams() {
-  const files = await fs.readdir(PAGES_DIR)
+  const files = await fs.readdir(/* turbopackIgnore: true */ PAGES_DIR)
   return files.filter((f) => f.endsWith('.mdx')).map((f) => ({ slug: stripMdx(f) }))
 }

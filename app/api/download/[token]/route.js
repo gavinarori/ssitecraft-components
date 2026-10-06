@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
 
-import { verifyDownloadToken } from '../../../src/lib/download-token'
-import { getSignedZipUrl } from '../../../src/lib/storage'
-import { store } from '../../../src/lib/store'
-import { getTemplateServer } from '../../../src/lib/templates-data'
+import { verifyDownloadToken } from '@util/lib/download-token'
+import { getSignedZipUrl } from '@util/lib/storage'
+import { store } from '@util/lib/store'
+import { getTemplateServer } from '@util/lib/templates-data'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'

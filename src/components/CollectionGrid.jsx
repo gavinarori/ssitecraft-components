@@ -3,8 +3,8 @@ import CollectionCard from '@component/CollectionCard'
 export default function CollectionGrid({ componentItems = [] }) {
   if (!componentItems.length) {
     return (
-      <p className="rounded-2xl border border-dashed border-slate-300 p-10 text-center text-sm text-slate-500">
-        No collections here yet. Check back soon.
+      <p className="rounded-2xl border border-dashed border-[var(--lf-line)] p-10 text-center text-sm text-neutral-500">
+        Nothing planted here yet. Check back soon.
       </p>
     )
   }

@@ -8,7 +8,7 @@ import rehypeExternalLinks from 'rehype-external-links'
 import remarkSlug from 'remark-slug'
 
 import { ogMeta, twitterMeta } from '@data/metadata'
-import { getPageParams, paths } from '@lib/components-data'
+import { getPageParams, paths } from '@util/components-data'
 
 import FaqList from '@component/FaqList'
 import Container from '@component/Container'
