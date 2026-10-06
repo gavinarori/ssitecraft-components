@@ -42,7 +42,7 @@
     "eslint": "8.57.0",
     "eslint-config-next": "^14.2.6",
     "fast-glob": "^3.3.2",
-    "next-mdx-remote": "^5.0.0",
+    "next-mdx-remote": "^6.0.0",
     "postcss": "^8.4.41",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.6",
