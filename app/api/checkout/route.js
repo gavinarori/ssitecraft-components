@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
 
-import { isTier } from '../../../src/lib/licenses'
-import { PaymentError } from '../../../src/lib/payments/errors'
-import { getProvider } from '../../../src/lib/payments'
-import { getSiteUrl } from '../../../src/lib/site-url'
-import { getTemplateServer } from '../../../src/lib/templates-data'
+import { isTier } from '@util/lib/licenses'
+import { PaymentError } from '@util/lib/payments/errors'
+import { getProvider } from '@util/lib/payments'
+import { getSiteUrl } from '@util/lib/site-url'
+import { getTemplateServer } from '@util/lib/templates-data'
 
 export const runtime = 'nodejs'
 

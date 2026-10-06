@@ -23,7 +23,10 @@ export default async function sitemap() {
             .filter((componentSlug) => componentSlug.includes(categorySlug))
             .map(async (componentSlug) => {
               const componentSlugFormatted = componentSlug.replace('.mdx', '')
-              const componentSlugTrue = componentSlugFormatted.replace(`${categorySlug}-`, '')
+              const componentSlugTrue = componentSlugFormatted.replace(
+                `${categorySlug}-`,
+                ''
+              )
 
               return `components/${categorySlug}/${componentSlugTrue}`
             })
@@ -36,21 +39,7 @@ export default async function sitemap() {
     return componentsByCategory.flatMap((componentItem) => componentItem)
   }
 
-  async function getBlogs() {
-    const blogsPath = join(process.cwd(), '/src/data/posts')
-
-    const blogSlugs = await fs.readdir(blogsPath)
-
-    return await Promise.all(
-      blogSlugs.map(async (blogSlug) => {
-        const blogSlugFormatted = blogSlug.replace('.mdx', '')
-
-        return `blog/${blogSlugFormatted}`
-      })
-    )
-  }
-
-  const siteSlugs = await Promise.all([getCategories(), getComponents(), getBlogs()])
+  const siteSlugs = await Promise.all([getCategories(), getComponents()])
 
   const transformedSlugs = siteSlugs.flatMap((siteSlug) => {
     return siteSlug.flatMap((pageSlug) => {
@@ -72,10 +61,6 @@ export default async function sitemap() {
     },
     {
       url: 'https://www.hyperui.dev/about/acknowledgements',
-      lastModified: new Date(),
-    },
-    {
-      url: 'https://www.hyperui.dev/blog',
       lastModified: new Date(),
     },
     ...transformedSlugs,

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import { getTemplate } from '../../../../src/lib/templates-data'
+import { getTemplate } from '@util/lib/templates-data'
 
 import TemplatePreviewShell from '@component/TemplatePreviewShell'
 

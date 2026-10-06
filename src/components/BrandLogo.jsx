@@ -1,32 +1,29 @@
 import Link from 'next/link'
 
-// Renders a <span>, not an <h1>: the logo appears on every page (header + footer),
-// and each page should own exactly one <h1>.
-export default function BrandLogo({ fontSize = 'text-xl' }) {
+// A span, not an <h1>: the logo sits on every page (header + footer) and each page owns one <h1>.
+// tone="light" is for dark backgrounds (the footer).
+export default function BrandLogo({ fontSize = 'text-xl', tone = 'dark' }) {
+  const light = tone === 'light'
+
   return (
-    <Link
-      href="/"
-      aria-label="Sitecraft home"
-      className="group inline-flex items-center gap-2 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-    >
-      <span className="grid size-8 place-items-center rounded-lg bg-gray-600 text-white shadow-sm transition group-hover:scale-105">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.75}
-          stroke="currentColor"
-          className="size-5"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M21.75 6.75a4.5 4.5 0 0 1-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 1 1-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 0 1 6.336-4.486l-3.276 3.276a3.004 3.004 0 0 0 2.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852Z"
-          />
+    <Link href="/" aria-label="Sitecraft home" className="lf-focus group inline-flex items-center gap-2.5">
+      <span
+        className={`grid size-8 place-items-center rounded-[10px] transition duration-300 group-hover:-rotate-6 group-hover:scale-105 ${
+          light ? 'bg-[var(--lf-lime)] text-[var(--lf-forest)]' : 'bg-[var(--lf-forest)] text-[var(--lf-lime)]'
+        }`}
+      >
+        {/* A sprout: stem and two leaves */}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" className="size-[18px]" aria-hidden="true">
+          <path d="M12 21v-8" />
+          <path d="M12 13c0-4 2.6-6.6 7-6.6 0 4-2.7 6.6-7 6.6Z" />
+          <path d="M12 15.5c0-3-2-5-5.5-5 0 3 2 5 5.5 5Z" />
         </svg>
       </span>
-      <span className={`${fontSize} font-bold tracking-tight text-slate-900`}>Sitecraft</span>
+      <span
+        className={`lf-display ${fontSize} font-semibold tracking-tight ${light ? 'text-[var(--lf-paper)]' : 'text-[var(--lf-forest)]'}`}
+      >
+        Sitecraft
+      </span>
     </Link>
   )
 }

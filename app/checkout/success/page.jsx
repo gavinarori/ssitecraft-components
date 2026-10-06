@@ -11,7 +11,7 @@ export default function Page() {
   return (
     <Container classNames="py-20">
       <div className="mx-auto max-w-lg text-center">
-        <span className="mx-auto flex size-12 items-center justify-center rounded-full bg-sky-50 text-sky-600 ring-1 ring-sky-600/20" aria-hidden="true">
+        <span className="mx-auto flex size-12 items-center justify-center rounded-full bg-[rgb(198_242_107/0.4)] text-[var(--lf-leaf)] ring-1 ring-[rgb(22_160_95/0.3)]" aria-hidden="true">
           <svg viewBox="0 0 20 20" fill="currentColor" className="size-6"><path fillRule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4l3.8 3.8 6.8-6.8a1 1 0 0 1 1.4 0Z" clipRule="evenodd" /></svg>
         </span>
         <h1 className="mt-6 text-3xl font-semibold tracking-tight text-neutral-950">Payment received</h1>

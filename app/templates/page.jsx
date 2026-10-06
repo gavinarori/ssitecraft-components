@@ -1,4 +1,4 @@
-import { getAllTemplates, getTemplateFacets } from '../../src/lib/templates-data'
+import { getAllTemplates, getTemplateFacets } from '@util/lib/templates-data'
 
 import { ogMeta, twitterMeta } from '@data/metadata'
 

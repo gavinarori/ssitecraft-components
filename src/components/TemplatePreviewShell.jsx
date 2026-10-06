@@ -4,9 +4,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import Link from 'next/link'
 
-import { formatPrice } from '../lib/format'
-import { TIERS, availableTiers } from '../lib/licenses'
-import { useCheckout } from '../lib/use-checkout'
+import { formatPrice } from '@util/lib/format'
+import { TIERS, availableTiers } from '../utils/lib/licenses'
+import { useCheckout } from '../utils/lib/use-checkout'
 
 const DEVICES = [
   { id: 'desktop', label: 'Desktop', width: '100%', icon: 'M3 5.5A1.5 1.5 0 0 1 4.5 4h15A1.5 1.5 0 0 1 21 5.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 14.5v-9ZM8 20h8M12 16v4' },

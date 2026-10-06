@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { formatPrice } from '../lib/format'
+import { formatPrice } from '../utils/lib/format'
 
 import TemplateShot from '@component/TemplateShot'
 
