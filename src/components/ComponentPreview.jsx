@@ -1,29 +1,41 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
 
 import { useInView } from 'react-intersection-observer'
 
 import { componentPreviewHtml, componentPreviewJsx, componentPreviewVue } from '@util/transformers'
+import { componentBreakpoints } from '@data/breakpoints'
 
+import PreviewCreator from '@component/PreviewCreator'
 import PreviewBreakpoint from '@component/PreviewBreakpoint'
 import PreviewCode from '@component/PreviewCode'
 import PreviewCopy from '@component/PreviewCopy'
 import PreviewIframe from '@component/PreviewIframe'
 import PreviewInteractive from '@component/PreviewInteractive'
-import PreviewType from '@component/PreviewType'
+import PreviewTitle from '@component/PreviewTitle'
 import PreviewView from '@component/PreviewView'
+import PreviewType from '@component/PreviewType'
 
 export default function ComponentPreview({ componentData, componentContainer }) {
   const refIframe = useRef(null)
 
   const [codeType, setCodeType] = useState('html')
-  const [sources, setSources] = useState({ html: '', jsx: '', vue: '', raw: '' })
-  const [isDarkMode] = useState(false)
+  const [componentCode, setComponentCode] = useState('')
+  const [componentHtml, setComponentHtml] = useState('')
+  const [componentJsx, setComponentJsx] = useState('')
+  const [componentVue, setComponentVue] = useState('')
+  const [isDarkMode, setIsDarkMode] = useState(false)
   const [isInteractive, setIsInteractive] = useState(false)
+  const [previewCode, setPreviewCode] = useState('')
   const [previewWidth, setPreviewWidth] = useState('100%')
   const [showPreview, setShowPreview] = useState(true)
-  const [status, setStatus] = useState('idle') // idle | loading | ready | error
+  const [loadError, setLoadError] = useState('')
 
-  const { ref, inView } = useInView({ threshold: 0, triggerOnce: true })
+  const { ref, inView } = useInView({
+    threshold: 0,
+    triggerOnce: true,
+  })
 
   const {
     id: componentId,
@@ -31,81 +43,118 @@ export default function ComponentPreview({ componentData, componentContainer }) 
     slug: componentSlug,
     category: componentCategory,
     container: componentSpace,
+    creator: componentCreator,
     dark: componentHasDark,
     interactive: componentHasInteractive,
   } = componentData
 
   const trueComponentContainer = componentSpace || componentContainer?.previewInner
   const componentWrapper = componentContainer?.previewHeight || 'h-[400px] lg:h-[600px]'
+
   const componentHash = `component-${componentId}`
 
   useEffect(() => {
-    if (!inView) return
+    if (inView) {
+      fetchHtml({
+        useDark: isDarkMode,
+      })
+    }
 
-    const controller = new AbortController()
-    const useDarkMode = Boolean(componentHasDark && isDarkMode)
-    const useInteractiveMode = Boolean(componentHasInteractive && isInteractive)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView])
+
+  useEffect(() => {
+    if (inView) {
+      fetchHtml({
+        useDark: isDarkMode,
+        useInteractive: isInteractive,
+      })
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDarkMode, isInteractive])
+
+  useEffect(() => {
+    if (inView) {
+      const transformedHtml = componentPreviewHtml(
+        componentCode,
+        trueComponentContainer,
+        isDarkMode,
+      )
+
+      setComponentHtml(transformedHtml)
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    codeType === 'html' && setPreviewCode(componentCode)
+    codeType === 'jsx' && setPreviewCode(componentJsx)
+    codeType === 'vue' && setPreviewCode(componentVue)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [codeType])
+
+  async function fetchHtml(useOptions = {}) {
+    const { useDark, useInteractive } = useOptions
+
+    const useDarkMode = componentHasDark && useDark
+    const useInteractiveMode = componentHasInteractive && useInteractive
 
     const componentPath = [componentId, useDarkMode && 'dark', useInteractiveMode && 'interactive']
       .filter(Boolean)
       .join('-')
-    const componentUrl = `/components/${componentCategory}-${componentSlug}/${componentPath}.html`
 
-    setStatus((current) => (current === 'ready' ? current : 'loading'))
+    // Try the slug as written, then lower-case (Vercel's file system is case-sensitive)
+    const folders = [...new Set([`${componentCategory}-${componentSlug}`, `${componentCategory}-${componentSlug}`.toLowerCase()])]
 
-    fetch(componentUrl, { signal: controller.signal })
-      .then((response) => {
-        if (!response.ok) throw new Error(`Failed to load ${componentUrl}`)
-        return response.text()
-      })
-      .then((text) => {
-        setSources({
-          raw: text,
-          html: componentPreviewHtml(text, trueComponentContainer, useDarkMode),
-          jsx: componentPreviewJsx(text),
-          vue: componentPreviewVue(text),
-        })
-        setStatus('ready')
-      })
-      .catch((error) => {
-        if (error.name !== 'AbortError') setStatus('error')
-      })
+    let textResponse = null
+    let tried = ''
+    for (const folder of folders) {
+      tried = `/components/${folder}/${componentPath}.html`
+      try {
+        const fetchResponse = await fetch(tried)
+        if (fetchResponse.ok) {
+          const text = await fetchResponse.text()
+          // A missing file can come back as an HTML 404 page with status 200 on some hosts
+          if (text && !/<title>\s*404/i.test(text)) {
+            textResponse = text
+            break
+          }
+        }
+      } catch {}
+    }
 
-    return () => controller.abort()
-  }, [
-    inView,
-    isDarkMode,
-    isInteractive,
-    componentId,
-    componentCategory,
-    componentSlug,
-    componentHasDark,
-    componentHasInteractive,
-    trueComponentContainer,
-  ])
+    if (textResponse === null) {
+      setLoadError(`Could not load ${tried}. Check that this file exists under public${tried}.`)
+      return
+    }
+    setLoadError('')
+    const transformedHtml = componentPreviewHtml(
+      textResponse,
+      trueComponentContainer,
+      useDark,
+    )
+    const transformedJsx = componentPreviewJsx(textResponse)
+    const transformedVue = componentPreviewVue(textResponse)
 
-  const previewCode = codeType === 'jsx' ? sources.jsx : codeType === 'vue' ? sources.vue : sources.raw
+    setPreviewCode(textResponse)
+    setComponentCode(textResponse)
+    setComponentHtml(transformedHtml)
+    setComponentJsx(transformedJsx)
+    setComponentVue(transformedVue)
+  }
 
   return (
-    <div ref={ref} id={componentHash} className="scroll-mt-32">
-      {/* One window: title bar carries the name and every control, body is the preview or the code */}
-      <div className="overflow-hidden rounded-2xl bg-white shadow-[0_1px_2px_rgb(10_10_10/0.04)] ring-1 ring-neutral-950/10">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-neutral-950/10 bg-neutral-50 px-3 py-2">
-          <h3 className="mr-auto min-w-0 truncate text-sm font-medium text-neutral-950">
-            <a href={`#${componentHash}`} className="sc-focus rounded-sm hover:underline hover:underline-offset-4">
-              {componentTitle}
-            </a>
-          </h3>
+    <div ref={ref} id={componentHash}>
+      <div className="space-y-4">
+        <div className="lg:flex lg:items-center">
+          {componentCode && (
+            <div className="flex flex-wrap items-center  gap-2 sm:gap-4">
+              <PreviewView handleSetShowPreview={setShowPreview}  />
 
-          {status === 'ready' && (
-            <>
-              <PreviewView handleSetShowPreview={setShowPreview} />
-
-              <PreviewType
-                componentId={componentId}
-                codeType={codeType}
-                handleSetCodeType={setCodeType}
-              />
+              <PreviewType componentId={componentId} handleSetCodeType={setCodeType} />
 
               <PreviewCopy componentCode={previewCode} codeType={codeType} />
 
@@ -115,46 +164,47 @@ export default function ComponentPreview({ componentData, componentContainer }) 
                   handleSetIsInteractive={setIsInteractive}
                 />
               )}
-            </>
+
+            </div>
           )}
 
-          <div className="hidden lg:block">
-            <PreviewBreakpoint handleSetPreviewWidth={setPreviewWidth} />
+          <div className="hidden lg:flex lg:flex-1 lg:items-end lg:justify-end lg:gap-4">
+                <PreviewBreakpoint
+                  handleSetPreviewWidth={setPreviewWidth}
+                />
+
           </div>
         </div>
 
-        <div className="relative">
-          {status === 'error' ? (
-            <div
-              role="alert"
-              className={`sc-hatch grid place-items-center p-6 ${componentWrapper}`}
-            >
-              <p className="max-w-sm rounded-lg bg-white px-4 py-3 text-center text-sm text-neutral-700 ring-1 ring-neutral-950/10">
-                This preview didn&apos;t load. Refresh the page to try again.
-              </p>
-            </div>
-          ) : status !== 'ready' ? (
-            <div
-              aria-busy="true"
-              aria-label={`Loading ${componentTitle}`}
-              className={`sc-hatch animate-pulse ${componentWrapper}`}
-            />
-          ) : (
-            <>
-              <PreviewIframe
-                showPreview={showPreview}
-                componentHtml={sources.html}
-                componentTitle={componentTitle}
-                previewWidth={previewWidth}
-                previewHeight={componentWrapper}
-                refIframe={refIframe}
-                previewDark={componentHasDark && isDarkMode}
-              />
+        {loadError && (
+          <p className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+            <strong>{componentTitle}</strong>: {loadError}
+          </p>
+        )}
 
-              <PreviewCode showPreview={showPreview} codeType={codeType} componentCode={previewCode} />
-            </>
-          )}
+        <div className="relative">
+          <div>
+            <PreviewIframe
+              showPreview={showPreview}
+              componentHtml={componentHtml}
+              componentTitle={componentTitle}
+              previewWidth={previewWidth}
+              previewHeight={componentWrapper}
+              refIframe={refIframe}
+              previewDark={componentHasDark && isDarkMode}
+            />
+
+            <PreviewCode
+              componentId={componentId}
+              showPreview={showPreview}
+              codeType={codeType}
+              showToggle={!isInteractive}
+              componentCode={previewCode}
+            />
+          </div>
         </div>
+
+       
       </div>
     </div>
   )

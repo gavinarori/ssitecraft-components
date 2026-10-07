@@ -16,7 +16,8 @@ const TEMPLATES_DIR = join(/* turbopackIgnore: true */ process.cwd(), 'src/data/
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 // Read at call time so tests and the build can change NODE_ENV
-const showDrafts = () => process.env.NODE_ENV === 'development'
+const showDrafts = () =>
+  process.env.NODE_ENV === 'development' || process.env.SHOW_DRAFT_TEMPLATES === '1'
 
 const asArray = (value) => (Array.isArray(value) ? value : value ? [value] : [])
 
@@ -131,7 +132,12 @@ export async function getTemplate(slug) {
 /** Every visible template, newest first. */
 export const getAllTemplates = cache(async () => {
   const slugs = await listSlugs()
-  const records = await Promise.all(slugs.map((slug) => readTemplateFile(slug)))
+  const records = await Promise.all(slugs.map((slug) =>
+      readTemplateFile(slug).catch((err) => {
+        console.error(`[templates] skipped "${slug}": ${err.message}`)
+        return null
+      })
+    ))
 
   return records
     .filter(Boolean)
