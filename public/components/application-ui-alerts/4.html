@@ -1,6 +1,101 @@
-<div role="alert" class="rounded border-s-4 border-red-500 bg-red-50 p-4">
+<!--
+  Error alert with icon - animated
+  - Warning icon pops in with a small wobble, then a gentle shake and red pulse (plays once)
+  - Errors never auto-dismiss: they stay until the problem is resolved
+  - Announced immediately to screen readers (role=alert)
+  - Honors prefers-reduced-motion
+-->
+<style>
+  /* ---------- Alert motion (self-contained: no Tailwind config needed) ---------- */
+  .sc-alert {
+    --sc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+    animation: sc-alert-in 480ms var(--sc-ease) backwards;
+  }
+  /* Staggered reveal: add data-stagger and style="--i:N" to any child */
+  .sc-alert [data-stagger] {
+    animation: sc-rise 420ms var(--sc-ease) both;
+    animation-delay: calc(var(--i, 0) * 70ms + 160ms);
+  }
+  @keyframes sc-alert-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.98);
+    }
+  }
+  @keyframes sc-rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  /* Attention cue: one gentle shake and one red pulse, then calm */
+  .sc-alert--error {
+    animation:
+      sc-alert-in 480ms var(--sc-ease) backwards,
+      sc-shake 480ms 380ms ease-in-out,
+      sc-pulse-red 900ms 380ms ease-out;
+  }
+  @keyframes sc-shake {
+    20% {
+      transform: translateX(-6px);
+    }
+    40% {
+      transform: translateX(5px);
+    }
+    60% {
+      transform: translateX(-3px);
+    }
+    80% {
+      transform: translateX(2px);
+    }
+  }
+  @keyframes sc-pulse-red {
+    from {
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.35);
+    }
+    to {
+      box-shadow: 0 0 0 14px rgba(239, 68, 68, 0);
+    }
+  }
+
+  .sc-alert .sc-icon-wobble {
+    animation: sc-wobble 700ms 120ms var(--sc-ease) backwards;
+  }
+  @keyframes sc-wobble {
+    0% {
+      transform: scale(0.5) rotate(-20deg);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.15) rotate(10deg);
+      opacity: 1;
+    }
+    75% {
+      transform: rotate(-6deg);
+    }
+  }
+
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .sc-alert,
+    .sc-alert * {
+      animation: none !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+
+<div role="alert" class="sc-alert sc-alert--error rounded border-s-4 border-red-500 bg-red-50 p-4">
   <div class="flex items-center gap-2 text-red-800">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      class="sc-icon-wobble size-5"
+    >
       <path
         fill-rule="evenodd"
         d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
@@ -8,10 +103,10 @@
       />
     </svg>
 
-    <strong class="block font-medium"> Something went wrong </strong>
+    <strong data-stagger style="--i: 0" class="block font-medium"> Something went wrong </strong>
   </div>
 
-  <p class="mt-2 text-sm text-red-700">
+  <p data-stagger style="--i: 1" class="mt-2 text-sm text-red-700">
     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nemo quasi assumenda numquam deserunt
     consectetur autem nihil quos debitis dolor culpa.
   </p>

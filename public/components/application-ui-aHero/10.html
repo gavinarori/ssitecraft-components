@@ -1,0 +1,421 @@
+<!--
+  Pixel Bloom - AI agency hero
+  HOW TO USE
+  1. Paste this whole file where you want the hero.
+  2. Every image is a placeholder. Search for the IMAGE and AVATAR comments and replace the link inside src="".
+  3. Change the text and links. Colors are CSS variables at the top of the <style> block.
+  - Rotating "get in touch" badge and an infinite brand marquee
+  - Buttons lift on hover
+-->
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap");
+
+  .hero-pixelbloom {
+    --ink: #0b0b0b;
+    --muted: #6b6b6b;
+    --line: #ececec;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: max(100vh, 640px);
+    background: #fdfdfd;
+    color: var(--ink);
+    font-family: Outfit, system-ui, sans-serif;
+  }
+  .hero-pixelbloom,
+  .hero-pixelbloom * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  .hero-pixelbloom a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .hero-pixelbloom ul {
+    list-style: none;
+  }
+  .hero-pixelbloom img {
+    display: block;
+    object-fit: cover;
+    background: #cfcfd6;
+  }
+  .hero-pixelbloom .ico {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .hero-pixelbloom .ico-fill {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+  }
+  .hero-pixelbloom .container {
+    width: min(1180px, 100% - 48px);
+    margin-inline: auto;
+  }
+
+  /* ---- Navigation ---- */
+  .hero-pixelbloom .nav {
+    border-bottom: 1px solid var(--line);
+    background: #fff;
+  }
+  .hero-pixelbloom .nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: 72px;
+  }
+  .hero-pixelbloom .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .hero-pixelbloom .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .hero-pixelbloom .nav-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: opacity 0.2s;
+  }
+  .hero-pixelbloom .nav-links a:hover {
+    opacity: 0.6;
+  }
+  .hero-pixelbloom .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 22px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font:
+      500 13px Outfit,
+      sans-serif;
+    cursor: pointer;
+    transition:
+      transform 0.25s,
+      background 0.25s,
+      color 0.25s,
+      box-shadow 0.25s;
+  }
+  .hero-pixelbloom .btn:hover {
+    transform: translateY(-2px);
+  }
+  .hero-pixelbloom .btn--outline {
+    padding: 10px 22px;
+    border-color: var(--ink);
+    background: transparent;
+    font-size: 14px;
+  }
+  .hero-pixelbloom .btn--outline:hover {
+    background: var(--ink);
+    color: #fff;
+  }
+  .hero-pixelbloom .btn--light {
+    border-color: #e6e6e6;
+    background: #fff;
+  }
+  .hero-pixelbloom .btn--light:hover {
+    box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.35);
+  }
+  .hero-pixelbloom .btn--dark {
+    background: #000;
+    color: #fff;
+  }
+  .hero-pixelbloom .btn--dark:hover {
+    box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.6);
+  }
+
+  /* ---- Hero body ---- */
+  .hero-pixelbloom .body {
+    display: grid;
+    flex: 1;
+    grid-template-columns: 1.05fr 1fr;
+    align-items: center;
+    gap: 56px;
+    padding: 48px 0;
+  }
+  .hero-pixelbloom .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 1px solid #eee;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .hero-pixelbloom .tag .ico-fill {
+    width: 15px;
+    height: 15px;
+  }
+  .hero-pixelbloom h1 {
+    margin: 28px 0 22px;
+    font-size: clamp(40px, 5vw, 60px);
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+  }
+  .hero-pixelbloom h1 .muted {
+    color: var(--muted);
+  }
+  .hero-pixelbloom .lead {
+    max-width: 310px;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .hero-pixelbloom .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+  }
+
+  /* ---- Visual + rotating badge ---- */
+  .hero-pixelbloom .visual {
+    position: relative;
+    height: clamp(380px, 62vh, 520px);
+  }
+  .hero-pixelbloom .visual > img {
+    width: 100%;
+    height: 100%;
+    border-radius: 28px;
+  }
+  .hero-pixelbloom .badge {
+    position: absolute;
+    top: 50%;
+    left: -56px;
+    width: 112px;
+    height: 112px;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background: #000;
+    color: #fff;
+    transition: transform 0.35s;
+  }
+  .hero-pixelbloom .badge:hover {
+    transform: translateY(-50%) scale(1.06);
+  }
+  .hero-pixelbloom .badge-text {
+    position: absolute;
+    inset: 0;
+    fill: #fff;
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    animation: pixel-bloom-spin 18s linear infinite;
+  }
+  .hero-pixelbloom .badge-center {
+    position: absolute;
+    inset: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #fff;
+    color: #000;
+  }
+  .hero-pixelbloom .badge-center .ico {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* ---- Marquee ---- */
+  .hero-pixelbloom .marquee {
+    overflow: hidden;
+    background: #000;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .hero-pixelbloom .marquee-track {
+    display: inline-flex;
+    animation: pixel-bloom-marquee 30s linear infinite;
+  }
+  .hero-pixelbloom .marquee-group {
+    display: inline-flex;
+  }
+  .hero-pixelbloom .marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 24px;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  @keyframes pixel-bloom-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes pixel-bloom-marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 900px) {
+    .hero-pixelbloom .nav-links {
+      display: none;
+    }
+    .hero-pixelbloom .body {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding: 36px 0 48px;
+    }
+    .hero-pixelbloom .badge {
+      top: auto;
+      bottom: -36px;
+      left: 20px;
+      transform: none;
+    }
+    .hero-pixelbloom .badge:hover {
+      transform: scale(1.06);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-pixelbloom .badge-text,
+    .hero-pixelbloom .marquee-track {
+      animation: none;
+    }
+  }
+</style>
+
+<!-- Icon sprite: keep this, the markup below references it -->
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+  <defs>
+    <symbol id="pb-plus" viewBox="0 0 24 24">
+      <path
+        d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linejoin="round"
+      />
+    </symbol>
+    <symbol id="pb-spark" viewBox="0 0 24 24">
+      <path d="M12 2c.8 5.2 4.8 9.2 10 10-5.2.8-9.2 4.8-10 10-.8-5.2-4.8-9.2-10-10 5.2-.8 9.2-4.8 10-10z" />
+    </symbol>
+    <symbol id="pb-chev" viewBox="0 0 24 24"><path d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></symbol>
+    <symbol id="pb-arrow" viewBox="0 0 24 24"><path d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></symbol>
+  </defs>
+</svg>
+<section class="hero-pixelbloom">
+  <!-- Navigation -->
+  <header class="nav">
+    <div class="container">
+      <a href="#" class="logo"
+        ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> ssitecraft</a
+      >
+      <nav aria-label="Main" class="nav-links">
+        <a href="#">Home</a>
+        <a href="#"
+          >Services <svg class="ico" aria-hidden="true"><use href="#pb-chev" /></svg
+        ></a>
+        <a href="#">Our Solution</a>
+        <a href="#">About Us</a>
+      </nav>
+      <a href="#" class="btn btn--outline">Let's Talk</a>
+    </div>
+  </header>
+
+  <!-- Hero content -->
+  <div class="container body">
+    <div>
+      <span class="tag"
+        ><svg class="ico-fill" aria-hidden="true"><use href="#pb-spark" /></svg> Your Vision, Our AI</span
+      >
+      <h1>Build Smarter AI <span class="muted">Models</span> with Precision</h1>
+      <p class="lead">Empower your business with cutting-edge AI solutions tailored to your needs.</p>
+      <div class="actions">
+        <a href="#" class="btn btn--light">Schedule a Meet</a>
+        <a href="#" class="btn btn--dark">Discover Services</a>
+      </div>
+    </div>
+
+    <div class="visual">
+      <!-- IMAGE (Hero image): replace the link in src="" with your own image -->
+      <img
+        src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+        alt="AI illustration"
+        width="840"
+        height="1040"
+      />
+      <!-- Rotating "get in touch" badge -->
+      <a href="#" class="badge" aria-label="Get in touch with Pixel Bloom">
+        <svg class="badge-text" viewBox="0 0 112 112" aria-hidden="true">
+          <defs><path id="pb-ring" d="M56 56m-42 0a42 42 0 1 1 84 0a42 42 0 1 1-84 0" /></defs>
+          <text>
+            <textPath href="#pb-ring" textLength="260" lengthAdjust="spacing">
+              GET IN TOUCH WITH PIXEL BLOOM •
+            </textPath>
+          </text>
+        </svg>
+        <span class="badge-center"
+          ><svg class="ico" aria-hidden="true"><use href="#pb-arrow" /></svg
+        ></span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Scrolling brand strip -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <div class="marquee-group">
+        <span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        ><span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        ><span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        ><span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        ><span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        ><span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        ><span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        ><span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        >
+      </div>
+      <div class="marquee-group">
+        <span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        ><span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        ><span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        ><span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        ><span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        ><span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        ><span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        ><span class="marquee-item"
+          ><svg class="ico-fill" aria-hidden="true"><use href="#pb-plus" /></svg> Pixel Bloom</span
+        >
+      </div>
+    </div>
+  </div>
+</section>

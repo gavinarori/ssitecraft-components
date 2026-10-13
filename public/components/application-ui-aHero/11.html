@@ -1,0 +1,443 @@
+<!--
+  Veluno - electronics store hero
+  HOW TO USE
+  1. Paste this whole file where you want the hero.
+  2. Every image is a placeholder. Search for the IMAGE and AVATAR comments and replace the link inside src="".
+  3. Change the text and links. Colors are CSS variables at the top of the <style> block.
+  - Pulsing hotspot, floating product card, slide dots
+  - Search field is a real input
+-->
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap");
+
+  .hero-velunotech {
+    --ink: #111;
+    --soft: #f3f3f3;
+    display: flex;
+    flex-direction: column;
+    min-height: max(100vh, 640px);
+    background: #fff;
+    color: var(--ink);
+    font-family: Outfit, system-ui, sans-serif;
+  }
+  .hero-velunotech,
+  .hero-velunotech * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  .hero-velunotech a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .hero-velunotech ul {
+    list-style: none;
+  }
+  .hero-velunotech img {
+    display: block;
+    object-fit: cover;
+    background: #cfcfd6;
+  }
+  .hero-velunotech .ico {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .hero-velunotech .ico-fill {
+    fill: currentColor;
+    stroke: none;
+  }
+
+  /* ---- Navigation ---- */
+  .hero-velunotech .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 16px 4%;
+  }
+  .hero-velunotech .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .hero-velunotech .logo .ico-fill {
+    width: 32px;
+    height: 32px;
+  }
+  .hero-velunotech .nav-links {
+    display: flex;
+    gap: 36px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .hero-velunotech .nav-links a {
+    transition: opacity 0.2s;
+  }
+  .hero-velunotech .nav-links a:hover {
+    opacity: 0.55;
+  }
+  .hero-velunotech .nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-velunotech .search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 152px;
+    padding: 11px 18px;
+    border-radius: 999px;
+    background: var(--soft);
+    color: #666;
+    transition: box-shadow 0.2s;
+  }
+  .hero-velunotech .search:focus-within {
+    box-shadow: 0 0 0 2px #111;
+  }
+  .hero-velunotech .search input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font:
+      400 13px Outfit,
+      sans-serif;
+    color: var(--ink);
+  }
+  .hero-velunotech .icon-btn {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--soft);
+    color: var(--ink);
+    cursor: pointer;
+    transition:
+      transform 0.25s,
+      background 0.25s,
+      color 0.25s;
+  }
+  .hero-velunotech .icon-btn:hover {
+    transform: translateY(-2px);
+    background: var(--ink);
+    color: #fff;
+  }
+  .hero-velunotech .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  /* ---- Stage ---- */
+  .hero-velunotech .stage {
+    position: relative;
+    flex: 1;
+    min-height: 520px;
+    margin: 0 18px 18px;
+    overflow: hidden;
+    border-radius: 36px;
+    color: #fff;
+  }
+  .hero-velunotech .bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .hero-velunotech .shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent 60%),
+      linear-gradient(to right, rgba(0, 0, 0, 0.2), transparent 55%);
+  }
+  .hero-velunotech .copy {
+    position: absolute;
+    bottom: 64px;
+    left: clamp(24px, 4.5vw, 50px);
+    max-width: 540px;
+  }
+  .hero-velunotech h1 {
+    font-size: clamp(44px, 6.4vw, 76px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+  }
+  .hero-velunotech .lead {
+    max-width: 390px;
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1.55;
+    opacity: 0.9;
+  }
+  .hero-velunotech .cta {
+    display: inline-flex;
+    margin-top: 22px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 500;
+    transition:
+      transform 0.25s,
+      box-shadow 0.25s;
+  }
+  .hero-velunotech .cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px -10px rgba(0, 0, 0, 0.6);
+  }
+
+  /* ---- Product hotspot + card ---- */
+  .hero-velunotech .hotspot {
+    position: absolute;
+    top: 46%;
+    left: 64.5%;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    border-radius: 50%;
+  }
+  .hero-velunotech .hotspot::before {
+    content: "";
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #fff;
+  }
+  .hero-velunotech .hotspot::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    animation: veluno-tech-ping 2.2s ease-out infinite;
+  }
+  .hero-velunotech .product {
+    position: absolute;
+    right: 6.5%;
+    bottom: 20%;
+    display: flex;
+    gap: 14px;
+    width: min(300px, 86%);
+    padding: 9px;
+    border-radius: 28px;
+    background: #fff;
+    color: var(--ink);
+    box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.5);
+    transition: transform 0.35s;
+  }
+  .hero-velunotech .product:hover {
+    transform: translateY(-4px);
+  }
+  .hero-velunotech .product img {
+    flex: none;
+    width: 130px;
+    height: 138px;
+    border-radius: 22px;
+  }
+  .hero-velunotech .product-info {
+    display: flex;
+    flex-direction: column;
+    padding: 6px 6px 4px 0;
+  }
+  .hero-velunotech .product-title {
+    font-size: 19px;
+    font-weight: 500;
+  }
+  .hero-velunotech .product-text {
+    margin-top: 6px;
+    color: #666;
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+  .hero-velunotech .product-price {
+    margin-top: auto;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  /* ---- Slide dots ---- */
+  .hero-velunotech .dots {
+    position: absolute;
+    bottom: 26px;
+    left: 50%;
+    display: flex;
+    gap: 10px;
+    transform: translateX(-50%);
+  }
+  .hero-velunotech .dot {
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.28);
+    cursor: pointer;
+    transition:
+      background 0.25s,
+      transform 0.25s;
+  }
+  .hero-velunotech .dot:hover {
+    transform: scale(1.25);
+  }
+  .hero-velunotech .dot.is-active {
+    background: #fff;
+  }
+  @keyframes veluno-tech-ping {
+    to {
+      transform: scale(1.9);
+      opacity: 0;
+    }
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 900px) {
+    .hero-velunotech .nav-links,
+    .hero-velunotech .search {
+      display: none;
+    }
+    .hero-velunotech .nav {
+      padding: 14px 20px;
+    }
+    .hero-velunotech .stage {
+      margin: 0 12px 12px;
+      border-radius: 26px;
+    }
+    .hero-velunotech .product {
+      right: 20px;
+      left: 20px;
+      bottom: 90px;
+      width: auto;
+    }
+    .hero-velunotech .hotspot {
+      display: none;
+    }
+    .hero-velunotech .copy {
+      bottom: auto;
+      top: 40px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-velunotech .hotspot::after {
+      animation: none;
+    }
+  }
+</style>
+
+<!-- Icon sprite: keep this, the markup below references it -->
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+  <defs>
+    <symbol id="vt-veluno" viewBox="0 0 32 32">
+      <polygon
+        points="16.0,1.0 19.5,7.2 23.5,3.0 23.5,10.1 29.0,8.5 25.4,14.7 31.0,16.0 24.8,19.5 29.0,23.5 21.9,23.5 23.5,29.0 17.3,25.4 16.0,31.0 12.5,24.8 8.5,29.0 8.5,21.9 3.0,23.5 6.6,17.3 1.0,16.0 7.2,12.5 3.0,8.5 10.1,8.5 8.5,3.0 14.7,6.6"
+      />
+    </symbol>
+    <symbol id="vt-search" viewBox="0 0 24 24">
+      <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+    </symbol>
+    <symbol id="vt-heart" viewBox="0 0 24 24">
+      <path
+        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+      />
+    </symbol>
+    <symbol id="vt-cart" viewBox="0 0 24 24">
+      <path
+        d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
+      />
+    </symbol>
+  </defs>
+</svg>
+<section class="hero-velunotech">
+  <!-- Navigation -->
+  <header class="nav">
+    <a href="#" class="logo"
+      ><svg class="ico-fill" aria-hidden="true"><use href="#vt-veluno" /></svg> sitecraft</a
+    >
+    <nav aria-label="Main" class="nav-links">
+      <a href="#">Home</a><a href="#">About</a><a href="#">Shop</a><a href="#">New Arrivals</a
+      ><a href="#">Contact Us</a>
+    </nav>
+    <div class="nav-icons">
+      <label class="search"
+        ><svg class="ico" aria-hidden="true"><use href="#vt-search" /></svg
+        ><input type="search" placeholder="Search" aria-label="Search"
+      /></label>
+      <button class="icon-btn" aria-label="Wishlist">
+        <svg class="ico" aria-hidden="true"><use href="#vt-heart" /></svg>
+      </button>
+      <button class="icon-btn" aria-label="Cart">
+        <svg class="ico" aria-hidden="true"><use href="#vt-cart" /></svg>
+      </button>
+      <!-- AVATAR: replace the link in src="" with a profile picture -->
+      <img
+        class="user-avatar"
+        src="https://plus.unsplash.com/premium_photo-1701065893190-46f44657fbee?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+        alt="Profile"
+        width="72"
+        height="72"
+      />
+    </div>
+  </header>
+
+  <!-- Stage -->
+  <div class="stage">
+    <!-- IMAGE (Background photo): replace the link in src="" with your own image -->
+    <img
+      class="bg"
+      src="https://routenote.com/blog/wp-content/uploads/2026/09/sony-wh-1000xm4c.jpg"
+      alt="Headphones campaign"
+      width="2000"
+      height="1300"
+    />
+    <div class="shade"></div>
+
+    <div class="copy">
+      <h1>Smart Tech, Smarter Living</h1>
+      <p class="lead">
+        Upgrade your everyday with Veluno modern electronics designed for comfort, style, and performance.
+      </p>
+      <a href="#" class="cta">Shop Now</a>
+    </div>
+
+    <!-- Hotspot: move it with left/top so it sits on the product in your photo -->
+    <span class="hotspot" aria-hidden="true"></span>
+
+    <!-- Featured product card -->
+    <a href="#" class="product">
+      <!-- IMAGE (Product photo): replace the link in src="" with your own image -->
+      <img
+        src="https://images.unsplash.com/photo-1700087151960-178ea946e608?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+        alt="SonicWave headphones"
+        width="260"
+        height="276"
+      />
+      <span class="product-info">
+        <span class="product-title">SonicWave</span>
+        <span class="product-text"
+          >Immersive sound with deep bass, crystal-clear highs, and rich dynamic tones.</span
+        >
+        <span class="product-price">$ 99.99</span>
+      </span>
+    </a>
+
+    <div class="dots" role="tablist" aria-label="Slides">
+      <button class="dot is-active" aria-label="Slide 1"></button
+      ><button class="dot" aria-label="Slide 2"></button><button class="dot" aria-label="Slide 3"></button
+      ><button class="dot" aria-label="Slide 4"></button><button class="dot" aria-label="Slide 5"></button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,365 @@
+<!--
+  Winzy - travel hero with booking bar
+  HOW TO USE
+  1. Paste this whole file where you want the hero.
+  2. Every image is a placeholder. Search for the IMAGE and AVATAR comments and replace the link inside src="".
+  3. Change the text and links. Colors are CSS variables at the top of the <style> block.
+  - Plane cut-out breaks out of the pill banner and drifts on hover
+  - Booking fields are real inputs with hover and focus states
+-->
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+
+  .hero-winzyflight {
+    --accent: #ff2a2a;
+    --ink: #111;
+    display: flex;
+    flex-direction: column;
+    min-height: max(100vh, 640px);
+    background: #fff;
+    color: var(--ink);
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  }
+  .hero-winzyflight,
+  .hero-winzyflight * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  .hero-winzyflight a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .hero-winzyflight img {
+    display: block;
+    object-fit: cover;
+  }
+  .hero-winzyflight .ico {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .hero-winzyflight .ico-fill {
+    fill: currentColor;
+    stroke: none;
+  }
+
+  /* ---- Navigation ---- */
+  .hero-winzyflight .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 18px 6%;
+    border-bottom: 1px solid #f1f1f1;
+  }
+  .hero-winzyflight .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent);
+    font-size: 22px;
+    font-weight: 600;
+  }
+  .hero-winzyflight .logo .ico-fill {
+    width: 26px;
+    height: 26px;
+  }
+  .hero-winzyflight .logo span {
+    color: var(--ink);
+  }
+  .hero-winzyflight .nav-links {
+    display: flex;
+    gap: 34px;
+    color: #555;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .hero-winzyflight .nav-links a {
+    transition: color 0.2s;
+  }
+  .hero-winzyflight .nav-links a:hover {
+    color: var(--ink);
+  }
+  .hero-winzyflight .btn {
+    display: inline-flex;
+    padding: 12px 26px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    transition:
+      transform 0.25s,
+      box-shadow 0.25s;
+  }
+  .hero-winzyflight .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px -10px rgba(255, 42, 42, 0.7);
+  }
+
+  /* ---- Content ---- */
+  .hero-winzyflight .main {
+    width: min(1020px, 100% - 48px);
+    margin: 0 auto;
+    padding: 46px 0 36px;
+    text-align: center;
+  }
+  .hero-winzyflight h1 {
+    max-width: 660px;
+    margin: 0 auto;
+    font-size: clamp(32px, 4.8vw, 54px);
+    font-weight: 700;
+    line-height: 1.14;
+    letter-spacing: -0.02em;
+  }
+
+  /* ---- Pill banner with the plane breaking out of it ---- */
+  .hero-winzyflight .banner {
+    position: relative;
+    height: clamp(190px, 30vw, 300px);
+    margin-top: 44px;
+  }
+  .hero-winzyflight .sky {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 999px;
+    background: #cfd8e3;
+  }
+  .hero-winzyflight .plane {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 112%;
+    max-width: none;
+    height: 124%;
+    transform: translate(-50%, -50%);
+    object-fit: contain;
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .hero-winzyflight .banner:hover .plane {
+    transform: translate(-50%, -52%) scale(1.02);
+  }
+
+  /* ---- Booking bar ---- */
+  .hero-winzyflight .search {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) auto;
+    align-items: center;
+    gap: 4px;
+    margin-top: 40px;
+    padding: 18px 22px 18px 14px;
+    border: 1px solid #f1f1f1;
+    border-radius: 26px;
+    background: #fff;
+    box-shadow: 0 24px 50px -22px rgba(0, 0, 0, 0.2);
+    text-align: left;
+  }
+  .hero-winzyflight .field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-radius: 18px;
+    cursor: text;
+    transition:
+      background 0.2s,
+      box-shadow 0.2s;
+  }
+  .hero-winzyflight .field + .field::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -2px;
+    width: 1px;
+    height: 38px;
+    background: #e8e8e8;
+    transform: translateY(-50%);
+  }
+  .hero-winzyflight .field:hover {
+    background: #f7f7f7;
+  }
+  .hero-winzyflight .field:focus-within {
+    background: #f7f7f7;
+    box-shadow: 0 0 0 2px rgba(255, 42, 42, 0.28);
+  }
+  .hero-winzyflight .field-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f3f3f3;
+    color: #222;
+  }
+  .hero-winzyflight .field-text {
+    min-width: 0;
+  }
+  .hero-winzyflight .field-title {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .hero-winzyflight .field input {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #777;
+    font:
+      400 12.5px "Plus Jakarta Sans",
+      sans-serif;
+  }
+  .hero-winzyflight .field input::placeholder {
+    color: #8a8a8a;
+  }
+  .hero-winzyflight .go {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    margin-left: 10px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    transition:
+      transform 0.25s,
+      box-shadow 0.25s;
+  }
+  .hero-winzyflight .go:hover {
+    transform: scale(1.08);
+    box-shadow: 0 10px 22px -8px rgba(255, 42, 42, 0.8);
+  }
+  .hero-winzyflight .go .ico {
+    width: 19px;
+    height: 19px;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 900px) {
+    .hero-winzyflight .nav-links {
+      display: none;
+    }
+    .hero-winzyflight .search {
+      grid-template-columns: 1fr 1fr;
+      padding: 12px;
+    }
+    .hero-winzyflight .field + .field::before {
+      display: none;
+    }
+    .hero-winzyflight .go {
+      grid-column: 1 / -1;
+      width: 100%;
+      height: 48px;
+      margin: 6px 0 0;
+      border-radius: 999px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-winzyflight .plane {
+      transition: none;
+    }
+  }
+</style>
+
+<!-- Icon sprite: keep this, the markup below references it -->
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+  <defs>
+    <symbol id="wf-winzy" viewBox="0 0 24 24">
+      <g id="wf-wb"><path d="M12 12V2.5c4.2 0 7.5 2.4 7.5 6.2z" /></g>
+      <use href="#wf-wb" transform="rotate(90 12 12)" />
+      <use href="#wf-wb" transform="rotate(180 12 12)" />
+      <use href="#wf-wb" transform="rotate(270 12 12)" />
+    </symbol>
+    <symbol id="wf-pin" viewBox="0 0 24 24">
+      <path d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+      <path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+    </symbol>
+    <symbol id="wf-users" viewBox="0 0 24 24">
+      <path
+        d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"
+      />
+    </symbol>
+    <symbol id="wf-cal" viewBox="0 0 24 24">
+      <path
+        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
+      />
+    </symbol>
+    <symbol id="wf-search" viewBox="0 0 24 24">
+      <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+    </symbol>
+  </defs>
+</svg>
+<section class="hero-winzyflight">
+  <!-- Navigation -->
+  <header class="nav">
+    <a href="#" class="logo"
+      ><svg class="ico-fill" aria-hidden="true"><use href="#wf-winzy" /></svg> <span>sitecraft</span></a
+    >
+    <nav aria-label="Main" class="nav-links">
+      <a href="#">Stays</a><a href="#">Experiences</a><a href="#">Blog</a><a href="#">About</a
+      ><a href="#">Become a Host</a>
+    </nav>
+    <a href="#" class="btn">Get Started</a>
+  </header>
+
+  <div class="main">
+    <h1>Explore New Horizons with Every Journey</h1>
+
+    <!-- Pill banner: sky behind, plane cut-out in front (it is wider than the pill on purpose) -->
+    <div class="banner">
+      <!-- IMAGE (Sky background): replace the link in src="" with your own image -->
+      <img
+        class="sky"
+        src="https://images.unsplash.com/photo-1569629743817-70d8db6c323b?q=80&w=1498&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+        alt="Blue sky"
+        width="1800"
+        height="600"
+      />
+     
+    </div>
+
+    <!-- Booking bar (real inputs) -->
+    <form class="search" action="#">
+      <label class="field"
+        ><span class="field-icon"
+          ><svg class="ico" aria-hidden="true"><use href="#wf-pin" /></svg></span
+        ><span class="field-text"
+          ><span class="field-title">Location</span
+          ><input type="text" placeholder="Where are you going?" /></span
+      ></label>
+      <label class="field"
+        ><span class="field-icon"
+          ><svg class="ico" aria-hidden="true"><use href="#wf-users" /></svg></span
+        ><span class="field-text"
+          ><span class="field-title">Travellers</span><input type="text" placeholder="Add guest" /></span
+      ></label>
+      <label class="field"
+        ><span class="field-icon"
+          ><svg class="ico" aria-hidden="true"><use href="#wf-cal" /></svg></span
+        ><span class="field-text"
+          ><span class="field-title">Check in</span><input type="text" placeholder="Add date" /></span
+      ></label>
+      <label class="field"
+        ><span class="field-icon"
+          ><svg class="ico" aria-hidden="true"><use href="#wf-cal" /></svg></span
+        ><span class="field-text"
+          ><span class="field-title">Check out</span><input type="text" placeholder="Add date" /></span
+      ></label>
+      <button class="go" type="submit" aria-label="Search">
+        <svg class="ico" aria-hidden="true"><use href="#wf-search" /></svg>
+      </button>
+    </form>
+  </div>
+</section>

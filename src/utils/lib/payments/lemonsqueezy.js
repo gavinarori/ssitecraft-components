@@ -8,7 +8,8 @@ import { PaymentError } from './errors.js'
  *
  *   createCheckout({ template, tier, siteUrl })  -> hosted checkout URL
  *   verifyWebhook({ rawBody, headers })          -> boolean
- *   parseWebhook(payload)                        -> { type, eventId, orderId, email, name, slug, tier } | null
+ *   parseWebhook(payload)                        -> { type, eventId, orderId, email, name, slug, tier, kind, pack } | null
+ *   createPackCheckout({ pack, siteUrl })        -> hosted checkout URL for a component pack
  *
  * Env:  LEMONSQUEEZY_API_KEY  LEMONSQUEEZY_STORE_ID  LEMONSQUEEZY_WEBHOOK_SECRET
  * Template frontmatter:  provider.lemonsqueezy.standard / .extended  (numeric variant IDs)
@@ -25,11 +26,27 @@ function requireEnv(name) {
   return value
 }
 
-export async function createCheckout({ template, tier, siteUrl }) {
-  const variantId = String(template.provider?.lemonsqueezy?.[tier] ?? '')
+export const createCheckout = ({ template, tier, siteUrl }) =>
+  postCheckout({
+    variantId: String(template.provider?.lemonsqueezy?.[tier] ?? ''),
+    label: `${template.slug}: provider.lemonsqueezy.${tier}`,
+    redirectUrl: `${siteUrl}/checkout/success?template=${encodeURIComponent(template.slug)}`,
+    custom: { slug: template.slug, tier },
+  })
+
+/** One-off purchase of a component pack. The pack's variant ID is `lemonsqueezy:` in its MDX frontmatter. */
+export const createPackCheckout = ({ pack, siteUrl }) =>
+  postCheckout({
+    variantId: pack.variant,
+    label: `${pack.id}: lemonsqueezy`,
+    redirectUrl: `${siteUrl}/checkout/success?pack=${encodeURIComponent(pack.id)}`,
+    custom: { kind: 'pack', pack: pack.id },
+  })
+
+async function postCheckout({ variantId, label, redirectUrl, custom }) {
   if (!/^\d+$/.test(variantId)) {
-    console.error(`[lemonsqueezy] ${template.slug}: provider.lemonsqueezy.${tier} must be a numeric variant ID`)
-    throw new PaymentError('This template is not available for purchase yet.', { status: 503 })
+    console.error(`[lemonsqueezy] ${label} must be a numeric variant ID`)
+    throw new PaymentError('This item is not available for purchase yet.', { status: 503 })
   }
 
   const apiKey = requireEnv('LEMONSQUEEZY_API_KEY')
@@ -48,10 +65,10 @@ export async function createCheckout({ template, tier, siteUrl }) {
         attributes: {
           product_options: {
             enabled_variants: [Number(variantId)],
-            redirect_url: `${siteUrl}/checkout/success?template=${encodeURIComponent(template.slug)}`,
+            redirect_url: redirectUrl,
           },
           // Comes back to us as meta.custom_data on the webhook
-          checkout_data: { custom: { slug: template.slug, tier } },
+          checkout_data: { custom },
         },
         relationships: {
           store: { data: { type: 'stores', id: String(storeId) } },
@@ -116,5 +133,7 @@ export function parseWebhook(payload) {
     name: attributes.user_name ?? null,
     slug: custom.slug ?? null,
     tier: custom.tier ?? null,
+    kind: custom.kind ?? 'template',
+    pack: custom.pack ?? null,
   }
 }
