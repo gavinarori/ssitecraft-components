@@ -1,6 +1,128 @@
-<div role="alert" class="rounded-xl border border-gray-100 bg-white p-4">
+<!--
+  Success alert - animated
+  - Slides in softly; the icon draws itself, text staggers in
+  - Dismiss collapses smoothly (no layout jump)
+  - Optional countdown: add data-autodismiss="6000" to the alert (pauses on hover/focus)
+  - Honors prefers-reduced-motion
+-->
+<style>
+  /* ---------- Alert motion (self-contained: no Tailwind config needed) ---------- */
+  .sc-alert {
+    --sc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+    animation: sc-alert-in 480ms var(--sc-ease) backwards;
+  }
+  /* Staggered reveal: add data-stagger and style="--i:N" to any child */
+  .sc-alert [data-stagger] {
+    animation: sc-rise 420ms var(--sc-ease) both;
+    animation-delay: calc(var(--i, 0) * 70ms + 160ms);
+  }
+  @keyframes sc-alert-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.98);
+    }
+  }
+  @keyframes sc-rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  /* Icon: ring draws, then the check, with a soft pulse */
+  .sc-alert .sc-icon {
+    animation:
+      sc-pop 500ms var(--sc-ease) backwards,
+      sc-pulse-green 900ms 250ms ease-out backwards;
+  }
+  .sc-alert .sc-draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    animation: sc-draw 520ms 120ms ease-out backwards;
+  }
+  .sc-alert .sc-draw--check {
+    animation-duration: 340ms;
+    animation-delay: 460ms;
+  }
+  @keyframes sc-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+  }
+  @keyframes sc-pop {
+    0% {
+      transform: scale(0.6);
+      opacity: 0;
+    }
+    60% {
+      transform: scale(1.12);
+      opacity: 1;
+    }
+  }
+  @keyframes sc-pulse-green {
+    from {
+      box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.35);
+    }
+    to {
+      box-shadow: 0 0 0 14px rgba(22, 163, 74, 0);
+    }
+  }
+
+  /* Optional countdown bar: enabled by data-autodismiss="6000" on the alert */
+  .sc-alert .sc-bar {
+    display: none;
+  }
+  .sc-alert[data-autodismiss] .sc-bar {
+    display: block;
+    animation: sc-countdown var(--sc-duration, 6000ms) linear forwards;
+  }
+  .sc-alert:hover .sc-bar,
+  .sc-alert:focus-within .sc-bar {
+    animation-play-state: paused;
+  }
+  @keyframes sc-countdown {
+    to {
+      transform: scaleX(0);
+    }
+  }
+
+  /* Smooth dismiss */
+  .sc-alert {
+    transition:
+      height 320ms var(--sc-ease),
+      opacity 220ms ease,
+      transform 320ms var(--sc-ease),
+      padding 320ms var(--sc-ease),
+      border-width 320ms ease;
+  }
+  .sc-alert.is-leaving {
+    height: 0 !important;
+    padding-block: 0 !important;
+    border-width: 0 !important;
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .sc-alert,
+    .sc-alert * {
+      animation: none !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+
+<div
+  role="status"
+  aria-live="polite"
+  data-alert
+  class="sc-alert rounded-xl border border-gray-100 bg-white p-4 shadow-sm"
+>
   <div class="flex items-start gap-4">
-    <span class="text-green-600">
+    <span class="sc-icon inline-flex rounded-full text-green-600">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -10,32 +132,76 @@
         class="size-6"
       >
         <path
+          class="sc-draw"
+          pathLength="1"
           stroke-linecap="round"
           stroke-linejoin="round"
-          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+        <path
+          class="sc-draw sc-draw--check"
+          pathLength="1"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M9 12.75L11.25 15 15 9.75"
         />
       </svg>
     </span>
 
     <div class="flex-1">
-      <strong class="block font-medium text-gray-900"> Changes saved </strong>
-
-      <p class="mt-1 text-sm text-gray-700">Your product changes have been saved.</p>
+      <strong data-stagger style="--i: 0" class="block font-medium text-gray-900"> Changes saved </strong>
+      <p data-stagger style="--i: 1" class="mt-1 text-sm text-gray-700">
+        Your product changes have been saved.
+      </p>
     </div>
 
-    <button class="text-gray-500 transition hover:text-gray-600">
+    <button
+      data-alert-dismiss
+      class="group rounded-lg p-1 text-gray-500 transition hover:bg-gray-100 hover:text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 active:scale-90"
+    >
       <span class="sr-only">Dismiss popup</span>
-
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         stroke-width="1.5"
         stroke="currentColor"
-        class="size-6"
+        class="size-6 transition-transform duration-200 group-hover:rotate-90"
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
   </div>
+  <div class="sc-bar absolute inset-x-0 bottom-0 h-0.5 origin-left bg-green-500/70" aria-hidden="true"></div>
 </div>
+
+<script>
+  /* Alert behaviour: dismiss + optional auto-dismiss. Safe to include more than once. */
+  (function () {
+    if (window.__scAlerts) return;
+    window.__scAlerts = true;
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function dismiss(alert) {
+      if (!alert || alert.classList.contains("is-leaving")) return;
+      if (reduce) return alert.remove();
+      alert.style.height = alert.offsetHeight + "px"; // lock height so it can animate to 0
+      alert.offsetHeight; // force reflow
+      alert.classList.add("is-leaving");
+      setTimeout(function () {
+        alert.remove();
+      }, 340);
+    }
+
+    document.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-alert-dismiss]");
+      if (btn) dismiss(btn.closest("[data-alert]"));
+    });
+    document.addEventListener("animationend", function (e) {
+      if (e.animationName === "sc-countdown") dismiss(e.target.closest("[data-alert]"));
+    });
+    document.querySelectorAll("[data-alert][data-autodismiss]").forEach(function (a) {
+      a.style.setProperty("--sc-duration", a.dataset.autodismiss + "ms");
+    });
+  })();
+</script>

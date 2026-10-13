@@ -1,0 +1,501 @@
+<!--
+  Veluno - interior store hero with collection carousel
+  HOW TO USE
+  1. Paste this whole file where you want the hero.
+  2. Every image is a placeholder. Search for the IMAGE and AVATAR comments and replace the link inside src="".
+  3. Change the text and links. Colors are CSS variables at the top of the <style> block.
+  - Glass cards in a scroll-snap carousel: arrows, counter and progress line work
+  - Add more <article class="card"> blocks and the counter updates itself
+-->
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap");
+
+  .hero-velunoliving * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  .hero-velunoliving {
+    --glass: rgba(255, 255, 255, 0.14);
+    box-sizing: border-box;
+    min-height: max(100vh, 640px);
+    padding: 12px;
+    background: #fff;
+    font-family: Outfit, system-ui, sans-serif;
+  }
+  .hero-velunoliving a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .hero-velunoliving img {
+    display: block;
+    object-fit: cover;
+    background: #4a4b4f;
+  }
+  .hero-velunoliving .ico {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .hero-velunoliving .ico-fill {
+    fill: currentColor;
+    stroke: none;
+  }
+  .hero-velunoliving .stage {
+    position: relative;
+    overflow: hidden;
+    min-height: calc(max(100vh, 640px) - 24px);
+    border-radius: 20px;
+    background: #222;
+    color: #fff;
+  }
+  .hero-velunoliving .bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .hero-velunoliving .shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent 35%, rgba(0, 0, 0, 0.35));
+  }
+
+  /* ---- Navigation (sits on the photo) ---- */
+  .hero-velunoliving .nav {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 3.5%;
+  }
+  .hero-velunoliving .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 26px;
+    font-weight: 600;
+  }
+  .hero-velunoliving .logo .ico-fill {
+    width: 32px;
+    height: 32px;
+  }
+  .hero-velunoliving .nav-links {
+    display: flex;
+    gap: 34px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .hero-velunoliving .nav-links a {
+    transition: color 0.2s;
+  }
+  .hero-velunoliving .nav-links a:hover,
+  .hero-velunoliving .nav-links a.is-active {
+    color: #fff;
+  }
+  .hero-velunoliving .nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-velunoliving .glass {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .hero-velunoliving .search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 152px;
+    padding: 11px 18px;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .hero-velunoliving .search input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font:
+      400 13px Outfit,
+      sans-serif;
+    color: #fff;
+  }
+  .hero-velunoliving .search input::placeholder {
+    color: rgba(255, 255, 255, 0.75);
+  }
+  .hero-velunoliving .icon-btn {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    transition:
+      transform 0.25s,
+      background 0.25s,
+      color 0.25s;
+  }
+  .hero-velunoliving .icon-btn:hover {
+    transform: translateY(-2px);
+    background: #fff;
+    color: #111;
+  }
+  .hero-velunoliving .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  /* ---- Right-hand panel ---- */
+  .hero-velunoliving .panel {
+    position: absolute;
+    z-index: 2;
+    top: 104px;
+    bottom: 44px;
+    left: 57%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .hero-velunoliving h1 {
+    padding-right: 5%;
+    font-size: clamp(44px, 6.2vw, 76px);
+    font-weight: 500;
+    line-height: 1.14;
+    text-align: right;
+    letter-spacing: -0.01em;
+  }
+  .hero-velunoliving .progress {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 38px 5% 20px 0;
+    font-size: 22px;
+    font-weight: 600;
+  }
+  .hero-velunoliving .progress-line {
+    position: relative;
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.35);
+  }
+  .hero-velunoliving .progress-fill {
+    position: absolute;
+    inset: -1px auto -1px 0;
+    width: 25%;
+    background: #fff;
+    height: 2px;
+    transition: width 0.4s ease;
+  }
+  .hero-velunoliving .progress-total {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* ---- Carousel ---- */
+  .hero-velunoliving .track {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    padding-right: 24px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .hero-velunoliving .track::-webkit-scrollbar {
+    display: none;
+  }
+  .hero-velunoliving .card {
+    display: flex;
+    flex: 0 0 min(312px, 86%);
+    gap: 14px;
+    padding: 10px;
+    border-radius: 26px;
+    scroll-snap-align: start;
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition:
+      transform 0.35s,
+      background 0.35s;
+  }
+  .hero-velunoliving .card:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .hero-velunoliving .card img {
+    flex: none;
+    width: 138px;
+    height: 166px;
+    border-radius: 18px;
+  }
+  .hero-velunoliving .card-body {
+    display: flex;
+    flex-direction: column;
+    padding: 6px 6px 4px 0;
+  }
+  .hero-velunoliving .card h3 {
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .hero-velunoliving .card p {
+    margin-top: 8px;
+    font-size: 12.5px;
+    line-height: 1.45;
+    opacity: 0.75;
+  }
+  .hero-velunoliving .cta {
+    align-self: flex-start;
+    margin-top: auto;
+    padding: 10px 20px;
+    border-radius: 999px;
+    background: #fff;
+    color: #111;
+    font-size: 13px;
+    font-weight: 500;
+    transition: transform 0.25s;
+  }
+  .hero-velunoliving .cta:hover {
+    transform: translateY(-2px);
+  }
+  .hero-velunoliving .controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+  }
+  .hero-velunoliving .control {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--glass);
+    color: #fff;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    transition:
+      transform 0.25s,
+      background 0.25s,
+      color 0.25s;
+  }
+  .hero-velunoliving .control:hover {
+    transform: scale(1.08);
+  }
+  .hero-velunoliving .control--next {
+    background: #fff;
+    color: #111;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 900px) {
+    .hero-velunoliving .nav-links,
+    .hero-velunoliving .search {
+      display: none;
+    }
+    .hero-velunoliving .panel {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      left: auto;
+      padding: 40px 0 32px 20px;
+    }
+    .hero-velunoliving h1 {
+      padding-right: 20px;
+      text-align: left;
+    }
+    .hero-velunoliving .progress {
+      margin-right: 20px;
+    }
+    .hero-velunoliving .shade {
+      background: rgba(0, 0, 0, 0.35);
+    }
+  }
+</style>
+
+<!-- Icon sprite: keep this, the markup below references it -->
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+  <defs>
+    <symbol id="vl-veluno" viewBox="0 0 32 32">
+      <polygon
+        points="16.0,1.0 19.5,7.2 23.5,3.0 23.5,10.1 29.0,8.5 25.4,14.7 31.0,16.0 24.8,19.5 29.0,23.5 21.9,23.5 23.5,29.0 17.3,25.4 16.0,31.0 12.5,24.8 8.5,29.0 8.5,21.9 3.0,23.5 6.6,17.3 1.0,16.0 7.2,12.5 3.0,8.5 10.1,8.5 8.5,3.0 14.7,6.6"
+      />
+    </symbol>
+    <symbol id="vl-search" viewBox="0 0 24 24">
+      <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+    </symbol>
+    <symbol id="vl-heart" viewBox="0 0 24 24">
+      <path
+        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+      />
+    </symbol>
+    <symbol id="vl-cart" viewBox="0 0 24 24">
+      <path
+        d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
+      />
+    </symbol>
+    <symbol id="vl-left" viewBox="0 0 24 24"><path d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></symbol>
+    <symbol id="vl-right" viewBox="0 0 24 24"><path d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></symbol>
+  </defs>
+</svg>
+<section class="hero-velunoliving">
+  <div class="stage">
+    <!-- IMAGE (Background photo): replace the link in src="" with your own image -->
+    <img
+      class="bg"
+      src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1700&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+      alt="Living room interior"
+      width="2000"
+      height="1300"
+    />
+    <div class="shade"></div>
+
+    <!-- Navigation -->
+    <header class="nav">
+      <a href="#" class="logo"
+        ><svg class="ico-fill" aria-hidden="true"><use href="#vl-veluno" /></svg> sitecraft</a
+      >
+      <nav aria-label="Main" class="nav-links">
+        <a href="#" class="is-active">Home</a><a href="#">About</a><a href="#">Shop</a
+        ><a href="#">New Arrivals</a><a href="#">Contact Us</a>
+      </nav>
+      <div class="nav-icons">
+        <label class="search glass"
+          ><svg class="ico" aria-hidden="true"><use href="#vl-search" /></svg
+          ><input type="search" placeholder="Search" aria-label="Search"
+        /></label>
+        <button class="icon-btn glass" aria-label="Wishlist">
+          <svg class="ico" aria-hidden="true"><use href="#vl-heart" /></svg>
+        </button>
+        <button class="icon-btn glass" aria-label="Cart">
+          <svg class="ico" aria-hidden="true"><use href="#vl-cart" /></svg>
+        </button>
+        <!-- AVATAR: replace the link in src="" with a profile picture -->
+        <img
+          class="user-avatar"
+          src="https://placehold.co/72x72/c9c9d1/555555?text=U"
+          alt="Profile"
+          width="72"
+          height="72"
+        />
+      </div>
+    </header>
+
+    <!-- Headline + collection carousel (buttons, counter and progress line are wired up by the script below) -->
+    <div class="panel" data-carousel>
+      <h1>Spaces That Mirror You</h1>
+      <div class="progress" aria-hidden="true">
+        <span data-current>01</span>
+        <span class="progress-line"><span class="progress-fill" data-fill></span></span>
+        <span class="progress-total" data-total>04</span>
+      </div>
+      <div class="track" tabindex="0" aria-label="Collections">
+        <article class="card">
+          <!-- IMAGE (Collection photo 1): replace the link in src="" with your own image -->
+          <img
+            src="https://images.unsplash.com/photo-1781795449353-233da5e767b6?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+            alt="Lasting Luxury Chairs"
+            width="280"
+            height="320"
+          />
+          <div class="card-body">
+            <h3>Lasting Luxury Chairs</h3>
+            <p>Discover timeless places for every room in your house</p>
+            <a href="#" class="cta">Show Now</a>
+          </div>
+        </article>
+        <article class="card">
+          <!-- IMAGE (Collection photo 2): replace the link in src="" with your own image -->
+          <img
+            src="https://images.unsplash.com/photo-1758972581195-c27b9d3b1c56?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+            alt="Statement Sofas"
+            width="280"
+            height="320"
+          />
+          <div class="card-body">
+            <h3>Statement Sofas</h3>
+            <p>Soft lines and rich fabrics made for living</p>
+            <a href="#" class="cta">Show Now</a>
+          </div>
+        </article>
+        <article class="card">
+          <!-- IMAGE (Collection photo 3): replace the link in src="" with your own image -->
+          <img
+            src="https://images.unsplash.com/photo-1758972581195-c27b9d3b1c56?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+            alt="Warm Wood Tables"
+            width="280"
+            height="320"
+          />
+          <div class="card-body">
+            <h3>Warm Wood Tables</h3>
+            <p>Handcrafted pieces that anchor the room</p>
+            <a href="#" class="cta">Show Now</a>
+          </div>
+        </article>
+        <article class="card">
+          <!-- IMAGE (Collection photo 4): replace the link in src="" with your own image -->
+          <img
+            src="https://images.unsplash.com/photo-1781794902242-f8578908d640?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+            alt="Quiet Corners"
+            width="280"
+            height="320"
+          />
+          <div class="card-body">
+            <h3>Quiet Corners</h3>
+            <p>Lighting and decor for slower evenings</p>
+            <a href="#" class="cta">Show Now</a>
+          </div>
+        </article>
+      </div>
+      <div class="controls">
+        <button class="control" data-prev aria-label="Previous">
+          <svg class="ico" aria-hidden="true"><use href="#vl-left" /></svg>
+        </button>
+        <button class="control control--next" data-next aria-label="Next">
+          <svg class="ico" aria-hidden="true"><use href="#vl-right" /></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  /* Collection carousel: arrows, counter and progress line. Safe to include more than once. */
+  document.querySelectorAll("[data-carousel]").forEach(function (root) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    var track = root.querySelector(".track");
+    var cards = track.children;
+    var current = root.querySelector("[data-current]");
+    var fill = root.querySelector("[data-fill]");
+
+    function step() {
+      var gap = parseFloat(getComputedStyle(track).columnGap) || 18;
+      return cards[0].offsetWidth + gap;
+    }
+    function update() {
+      var i = Math.min(cards.length - 1, Math.round(track.scrollLeft / step()));
+      current.textContent = String(i + 1).padStart(2, "0");
+      fill.style.width = ((i + 1) / cards.length) * 100 + "%";
+    }
+    root.querySelector("[data-next]").addEventListener("click", function () {
+      track.scrollBy({ left: step(), behavior: "smooth" });
+    });
+    root.querySelector("[data-prev]").addEventListener("click", function () {
+      track.scrollBy({ left: -step(), behavior: "smooth" });
+    });
+    track.addEventListener("scroll", update, { passive: true });
+    update();
+  });
+</script>

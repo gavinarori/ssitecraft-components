@@ -1,0 +1,422 @@
+<!--
+  Triloe Services — hero section
+  HOW TO USE
+  1. Paste this whole file where you want the hero.
+  2. Every image is a placeholder. Search for the IMAGE and AVATAR comments and replace the link inside src="".
+  3. Change the text, links and colors (colors live at the top of the <style> block).
+  Fonts are loaded from Google Fonts by the @import line below.
+-->
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap");
+
+  .hero-triloe-services,
+  .hero-triloe-services * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  .hero-triloe-services {
+    background: #fff;
+    font-family: Inter, system-ui, sans-serif;
+    color: #111;
+  }
+  .hero-triloe-services a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .hero-triloe-services ul {
+    list-style: none;
+  }
+  .hero-triloe-services {
+    position: relative;
+    overflow: hidden;
+    min-height: max(100vh, 640px);
+  }
+
+  /* ---- Navigation ---- */
+  .hero-triloe-services .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 48px;
+    position: relative;
+    z-index: 5;
+    font-size: 13px;
+  }
+  .hero-triloe-services .nav ul {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+  .hero-triloe-services .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 17px;
+  }
+  .hero-triloe-services .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 500;
+    transition:
+      transform 0.25s,
+      box-shadow 0.25s;
+    cursor: pointer;
+    border: 0;
+    font-family: inherit;
+  }
+  .hero-triloe-services .pill:hover {
+    transform: translateY(-2px);
+  }
+  .hero-triloe-services .pill svg,
+  .hero-triloe-services .icon-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+  .hero-triloe-services .icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-grid;
+    place-items: center;
+    transition: transform 0.3s;
+  }
+  .hero-triloe-services .icon-btn:hover {
+    transform: rotate(45deg);
+  }
+  .hero-triloe-services .avatars {
+    display: flex;
+  }
+  .hero-triloe-services .avatars img {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    margin-left: -9px;
+  }
+  .hero-triloe-services .avatars img:first-child {
+    margin-left: 0;
+  }
+  .hero-triloe-services .card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 20px 40px -18px rgba(0, 0, 0, 0.35);
+  }
+  .hero-triloe-services .spin {
+    animation: triloe-services-spin 18s linear infinite;
+  }
+  @keyframes triloe-services-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes triloe-services-float {
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  .hero-triloe-services .float {
+    animation: triloe-services-float 5s ease-in-out infinite;
+  }
+  .hero-triloe-services {
+    background: #fff;
+    font-family: "Plus Jakarta Sans", sans-serif;
+  }
+  .hero-triloe-services .nav ul {
+    gap: 12px;
+    color: #222;
+    font-weight: 500;
+  }
+  .hero-triloe-services .nav li {
+    padding: 10px 18px;
+    border-radius: 99px;
+  }
+  .hero-triloe-services .nav-active {
+    background: #2f4bf2;
+    color: #fff;
+  }
+  .hero-triloe-services .nav {
+    border-bottom: 1px solid #f0f0f2;
+  }
+  .hero-triloe-services .btn-primary {
+    background: #2f4bf2;
+    color: #fff;
+  }
+  .hero-triloe-services .tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 6px 12px;
+    border: 1px solid #e6e6ea;
+    border-radius: 99px;
+    color: #444;
+  }
+  .hero-triloe-services .intro {
+    text-align: center;
+    padding: 30px 20px 0;
+  }
+  .hero-triloe-services h2 {
+    font-size: clamp(30px, 4vw, 46px);
+    color: #0b0b6b;
+    font-weight: 800;
+    margin: 10px 0 14px;
+    letter-spacing: -0.02em;
+  }
+  .hero-triloe-services .intro p {
+    font-size: 13px;
+    color: #555;
+    max-width: 470px;
+    margin: auto;
+    line-height: 1.6;
+  }
+  .hero-triloe-services .collage {
+    position: relative;
+    width: min(780px, 92%);
+    height: 380px;
+    margin: 36px auto 0;
+  }
+  .hero-triloe-services .photo {
+    position: absolute;
+    left: 12%;
+    top: 0;
+    width: 68%;
+    height: 100%;
+    border-radius: 30px;
+  }
+  .hero-triloe-services .stat-dark {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 190px;
+    background: #121212;
+    color: #fff;
+    border-radius: 22px;
+    padding: 20px;
+    z-index: 2;
+    border: 10px solid #fff;
+    border-width: 0 10px 10px 0;
+    box-sizing: content-box;
+  }
+  .hero-triloe-services .stat-dark b {
+    font-size: 34px;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .hero-triloe-services .stat-dark span {
+    font-size: 12px;
+    opacity: 0.85;
+    line-height: 1.5;
+  }
+  .hero-triloe-services .stat-rating {
+    position: absolute;
+    right: 0;
+    top: 46px;
+    background: #fff;
+    border-radius: 22px;
+    padding: 18px 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    z-index: 2;
+  }
+  .hero-triloe-services .stat-rating b {
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero-triloe-services .stat-rating b i {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #111;
+    display: inline-block;
+  }
+  .hero-triloe-services .stat-rating span {
+    font-size: 12px;
+    color: #777;
+    display: block;
+    margin-top: 6px;
+  }
+  .hero-triloe-services .stat-users {
+    position: absolute;
+    left: -4%;
+    bottom: 34px;
+    background: #fff;
+    border-radius: 22px;
+    padding: 18px 20px;
+    z-index: 2;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  }
+  .hero-triloe-services .stat-users b {
+    font-size: 34px;
+    display: block;
+  }
+  .hero-triloe-services .stat-users span {
+    font-size: 12px;
+    color: #777;
+    display: block;
+    margin-top: 6px;
+  }
+  .hero-triloe-services .chips {
+    position: absolute;
+    right: 2%;
+    bottom: 0;
+    width: 48%;
+    background: #fff;
+    border-radius: 30px 0 0 0;
+    padding: 26px 0 0 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 10px;
+    z-index: 2;
+  }
+  .hero-triloe-services .chips span {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 12px 20px;
+    border-radius: 99px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+  }
+  .hero-triloe-services .cta-wrap {
+    text-align: center;
+    margin-top: -18px;
+    position: relative;
+    z-index: 3;
+    padding-bottom: 30px;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 820px) {
+    .hero-triloe-services .nav {
+      padding: 18px 22px;
+    }
+    .hero-triloe-services .nav ul {
+      display: none;
+    }
+    .hero-triloe-services .collage {
+      height: auto;
+      display: grid;
+      gap: 12px;
+    }
+    .hero-triloe-services .collage > * {
+      position: static !important;
+      width: auto !important;
+    }
+    .hero-triloe-services .photo {
+      height: 260px;
+      border-radius: 24px;
+    }
+    .hero-triloe-services .chips {
+      border-radius: 0;
+      padding: 0;
+      box-shadow: none;
+    }
+    .hero-triloe-services .stat-dark {
+      border: 0;
+      padding: 20px;
+    }
+  }
+
+  /* ---- Images ---- */
+  .hero-triloe-services img {
+    display: block;
+    object-fit: cover;
+    background: #cfcfd6;
+  }
+  .hero-triloe-services .avatars img,
+  .hero-triloe-services .avatars img,
+  .hero-triloe-services .th img,
+  .hero-triloe-services .au img,
+  .hero-triloe-services .rv img {
+    border-radius: 50%;
+  }
+  .hero-triloe-services .nav-icons .user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+  }
+</style>
+
+<!-- Icon sprite (arrows, stars, search) - keep this, the buttons use it -->
+<svg width="0" height="0" style="position: absolute">
+  <defs>
+    <symbol id="ar" viewBox="0 0 24 24">
+      <path
+        d="M7 17 17 7M8 7h9v9"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </symbol>
+    <symbol id="st" viewBox="0 0 24 24">
+      <path d="M12 1c1 6 5 10 11 11-6 1-10 5-11 11-1-6-5-10-11-11C7 11 11 7 12 1z" fill="currentColor" />
+    </symbol>
+    <symbol id="sq" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+      <path d="m20 20-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </symbol>
+    <symbol id="pw" viewBox="0 0 24 24">
+      <path d="M12 2 9 9l-7 3 7 3 3 7 3-7 7-3-7-3z" fill="currentColor" />
+    </symbol>
+  </defs>
+</svg>
+<section class="h hero-triloe-services">
+  <!-- Navigation -->
+  <nav class="nav">
+    <a class="logo" href="#"
+      ><svg width="30" height="30" viewBox="0 0 30 30">
+        <rect width="30" height="30" rx="8" fill="#2f4bf2" />
+        <path d="M9 10l6 3 6-3-6 12z" fill="#fff" /></svg
+      sitecraft</a
+    >
+    <ul>
+      <li>Home</li>
+      <li>About</li>
+      <li class="nav-active">Service ●</li>
+      <li>Testimonial</li>
+      <li>Pricing</li>
+      <li>Careers</li>
+    </ul>
+    <a class="pill btn-primary" href="#"
+      >Contact us <svg><use href="#ar" /></svg
+    ></a>
+  </nav>
+  <div class="intro">
+    <span class="tag">Smart Marketing</span>
+    <h2>Our Tailored Services</h2>
+    <p>
+      We create marketing experiences that resonate, perform, and last. From brand building to data-led
+      campaigns, we help you shape a unique identity
+    </p>
+  </div>
+  <div class="collage">
+    <!-- IMAGE (Hero photo): replace the link in src="" with your own image -->
+    <img
+      class="photo"
+      src="https://images.unsplash.com/photo-1746723370709-70d89a7b7999?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+      alt="Team member at work"
+      width="1100"
+      height="760"
+    />
+    <div class="stat-dark"><b>99%</b><span>Actionable business for an amazing real world insights</span></div>
+    <div class="stat-rating">
+      <b>4.8<i></i></b><span>Our average customer rating</span>
+    </div>
+    <div class="stat-users"><b>2.5M</b><span>Total users we've impacted</span></div>
+    <div class="chips">
+      <span>Designing</span><span>Branding</span><span>Consulting</span><span>Marketing</span
+      ><span>Web Design</span>
+    </div>
+  </div>
+  <div class="cta-wrap">
+    <a class="pill btn-primary" href="#"
+      >Book Free Consulting <svg><use href="#ar" /></svg
+    ></a>
+  </div>
+</section>

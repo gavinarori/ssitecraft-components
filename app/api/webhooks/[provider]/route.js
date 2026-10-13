@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server'
 
 import { downloadLinkHours, signDownloadToken } from '@util/lib/download-token'
+import { recordPurchase, signUnlockLink } from '@util/lib/entitlements'
 import { sendDeliveryEmail } from '@util/lib/email'
+import { getPack } from '@util/lib/packs'
+import { sendUnlockEmail } from '@util/lib/unlock-email'
 import { getProvider } from '@util/lib/payments'
 import { getSiteUrl } from '@util/lib/site-url'
 import { store } from '@util/lib/store'
@@ -12,6 +15,26 @@ export const dynamic = 'force-dynamic'
 
 const DAY = 86_400
 const ok = (body = {}) => NextResponse.json({ ok: true, ...body })
+
+async function unlockPack(event, request) {
+  const pack = event.pack ? await getPack(event.pack) : null
+  if (!event.email || !pack) {
+    console.error('[webhook] pack order is missing email or pack. Unlock manually.', event.orderId, event.pack)
+    return
+  }
+  const componentId = event.kind === 'component' ? event.component : null
+  if (event.kind === 'component' && !pack.hasComponent(componentId)) {
+    console.error('[webhook] component order for unknown component. Unlock manually.', event.orderId, event.pack, componentId)
+    return
+  }
+  const orders = await recordPurchase({ email: event.email, orderId: event.orderId, packId: pack.id, componentId })
+  const mine = orders.filter((order) => order.o === event.orderId)
+  await sendUnlockEmail({
+    to: event.email,
+    titles: [componentId ? `${pack.title} (component ${componentId})` : pack.title],
+    unlockUrl: `${getSiteUrl(request)}/api/unlock/${signUnlockLink(mine)}`,
+  })
+}
 
 async function deliver(event, request) {
   if (!event.email || !event.slug || !event.tier) {
@@ -66,7 +89,7 @@ export async function POST(request, { params }) {
   if (!claimed) return ok({ duplicate: true })
 
   try {
-    if (event.type === 'order_paid') await deliver(event, request)
+    if (event.type === 'order_paid') await (event.kind === 'pack' || event.kind === 'component' ? unlockPack : deliver)(event, request)
     if (event.type === 'order_refunded') await store.set(`revoked:${event.orderId}`, '1')
 
     await store.set(lockKey, 'done', 30 * DAY)

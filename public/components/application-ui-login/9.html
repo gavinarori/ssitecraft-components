@@ -1,0 +1,527 @@
+<!--
+  ShipX - welcome login with brand panel
+  HOW TO USE
+  1. Paste this whole file where you want the page.
+  2. Image slots are marked with IMAGE comments: replace the link inside src="".
+  3. Change the text and links. Colors are CSS variables at the top of the <style> block.
+  - No photos needed: the hex pattern, orb and chips are CSS/SVG
+  - Chips and the orb are easy to edit or remove
+-->
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap");
+
+  .login-shipx * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  .login-shipx {
+    box-sizing: border-box;
+    min-height: max(100vh, 640px);
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font), system-ui, sans-serif;
+  }
+  .login-shipx a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .login-shipx img {
+    display: block;
+    object-fit: cover;
+    background: #cfcfd6;
+  }
+  .login-shipx .ico {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .login-shipx .label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .login-shipx .input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 50px;
+    padding: 0 18px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--field);
+    color: var(--muted);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .login-shipx .input:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--ring);
+  }
+  .login-shipx .input input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--ink);
+    font:
+      400 14px var(--font),
+      sans-serif;
+  }
+  .login-shipx .input input::placeholder {
+    color: var(--muted);
+  }
+  .login-shipx .eye {
+    display: grid;
+    place-items: center;
+    padding: 4px;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .login-shipx .eye:hover,
+  .login-shipx .eye[aria-pressed="true"] {
+    color: var(--ink);
+  }
+  .login-shipx .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 50px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font:
+      500 15px var(--font),
+      sans-serif;
+    cursor: pointer;
+    transition:
+      transform 0.2s,
+      box-shadow 0.25s,
+      background 0.2s;
+  }
+  .login-shipx .btn:hover {
+    transform: translateY(-1px);
+  }
+  .login-shipx .btn--primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .login-shipx .btn--primary:hover {
+    box-shadow: 0 14px 26px -14px var(--accent);
+  }
+  .login-shipx .btn--outline {
+    border-color: var(--line);
+    background: transparent;
+    color: var(--ink);
+    font-weight: 400;
+  }
+  .login-shipx .btn--outline:hover {
+    background: var(--hover);
+  }
+  .login-shipx .btn .brand {
+    width: 20px;
+    height: 20px;
+  }
+  .login-shipx .divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .login-shipx .divider::before,
+  .login-shipx .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .login-shipx .check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .login-shipx .check input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+  }
+  .login-shipx .link {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .login-shipx .link:hover {
+    text-decoration: underline;
+  }
+  .login-shipx .stack {
+    display: grid;
+    gap: 18px;
+  }
+  .login-shipx .dots {
+    display: flex;
+    gap: 9px;
+  }
+  .login-shipx .dots i {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: transform 0.2s;
+  }
+  .login-shipx .dots i:first-child {
+    background: #fff;
+  }
+  .login-shipx .dots i:hover {
+    transform: scale(1.25);
+  }
+  @keyframes login-pulse {
+    0% {
+      transform: scale(0.8);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .login-shipx * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  .login-shipx {
+    --bg: #fff;
+    --ink: #0b0b0b;
+    --muted: #8a8a92;
+    --line: #e6e6ea;
+    --field: #fff;
+    --hover: #f8f8fa;
+    --accent: #6470c8;
+    --accent-ink: #fff;
+    --ring: rgba(100, 112, 200, 0.2);
+    --radius: 999px;
+    --font: Outfit;
+    display: grid;
+    grid-template-columns: 47% 53%;
+  }
+  .login-shipx .panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: min(362px, 100% - 48px);
+    margin: 0 auto;
+    padding: 48px 0;
+  }
+  .login-shipx .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--accent);
+    font-size: 24px;
+    font-weight: 600;
+  }
+  .login-shipx .logo svg {
+    width: 30px;
+    height: 30px;
+  }
+  .login-shipx h1 {
+    margin: 8px 0 6px;
+    text-align: center;
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .login-shipx .sub {
+    margin-bottom: 22px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .login-shipx .socials {
+    display: grid;
+    gap: 10px;
+  }
+  .login-shipx .divider {
+    margin: 20px 0;
+  }
+  .login-shipx .form {
+    display: grid;
+    gap: 10px;
+  }
+  .login-shipx .input {
+    height: 50px;
+  }
+  .login-shipx .foot {
+    margin-top: 24px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .login-shipx .foot a {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .login-shipx .foot a:hover {
+    text-decoration: underline;
+  }
+  .login-shipx .stage {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(40px, 6vh, 70px) 5.5%;
+    border-left: 1px solid var(--line);
+    background: #f7f7f9;
+  }
+  .login-shipx .hex {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .login-shipx .stage > *:not(.hex) {
+    position: relative;
+  }
+  .login-shipx .say {
+    font-size: clamp(52px, 6.6vw, 86px);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.03em;
+  }
+  .login-shipx .name {
+    display: inline-block;
+    margin-top: 2px;
+    padding: 0 20px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.35));
+    backdrop-filter: blur(6px);
+    box-shadow: inset 40px 1px 0 -38px rgba(100, 112, 200, 0.9);
+  }
+  .login-shipx .orb {
+    display: grid;
+    place-items: center;
+    width: 160px;
+    height: 160px;
+    margin: 56px 0 0 clamp(60px, 10vw, 180px);
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 30%, #fff, #ececef);
+    box-shadow:
+      inset 0 -10px 24px rgba(0, 0, 0, 0.06),
+      0 20px 40px -18px rgba(0, 0, 0, 0.2);
+    animation: shipx-float 6s ease-in-out infinite;
+  }
+  .login-shipx .orb svg {
+    width: 74px;
+    height: 74px;
+  }
+  .login-shipx .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 12px;
+    max-width: 520px;
+    margin-top: 40px;
+  }
+  .login-shipx .chip {
+    position: relative;
+    padding: 14px 22px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(6px);
+    font-size: 14px;
+    transition:
+      transform 0.25s,
+      box-shadow 0.25s;
+  }
+  .login-shipx .chip::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 22%;
+    right: 22%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+  .login-shipx .chip:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 26px -16px rgba(100, 112, 200, 0.7);
+  }
+  .login-shipx .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 64px;
+    padding: 8px;
+    border: 1px dashed #cfcfd6;
+    border-radius: 999px;
+  }
+  .login-shipx .cta span {
+    padding: 14px 34px;
+    border-radius: 999px;
+    background: #efeff1;
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .login-shipx .cta i {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    transition: transform 0.3s;
+  }
+  .login-shipx .cta:hover i {
+    transform: rotate(45deg);
+  }
+  .login-shipx .cta .ico {
+    width: 22px;
+    height: 22px;
+  }
+  @keyframes shipx-float {
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  @media (max-width: 900px) {
+    .login-shipx {
+      grid-template-columns: 1fr;
+    }
+    .login-shipx .stage {
+      display: none;
+    }
+  }
+</style>
+
+<section class="login-shipx">
+  <!-- Form -->
+  <div class="panel">
+    <a href="#" class="logo"
+      ><svg viewBox="0 0 32 32" aria-hidden="true">
+        <g fill="#6470c8">
+          <rect x="2" y="2" width="12.500" height="12.500" rx="4" />
+          <rect x="17.500" y="2" width="12.500" height="12.500" rx="4" />
+          <rect x="2" y="17.500" width="12.500" height="12.500" rx="4" />
+          <rect x="17.500" y="17.500" width="12.500" height="12.500" rx="4" />
+        </g>
+      </svg>
+      Sitecraft</a
+    >
+    <h1>Welcome to Sitecraft</h1>
+    <p class="sub">AI powered inventory management software</p>
+    <div class="socials">
+      <button class="btn btn--outline" type="button">
+        <svg class="brand" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="#4285F4"
+            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+          />
+          <path
+            fill="#34A853"
+            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+          />
+          <path
+            fill="#FBBC05"
+            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+          />
+          <path
+            fill="#EA4335"
+            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+          />
+        </svg>
+        Continue with Google
+      </button>
+      <button class="btn btn--outline" type="button">
+        <svg class="brand" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"
+          />
+        </svg>
+        Continue with Apple
+      </button>
+    </div>
+    <div class="divider">or</div>
+    <form class="form" action="#">
+      <div class="input">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+          /></svg
+        ><input id="sx-email" type="email" placeholder="helloshivani24@gmail.com" />
+      </div>
+      <button class="btn btn--primary" type="submit">Continue with email</button>
+    </form>
+    <p class="foot">Already have an account? <a href="#">Sign in</a></p>
+  </div>
+
+  <!-- Brand panel (pure CSS/SVG, no photos) -->
+  <div class="stage">
+    <svg class="hex" aria-hidden="true" preserveAspectRatio="xMidYMid slice" viewBox="0 0 900 900">
+      <defs>
+        <pattern
+          id="sx-hex"
+          width="346.4"
+          height="600"
+          patternUnits="userSpaceOnUse"
+          patternTransform="translate(-40 40) scale(.9)"
+        >
+          <g fill="none" stroke="#e9e9ed" stroke-width="22">
+            <path d="M173.2 0L346.4 100V300L173.2 400L0.0 300V100Z" />
+            <path d="M0 300L173.2 400V600L0 700L-173.2 600V400Z" />
+            <path d="M346.4 300L519.5999999999999 400V600L346.4 700L173.2 600V400Z" />
+            <path d="M0 -300L173.2 -200V0L0 100L-173.2 0V-200Z" />
+            <path d="M346.4 -300L519.5999999999999 -200V0L346.4 100L173.2 0V-200Z" />
+          </g>
+          <g fill="none" stroke="#fbfbfc" stroke-width="3">
+            <path d="M173.2 0L346.4 100V300L173.2 400L0.0 300V100Z" />
+            <path d="M0 300L173.2 400V600L0 700L-173.2 600V400Z" />
+            <path d="M346.4 300L519.5999999999999 400V600L346.4 700L173.2 600V400Z" />
+            <path d="M0 -300L173.2 -200V0L0 100L-173.2 0V-200Z" />
+            <path d="M346.4 -300L519.5999999999999 -200V0L346.4 100L173.2 0V-200Z" />
+          </g>
+        </pattern>
+      </defs>
+      <rect width="900" height="900" fill="url(#sx-hex)" />
+    </svg>
+    <h2 class="say">Say hello to<br /><span class="name">Sitecraft</span></h2>
+    <div class="orb">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <g fill="#6470c8">
+          <rect x="2" y="2" width="12.500" height="12.500" rx="4" />
+          <rect x="17.500" y="2" width="12.500" height="12.500" rx="4" />
+          <rect x="2" y="17.500" width="12.500" height="12.500" rx="4" />
+          <rect x="17.500" y="17.500" width="12.500" height="12.500" rx="4" />
+        </g>
+      </svg>
+    </div>
+    <div class="chips">
+      <span class="chip">Inventory Management</span><span class="chip">Stock Analysis</span
+      ><span class="chip">AI Insights</span><span class="chip">Sales Activity</span
+      ><span class="chip">Product Activity</span>
+    </div>
+    <a href="#" class="cta"
+      ><span>Work with us</span
+      ><i
+        ><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg></i
+    ></a>
+  </div>
+</section>

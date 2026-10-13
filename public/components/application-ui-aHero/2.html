@@ -1,0 +1,377 @@
+<!--
+  Sparkly — hero section
+  HOW TO USE
+  1. Paste this whole file where you want the hero.
+  2. Every image is a placeholder. Search for the IMAGE and AVATAR comments and replace the link inside src="".
+  3. Change the text, links and colors (colors live at the top of the <style> block).
+  Fonts are loaded from Google Fonts by the @import line below.
+-->
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+  .hero-sparkly,
+  .hero-sparkly * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  .hero-sparkly {
+    background: #fff;
+    font-family: Inter, system-ui, sans-serif;
+    color: #111;
+  }
+  .hero-sparkly a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .hero-sparkly ul {
+    list-style: none;
+  }
+  .hero-sparkly {
+    position: relative;
+    overflow: hidden;
+    min-height: max(100vh, 640px);
+  }
+
+  /* ---- Navigation ---- */
+  .hero-sparkly .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 48px;
+    position: relative;
+    z-index: 5;
+    font-size: 13px;
+  }
+  .hero-sparkly .nav ul {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+  .hero-sparkly .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 17px;
+  }
+  .hero-sparkly .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 500;
+    transition:
+      transform 0.25s,
+      box-shadow 0.25s;
+    cursor: pointer;
+    border: 0;
+    font-family: inherit;
+  }
+  .hero-sparkly .pill:hover {
+    transform: translateY(-2px);
+  }
+  .hero-sparkly .pill svg,
+  .hero-sparkly .icon-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+  .hero-sparkly .icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-grid;
+    place-items: center;
+    transition: transform 0.3s;
+  }
+  .hero-sparkly .icon-btn:hover {
+    transform: rotate(45deg);
+  }
+  .hero-sparkly .avatars {
+    display: flex;
+  }
+  .hero-sparkly .avatars img {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    margin-left: -9px;
+  }
+  .hero-sparkly .avatars img:first-child {
+    margin-left: 0;
+  }
+  .hero-sparkly .card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 20px 40px -18px rgba(0, 0, 0, 0.35);
+  }
+  .hero-sparkly .spin {
+    animation: sparkly-spin 18s linear infinite;
+  }
+  @keyframes sparkly-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes sparkly-float {
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  .hero-sparkly .float {
+    animation: sparkly-float 5s ease-in-out infinite;
+  }
+  .hero-sparkly {
+    background: #5a37e0;
+    color: #fff;
+    text-align: center;
+    font-family: Inter;
+  }
+  .hero-sparkly .nav ul {
+    color: rgba(255, 255, 255, 0.55);
+  }
+  .hero-sparkly .nav li.on {
+    color: #fff;
+  }
+  .hero-sparkly .pill {
+    background: #fff;
+    color: #4a2bd0;
+    font-weight: 600;
+  }
+  .hero-sparkly h1 {
+    font-size: clamp(30px, 4.3vw, 48px);
+    font-weight: 500;
+    line-height: 1.3;
+    max-width: 560px;
+    margin: 44px auto 16px;
+    letter-spacing: -0.01em;
+  }
+  .hero-sparkly p.sub {
+    font-size: 12.5px;
+    max-width: 360px;
+    margin: auto;
+    line-height: 1.6;
+    opacity: 0.85;
+  }
+  .hero-sparkly .arcs {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 640px;
+    height: 330px;
+    transform: translateX(-50%);
+    background: radial-gradient(
+      circle at 50% 100%,
+      #7b55f6 0 150px,
+      #6c48ec 150px 215px,
+      #6240e6 215px 280px,
+      transparent 280px 100%
+    );
+  }
+  .hero-sparkly .girl {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 330px;
+    height: auto;
+    transform: translateX(-50%);
+    display: block;
+    object-fit: contain;
+  }
+  .hero-sparkly .rating-card,
+  .hero-sparkly .mentors-card {
+    position: absolute;
+    color: #111;
+    text-align: left;
+    padding: 20px 22px;
+  }
+  .hero-sparkly .rating-card {
+    left: 17%;
+    bottom: 14%;
+    width: 220px;
+  }
+  .hero-sparkly .mentors-card {
+    right: 17%;
+    bottom: 19%;
+    width: 220px;
+  }
+  .hero-sparkly .rating-card b {
+    font-size: 28px;
+    font-weight: 600;
+    display: block;
+  }
+  .hero-sparkly .rating-card em {
+    color: #f7c600;
+    font-style: normal;
+    letter-spacing: 2px;
+    font-size: 15px;
+  }
+  .hero-sparkly .rating-card span,
+  .hero-sparkly .mentors-card span {
+    display: block;
+    font-size: 12px;
+    color: #444;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+  .hero-sparkly .mentors-card b {
+    font-size: 26px;
+    font-weight: 600;
+    display: block;
+    margin: 12px 0 8px;
+  }
+  .hero-sparkly .mentors-card .avatars img {
+    width: 36px;
+    height: 36px;
+    border: 0;
+    margin-left: -4px;
+  }
+  .hero-sparkly .sparkle-star,
+  .hero-sparkly .sparkle-sun {
+    position: absolute;
+    color: #ffd400;
+  }
+  .hero-sparkly .sparkle-star {
+    right: 25%;
+    top: 42%;
+    width: 42px;
+  }
+  .hero-sparkly .sparkle-sun {
+    left: 30%;
+    top: 50%;
+    width: 56px;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 820px) {
+    .hero-sparkly .nav {
+      padding: 18px 22px;
+    }
+    .hero-sparkly .nav ul {
+      display: none;
+    }
+    .hero-sparkly .rating-card,
+    .hero-sparkly .mentors-card {
+      display: none;
+    }
+  }
+
+  /* ---- Images ---- */
+  .hero-sparkly img {
+    display: block;
+    object-fit: cover;
+    
+  }
+  .hero-sparkly .avatars img,
+  .hero-sparkly .avatars img,
+  .hero-sparkly .th img,
+  .hero-sparkly .au img,
+  .hero-sparkly .rv img {
+    border-radius: 50%;
+  }
+  .hero-sparkly .nav-icons .user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+  }
+</style>
+
+<!-- Icon sprite (arrows, stars, search) - keep this, the buttons use it -->
+<svg width="0" height="0" style="position: absolute">
+  <defs>
+    <symbol id="ar" viewBox="0 0 24 24">
+      <path
+        d="M7 17 17 7M8 7h9v9"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </symbol>
+    <symbol id="st" viewBox="0 0 24 24">
+      <path d="M12 1c1 6 5 10 11 11-6 1-10 5-11 11-1-6-5-10-11-11C7 11 11 7 12 1z" fill="currentColor" />
+    </symbol>
+    <symbol id="sq" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+      <path d="m20 20-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </symbol>
+    <symbol id="pw" viewBox="0 0 24 24">
+      <path d="M12 2 9 9l-7 3 7 3 3 7 3-7 7-3-7-3z" fill="currentColor" />
+    </symbol>
+  </defs>
+</svg>
+<section class="h hero-sparkly">
+  <!-- Navigation -->
+  <nav class="nav">
+    <a class="logo" href="#"
+      ><svg width="20" height="20"><use href="#st" /></svg>Sitecraft</a
+    >
+    <ul>
+      <li>Home</li>
+      <li class="on">Courses ⌄</li>
+      <li>Mentors</li>
+      <li>About us</li>
+      <li>Contact us</li>
+      <li>Blogs</li>
+    </ul>
+    <a class="pill" href="#">Register now</a>
+  </nav>
+  <h1>Choose the Right Course for Your Goal</h1>
+  <p class="subtitle">
+    Develop essential skills with expert-led courses in AI, ML, data science, and more. Learn at your own
+    pace, anytime
+  </p>
+  <svg class="sparkle-star float" viewBox="0 0 24 24"><use href="#st" /></svg>
+  <svg class="sparkle-sun spin" viewBox="0 0 60 60" style="animation-duration: 30s">
+    <g stroke="#ffc400" stroke-width="2.2" stroke-linecap="round">
+      <path id="x" d="M30 4v10" />
+      <use href="#x" transform="rotate(20 30 30)" />
+      <use href="#x" transform="rotate(40 30 30)" />
+      <use href="#x" transform="rotate(60 30 30)" />
+      <use href="#x" transform="rotate(80 30 30)" />
+      <use href="#x" transform="rotate(100 30 30)" />
+      <use href="#x" transform="rotate(120 30 30)" />
+      <use href="#x" transform="rotate(140 30 30)" />
+      <use href="#x" transform="rotate(160 30 30)" />
+      <use href="#x" transform="rotate(180 30 30)" />
+      <use href="#x" transform="rotate(200 30 30)" />
+      <use href="#x" transform="rotate(220 30 30)" />
+      <use href="#x" transform="rotate(240 30 30)" />
+      <use href="#x" transform="rotate(260 30 30)" />
+      <use href="#x" transform="rotate(280 30 30)" />
+      <use href="#x" transform="rotate(300 30 30)" />
+      <use href="#x" transform="rotate(320 30 30)" />
+      <use href="#x" transform="rotate(340 30 30)" />
+    </g>
+    <circle cx="30" cy="30" r="9" fill="#ffc400" />
+  </svg>
+  <div class="arcs"></div>
+  <!-- IMAGE (Transparent PNG of person): replace the link in src="" with your own image -->
+  <img
+    class="girl"
+    src="/magnific__have-a-cut-out-of-this-girl-with-no-background-wha__49023.png"
+    alt="Student holding books"
+    width="660"
+    height="100"
+  />
+  <div class="card rating-card">
+    <b>4.5</b><em>★★★★★</em><span>We are trusted by students all over the world</span>
+  </div>
+  <div class="card mentors-card">
+    <!-- AVATARS: replace each src with a profile picture link -->
+    <div class="avatars">
+        <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D" alt="Avatar 1" /><img
+          src="https://images.unsplash.com/photo-1731341711385-0421015b2dff?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+          alt="Avatar 2"
+        /><img src="https://images.unsplash.com/photo-1714331251780-db56109a9887?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D" alt="Avatar 3" /><img
+          src="https://images.unsplash.com/photo-1688641877066-f8f4ef86bd08?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+          alt="Avatar 4"
+        />
+      </div>
+    <b>2K+</b><span>Learn with expert mentors who are ready to guide &amp; skills</span>
+  </div>
+</section>

@@ -1,0 +1,738 @@
+<!--
+  Chainex - dark sign-up with product showcase
+  HOW TO USE
+  1. Paste this whole file where you want the page.
+  2. Image slots are marked with IMAGE comments: replace the link inside src="".
+  3. Change the text and links. Colors are CSS variables at the top of the <style> block.
+  - Password fields have a working show/hide button
+  - Right side: animated chart mock-up with floating glass cards (4 icon slots)
+-->
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap");
+
+  .login-chainexsignup * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  .login-chainexsignup {
+    box-sizing: border-box;
+    min-height: max(100vh, 640px);
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font), system-ui, sans-serif;
+  }
+  .login-chainexsignup a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .login-chainexsignup img {
+    display: block;
+    object-fit: cover;
+    background: #cfcfd6;
+  }
+  .login-chainexsignup .ico {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .login-chainexsignup .label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .login-chainexsignup .input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 50px;
+    padding: 0 18px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--field);
+    color: var(--muted);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .login-chainexsignup .input:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--ring);
+  }
+  .login-chainexsignup .input input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--ink);
+    font:
+      400 14px var(--font),
+      sans-serif;
+  }
+  .login-chainexsignup .input input::placeholder {
+    color: var(--muted);
+  }
+  .login-chainexsignup .eye {
+    display: grid;
+    place-items: center;
+    padding: 4px;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .login-chainexsignup .eye:hover,
+  .login-chainexsignup .eye[aria-pressed="true"] {
+    color: var(--ink);
+  }
+  .login-chainexsignup .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 50px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font:
+      500 15px var(--font),
+      sans-serif;
+    cursor: pointer;
+    transition:
+      transform 0.2s,
+      box-shadow 0.25s,
+      background 0.2s;
+  }
+  .login-chainexsignup .btn:hover {
+    transform: translateY(-1px);
+  }
+  .login-chainexsignup .btn--primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .login-chainexsignup .btn--primary:hover {
+    box-shadow: 0 14px 26px -14px var(--accent);
+  }
+  .login-chainexsignup .btn--outline {
+    border-color: var(--line);
+    background: transparent;
+    color: var(--ink);
+    font-weight: 400;
+  }
+  .login-chainexsignup .btn--outline:hover {
+    background: var(--hover);
+  }
+  .login-chainexsignup .btn .brand {
+    width: 20px;
+    height: 20px;
+  }
+  .login-chainexsignup .divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .login-chainexsignup .divider::before,
+  .login-chainexsignup .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .login-chainexsignup .check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .login-chainexsignup .check input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+  }
+  .login-chainexsignup .link {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .login-chainexsignup .link:hover {
+    text-decoration: underline;
+  }
+  .login-chainexsignup .stack {
+    display: grid;
+    gap: 18px;
+  }
+  .login-chainexsignup .dots {
+    display: flex;
+    gap: 9px;
+  }
+  .login-chainexsignup .dots i {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: transform 0.2s;
+  }
+  .login-chainexsignup .dots i:first-child {
+    background: #fff;
+  }
+  .login-chainexsignup .dots i:hover {
+    transform: scale(1.25);
+  }
+  @keyframes login-pulse {
+    0% {
+      transform: scale(0.8);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .login-chainexsignup * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  .login-chainexsignup {
+    --bg: #101015;
+    --ink: #fff;
+    --muted: #8b8b95;
+    --line: #2a2a33;
+    --field: transparent;
+    --hover: rgba(255, 255, 255, 0.05);
+    --accent: #3fb086;
+    --accent-ink: #fff;
+    --ring: rgba(63, 176, 134, 0.18);
+    --radius: 999px;
+    --font: Inter;
+    display: grid;
+    grid-template-columns: 44% 56%;
+  }
+  .login-chainexsignup .panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 26px;
+    padding: 48px clamp(24px, 16%, 96px);
+  }
+  .login-chainexsignup .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 19px;
+    font-weight: 600;
+  }
+  .login-chainexsignup .logo svg {
+    width: 32px;
+    height: 32px;
+  }
+  .login-chainexsignup h1 {
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .login-chainexsignup .sub {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .login-chainexsignup .form {
+    display: grid;
+    gap: 14px;
+  }
+  .login-chainexsignup .form .label {
+    margin-bottom: 8px;
+  }
+  .login-chainexsignup .btn--primary {
+    margin-top: 2px;
+  }
+  .login-chainexsignup .foot {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .login-chainexsignup .stage {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    overflow: hidden;
+    padding: 70px 3% 48px;
+    background:
+      radial-gradient(ellipse 70% 55% at 55% 60%, rgba(63, 176, 134, 0.2), transparent 70%),
+      linear-gradient(135deg, #0b0d0c, #0a120e);
+  }
+  .login-chainexsignup .mock {
+    position: relative;
+    width: min(640px, 92%);
+    height: min(430px, 56vh);
+    min-height: 340px;
+  }
+  .login-chainexsignup .chart {
+    position: absolute;
+    inset: 60px 0 24px 4%;
+    display: grid;
+    grid-template-columns: 34px 1fr 48px;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .login-chainexsignup .chart-top {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .login-chainexsignup .tool {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.07);
+    color: #aaa;
+  }
+  .login-chainexsignup .tool .ico {
+    width: 14px;
+    height: 14px;
+  }
+  .login-chainexsignup .rail {
+    align-self: end;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 7px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.07);
+    color: #aaa;
+    margin-bottom: -4px;
+  }
+  .login-chainexsignup .rail .ico {
+    width: 14px;
+    height: 14px;
+  }
+  .login-chainexsignup .chart-svg {
+    align-self: end;
+    width: 100%;
+    height: 76%;
+  }
+  .login-chainexsignup .axis {
+    align-self: end;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 70%;
+    font-size: 11px;
+    color: #9a9aa3;
+  }
+  .login-chainexsignup .bubble {
+    position: absolute;
+    top: 44%;
+    left: 42%;
+    padding: 5px 12px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.1);
+    font-size: 10px;
+  }
+  .login-chainexsignup .float {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 88px;
+    padding: 14px 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 22px;
+    background: rgba(40, 42, 48, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    font-size: 13px;
+    box-shadow: 0 20px 40px -16px rgba(0, 0, 0, 0.6);
+    animation: chainex-float 6s ease-in-out infinite;
+  }
+  .login-chainexsignup .float img {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #33353b;
+  }
+  .login-chainexsignup .float--blog {
+    top: 0;
+    left: 15%;
+  }
+  .login-chainexsignup .float--news {
+    top: 30px;
+    right: 16%;
+    animation-delay: -2s;
+  }
+  .login-chainexsignup .float--invest {
+    bottom: 0;
+    left: -2%;
+    animation-delay: -4s;
+  }
+  .login-chainexsignup .float--bot {
+    bottom: 50px;
+    right: -4%;
+    animation-delay: -1s;
+  }
+  .login-chainexsignup .marker {
+    position: absolute;
+    width: 92px;
+    height: 92px;
+    opacity: 0.9;
+  }
+  .login-chainexsignup .marker::before,
+  .login-chainexsignup .marker::after {
+    content: "";
+    position: absolute;
+    background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.55) 0 5px, transparent 5px 9px);
+  }
+  .login-chainexsignup .marker::before {
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+  }
+  .login-chainexsignup .marker::after {
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.55) 0 5px, transparent 5px 9px);
+  }
+  .login-chainexsignup .marker i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid #fff;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    box-shadow: 0 0 0 0 rgba(63, 176, 134, 0.6);
+    animation: chainex-ping 2.4s infinite;
+  }
+  .login-chainexsignup .marker--a {
+    top: -8px;
+    left: -6%;
+  }
+  .login-chainexsignup .marker--b {
+    top: 20px;
+    right: -12%;
+  }
+  .login-chainexsignup .marker--c {
+    bottom: -30px;
+    left: 26%;
+  }
+  .login-chainexsignup .intro {
+    text-align: center;
+    max-width: 430px;
+  }
+  .login-chainexsignup .intro h2 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .login-chainexsignup .intro p {
+    margin: 18px 0 14px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .login-chainexsignup .intro .dots {
+    justify-content: center;
+  }
+  @keyframes chainex-float {
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  @keyframes chainex-ping {
+    70% {
+      box-shadow: 0 0 0 12px rgba(63, 176, 134, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(63, 176, 134, 0);
+    }
+  }
+  @media (max-width: 900px) {
+    .login-chainexsignup {
+      grid-template-columns: 1fr;
+    }
+    .login-chainexsignup .stage {
+      display: none;
+    }
+  }
+</style>
+
+<section class="login-chainexsignup">
+  <!-- Form -->
+  <div class="panel">
+    <a href="#" class="logo"
+      ><svg viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="9" fill="#3fb086" />
+        <path d="M11 9v14M21 9v14M11 16h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" />
+      </svg>
+      Chainex</a
+    >
+    <div>
+      <h1>Sign up</h1>
+      <p class="sub">Sign up to start your journey</p>
+    </div>
+    <form class="form" action="#">
+      <div>
+        <label class="label" for="cx-name">Name</label>
+        <div class="input"><input id="cx-name" type="text" placeholder="Shivani Chauhan" /></div>
+      </div>
+      <div>
+        <label class="label" for="cx-email">Email</label>
+        <div class="input"><input id="cx-email" type="email" placeholder="shivani2@uiwiki.com" /></div>
+      </div>
+      <div>
+        <label class="label" for="cx-pass">Password</label>
+        <div class="input">
+          <input id="cx-pass" type="password" placeholder="••••••••" autocomplete="off" /><button
+            type="button"
+            class="eye"
+            data-toggle-password
+            aria-label="Show password"
+            aria-pressed="false"
+          >
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+              />
+              <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div>
+        <label class="label" for="cx-pass2">Confirm Password</label>
+        <div class="input">
+          <input id="cx-pass2" type="password" placeholder="••••••••" autocomplete="off" /><button
+            type="button"
+            class="eye"
+            data-toggle-password
+            aria-label="Show password"
+            aria-pressed="false"
+          >
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+              />
+              <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <label class="check"><input type="checkbox" /> Remember me</label>
+      <button class="btn btn--primary" type="submit">Create Account</button>
+      <button class="btn btn--outline" type="button">
+        <svg class="brand" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="#4285F4"
+            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+          />
+          <path
+            fill="#34A853"
+            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+          />
+          <path
+            fill="#FBBC05"
+            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+          />
+          <path
+            fill="#EA4335"
+            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+          />
+        </svg>
+        Google
+      </button>
+    </form>
+    <p class="foot">Already have an account? <a href="#" class="link">Log in</a></p>
+  </div>
+
+  <!-- Product showcase -->
+  <div class="stage">
+    <div class="mock">
+      <span class="marker marker--a" aria-hidden="true"><i></i></span
+      ><span class="marker marker--b" aria-hidden="true"><i></i></span
+      ><span class="marker marker--c" aria-hidden="true"><i></i></span>
+      <div class="chart" aria-hidden="true">
+        <div class="chart-top">
+          <span class="tool"
+            ><svg class="ico" viewBox="0 0 24 24"><path d="M6 4v16M12 8v8M18 5v14" /></svg></span
+          ><span class="tool"
+            ><svg class="ico" viewBox="0 0 24 24"><path d="M4 12h16M12 4v16" /></svg></span
+          ><span class="tool"
+            ><svg class="ico" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" /></svg></span
+          ><span class="tool"
+            ><svg class="ico" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h6" /></svg
+          ></span>
+        </div>
+        <div class="rail">
+          <span
+            ><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg></span
+          ><span
+            ><svg class="ico" viewBox="0 0 24 24"><path d="M4 18l6-8 4 4 6-9" /></svg></span
+          ><span
+            ><svg class="ico" viewBox="0 0 24 24"><path d="M12 3l9 9-9 9-9-9z" /></svg></span
+          ><span
+            ><svg class="ico" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg
+          ></span>
+        </div>
+        <svg class="chart-svg" viewBox="0 0 470 200" preserveAspectRatio="none" aria-hidden="true">
+          <g stroke="rgba(255,255,255,.12)" stroke-dasharray="3 5">
+            <path d="M0 40H470M0 100H470M0 160H470" />
+          </g>
+          <line x1="11.5" x2="11.5" y1="105" y2="71" stroke="#3fb086" stroke-width="1.5" />
+          <rect x="8.0" y="89" width="7" height="6" rx="1.5" fill="#3fb086" />
+          <line x1="25.7" x2="25.7" y1="111" y2="81" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="22.2" y="89" width="7" height="15" rx="1.5" fill="#2a2d31" />
+          <line x1="39.9" x2="39.9" y1="121" y2="87" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="36.4" y="104" width="7" height="8" rx="1.5" fill="#2a2d31" />
+          <line x1="54.1" x2="54.1" y1="130" y2="90" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="50.6" y="112" width="7" height="11" rx="1.5" fill="#2a2d31" />
+          <line x1="68.3" x2="68.3" y1="130" y2="102" stroke="#3fb086" stroke-width="1.5" />
+          <rect x="64.8" y="110" width="7" height="13" rx="1.5" fill="#3fb086" />
+          <line x1="82.5" x2="82.5" y1="130" y2="102" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="79.0" y="110" width="7" height="5" rx="1.5" fill="#2a2d31" />
+          <line x1="96.7" x2="96.7" y1="119" y2="81" stroke="#3fb086" stroke-width="1.5" />
+          <rect x="93.2" y="100" width="7" height="11" rx="1.5" fill="#3fb086" />
+          <line x1="110.9" x2="110.9" y1="109" y2="64" stroke="#3fb086" stroke-width="1.5" />
+          <rect x="107.4" y="77" width="7" height="23" rx="1.5" fill="#3fb086" />
+          <line x1="125.1" x2="125.1" y1="98" y2="59" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="121.6" y="77" width="7" height="14" rx="1.5" fill="#2a2d31" />
+          <line x1="139.3" x2="139.3" y1="104" y2="61" stroke="#3fb086" stroke-width="1.5" />
+          <rect x="135.8" y="68" width="7" height="23" rx="1.5" fill="#3fb086" />
+          <line x1="153.5" x2="153.5" y1="87" y2="53" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="150.0" y="68" width="7" height="9" rx="1.5" fill="#2a2d31" />
+          <line x1="167.7" x2="167.7" y1="87" y2="68" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="164.2" y="77" width="7" height="5" rx="1.5" fill="#2a2d31" />
+          <line x1="181.9" x2="181.9" y1="102" y2="66" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="178.4" y="77" width="7" height="10" rx="1.5" fill="#2a2d31" />
+          <line x1="196.1" x2="196.1" y1="99" y2="50" stroke="#3fb086" stroke-width="1.5" />
+          <rect x="192.6" y="67" width="7" height="20" rx="1.5" fill="#3fb086" />
+          <line x1="210.3" x2="210.3" y1="75" y2="40" stroke="#3fb086" stroke-width="1.5" />
+          <rect x="206.8" y="47" width="7" height="20" rx="1.5" fill="#3fb086" />
+          <line x1="224.5" x2="224.5" y1="72" y2="26" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="221.0" y="47" width="7" height="13" rx="1.5" fill="#2a2d31" />
+          <line x1="238.7" x2="238.7" y1="96" y2="44" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="235.2" y="60" width="7" height="17" rx="1.5" fill="#2a2d31" />
+          <line x1="252.9" x2="252.9" y1="100" y2="60" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="249.4" y="77" width="7" height="5" rx="1.5" fill="#2a2d31" />
+          <line x1="267.1" x2="267.1" y1="93" y2="62" stroke="#3fb086" stroke-width="1.5" />
+          <rect x="263.6" y="73" width="7" height="7" rx="1.5" fill="#3fb086" />
+          <line x1="281.3" x2="281.3" y1="104" y2="65" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="277.8" y="73" width="7" height="18" rx="1.5" fill="#2a2d31" />
+          <line x1="295.5" x2="295.5" y1="116" y2="69" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="292.0" y="91" width="7" height="10" rx="1.5" fill="#2a2d31" />
+          <line x1="309.7" x2="309.7" y1="122" y2="81" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="306.2" y="101" width="7" height="5" rx="1.5" fill="#2a2d31" />
+          <line x1="323.9" x2="323.9" y1="114" y2="89" stroke="#3fb086" stroke-width="1.5" />
+          <rect x="320.4" y="98" width="7" height="8" rx="1.5" fill="#3fb086" />
+          <line x1="338.1" x2="338.1" y1="123" y2="87" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="334.6" y="98" width="7" height="6" rx="1.5" fill="#2a2d31" />
+          <line x1="352.3" x2="352.3" y1="142" y2="94" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="348.8" y="104" width="7" height="22" rx="1.5" fill="#2a2d31" />
+          <line x1="366.5" x2="366.5" y1="150" y2="119" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="363.0" y="126" width="7" height="5" rx="1.5" fill="#2a2d31" />
+          <line x1="380.7" x2="380.7" y1="155" y2="115" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="377.2" y="131" width="7" height="16" rx="1.5" fill="#2a2d31" />
+          <line x1="394.9" x2="394.9" y1="164" y2="121" stroke="#3fb086" stroke-width="1.5" />
+          <rect x="391.4" y="142" width="7" height="5" rx="1.5" fill="#3fb086" />
+          <line x1="409.1" x2="409.1" y1="173" y2="134" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="405.6" y="142" width="7" height="11" rx="1.5" fill="#2a2d31" />
+          <line x1="423.3" x2="423.3" y1="167" y2="111" stroke="#3fb086" stroke-width="1.5" />
+          <rect x="419.8" y="132" width="7" height="21" rx="1.5" fill="#3fb086" />
+          <line x1="437.5" x2="437.5" y1="158" y2="125" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="434.0" y="132" width="7" height="18" rx="1.5" fill="#2a2d31" />
+          <line x1="451.7" x2="451.7" y1="180" y2="130" stroke="#2a2d31" stroke-width="1.5" />
+          <rect x="448.2" y="150" width="7" height="15" rx="1.5" fill="#2a2d31" />
+        </svg>
+        <div class="axis"><span>$400K</span><span>$200K</span><span>$100K</span></div>
+        <span class="bubble">$213.23</span>
+      </div>
+      <div class="float float--blog">
+        <!-- IMAGE (Blog icon): replace the link in src="" with your own image -->
+        <img
+          src="https://placehold.co/88x88/3a3c42/b5b7bd?text=Blog+icon"
+          alt="Blog"
+          width="88"
+          height="88"
+        /><span>Blog</span>
+      </div>
+      <div class="float float--news">
+        <!-- IMAGE (News icon): replace the link in src="" with your own image -->
+        <img
+          src="https://placehold.co/88x88/3a3c42/b5b7bd?text=News+icon"
+          alt="News"
+          width="88"
+          height="88"
+        /><span>News</span>
+      </div>
+      <div class="float float--invest">
+        <!-- IMAGE (Invest icon): replace the link in src="" with your own image -->
+        <img
+          src="https://placehold.co/88x88/3a3c42/b5b7bd?text=Invest+icon"
+          alt="Invest"
+          width="88"
+          height="88"
+        /><span>Invest</span>
+      </div>
+      <div class="float float--bot">
+        <!-- IMAGE (AI Bot icon): replace the link in src="" with your own image -->
+        <img
+          src="https://placehold.co/88x88/3a3c42/b5b7bd?text=AI+Bot+icon"
+          alt="AI Bot"
+          width="88"
+          height="88"
+        /><span>AI Bot</span>
+      </div>
+    </div>
+    <div class="intro">
+      <h2>Introducing Chainex</h2>
+      <p>
+        Chainex is a secure, low-fee crypto exchange with fast trades, high liquidity, and real-time insights.
+        🚀
+      </p>
+      <div class="dots"><i></i><i></i><i></i></div>
+    </div>
+  </div>
+</section>
+<script>
+  /* Show / hide password. Safe to include more than once. */
+  document.querySelectorAll("[data-toggle-password]").forEach(function (btn) {
+    if (btn.dataset.ready) return;
+    btn.dataset.ready = "1";
+    btn.addEventListener("click", function () {
+      var input = btn.parentElement.querySelector("input");
+      var show = input.type === "password";
+      input.type = show ? "text" : "password";
+      btn.setAttribute("aria-pressed", show);
+    });
+  });
+</script>

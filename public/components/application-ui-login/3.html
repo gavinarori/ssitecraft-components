@@ -1,0 +1,498 @@
+<!--
+  Skyline - mobile number login with glass tile photo
+  HOW TO USE
+  1. Paste this whole file where you want the page.
+  2. Image slots are marked with IMAGE comments: replace the link inside src="".
+  3. Change the text and links. Colors are CSS variables at the top of the <style> block.
+  - Phone input with country prefix, social buttons
+  - Photo is covered by frosted glass tiles and soft rings (edit the tiles in the .tiles block)
+-->
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Playfair+Display:ital,wght@1,500&display=swap");
+
+  .login-skylinelogin * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  .login-skylinelogin {
+    box-sizing: border-box;
+    min-height: max(100vh, 640px);
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font), system-ui, sans-serif;
+  }
+  .login-skylinelogin a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .login-skylinelogin img {
+    display: block;
+    object-fit: cover;
+    background: #cfcfd6;
+  }
+  .login-skylinelogin .ico {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .login-skylinelogin .label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .login-skylinelogin .input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 50px;
+    padding: 0 18px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--field);
+    color: var(--muted);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .login-skylinelogin .input:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--ring);
+  }
+  .login-skylinelogin .input input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--ink);
+    font:
+      400 14px var(--font),
+      sans-serif;
+  }
+  .login-skylinelogin .input input::placeholder {
+    color: var(--muted);
+  }
+  .login-skylinelogin .eye {
+    display: grid;
+    place-items: center;
+    padding: 4px;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .login-skylinelogin .eye:hover,
+  .login-skylinelogin .eye[aria-pressed="true"] {
+    color: var(--ink);
+  }
+  .login-skylinelogin .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 50px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font:
+      500 15px var(--font),
+      sans-serif;
+    cursor: pointer;
+    transition:
+      transform 0.2s,
+      box-shadow 0.25s,
+      background 0.2s;
+  }
+  .login-skylinelogin .btn:hover {
+    transform: translateY(-1px);
+  }
+  .login-skylinelogin .btn--primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .login-skylinelogin .btn--primary:hover {
+    box-shadow: 0 14px 26px -14px var(--accent);
+  }
+  .login-skylinelogin .btn--outline {
+    border-color: var(--line);
+    background: transparent;
+    color: var(--ink);
+    font-weight: 400;
+  }
+  .login-skylinelogin .btn--outline:hover {
+    background: var(--hover);
+  }
+  .login-skylinelogin .btn .brand {
+    width: 20px;
+    height: 20px;
+  }
+  .login-skylinelogin .divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .login-skylinelogin .divider::before,
+  .login-skylinelogin .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .login-skylinelogin .check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .login-skylinelogin .check input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+  }
+  .login-skylinelogin .link {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .login-skylinelogin .link:hover {
+    text-decoration: underline;
+  }
+  .login-skylinelogin .stack {
+    display: grid;
+    gap: 18px;
+  }
+  .login-skylinelogin .dots {
+    display: flex;
+    gap: 9px;
+  }
+  .login-skylinelogin .dots i {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: transform 0.2s;
+  }
+  .login-skylinelogin .dots i:first-child {
+    background: #fff;
+  }
+  .login-skylinelogin .dots i:hover {
+    transform: scale(1.25);
+  }
+  @keyframes login-pulse {
+    0% {
+      transform: scale(0.8);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .login-skylinelogin * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  .login-skylinelogin {
+    --bg: #fff;
+    --ink: #161616;
+    --muted: #8c8c8c;
+    --line: #e6e6e6;
+    --field: #fff;
+    --hover: #f8f8f8;
+    --accent: #e0592a;
+    --accent-ink: #fff;
+    --ring: rgba(224, 89, 42, 0.16);
+    --radius: 12px;
+    --font: Outfit;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    align-items: center;
+  }
+  .login-skylinelogin .panel {
+    width: min(374px, 100% - 48px);
+    margin: 0 auto;
+    padding: 40px 0;
+  }
+  .login-skylinelogin .brand-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 44px;
+    text-align: center;
+  }
+  .login-skylinelogin .logo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font:
+      italic 500 42px "Playfair Display",
+      serif;
+  }
+  .login-skylinelogin .logo svg {
+    width: 52px;
+    height: 40px;
+  }
+  .login-skylinelogin .welcome {
+    color: var(--muted);
+    font-size: 15px;
+  }
+  .login-skylinelogin .phone {
+    padding-left: 0;
+  }
+  .login-skylinelogin .prefix {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    padding: 0 14px 0 16px;
+    border-right: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .login-skylinelogin .phone input {
+    padding-left: 4px;
+  }
+  .login-skylinelogin .btn--primary {
+    margin-top: 28px;
+  }
+  .login-skylinelogin .divider {
+    margin: 26px 0;
+  }
+  .login-skylinelogin .socials {
+    display: grid;
+    gap: 14px;
+  }
+  .login-skylinelogin .showcase {
+    padding: 24px 24px 24px 0;
+    height: 100%;
+    min-height: 640px;
+    display: grid;
+    align-items: center;
+  }
+  .login-skylinelogin .frame {
+    position: relative;
+    height: min(654px, 100%);
+    min-height: 520px;
+    overflow: hidden;
+    border-radius: 26px;
+  }
+  .login-skylinelogin .frame > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .login-skylinelogin .tiles {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+    background-size: 12.5% 12.5%;
+  }
+  .login-skylinelogin .tile {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.08));
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+  }
+  .login-skylinelogin .q-br {
+    border-radius: 0 0 100% 0;
+  }
+  .login-skylinelogin .q-bl {
+    border-radius: 0 0 0 100%;
+  }
+  .login-skylinelogin .q-tr {
+    border-radius: 0 100% 0 0;
+  }
+  .login-skylinelogin .q-tl {
+    border-radius: 100% 0 0 0;
+  }
+  .login-skylinelogin .h-r {
+    border-radius: 0 999px 999px 0;
+  }
+  .login-skylinelogin .h-l {
+    border-radius: 999px 0 0 999px;
+  }
+  .login-skylinelogin .ring {
+    position: relative;
+    place-self: center;
+    border-radius: 50%;
+  }
+  .login-skylinelogin .ring--glass {
+    width: 62%;
+    aspect-ratio: 1;
+    background: rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(6px);
+    box-shadow:
+      0 0 0 9px rgba(255, 255, 255, 0.14),
+      0 0 0 18px rgba(255, 255, 255, 0.08);
+  }
+  .login-skylinelogin .ring--glass-s {
+    width: 40%;
+    aspect-ratio: 1;
+    background: rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.14);
+  }
+  .login-skylinelogin .ring--rings {
+    width: 78%;
+    aspect-ratio: 1;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow:
+      0 0 0 9px rgba(255, 255, 255, 0),
+      inset 0 0 0 9px transparent;
+  }
+  .login-skylinelogin .ring--rings::before,
+  .login-skylinelogin .ring--rings::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+  }
+  .login-skylinelogin .ring--rings::before {
+    inset: -12%;
+  }
+  .login-skylinelogin .ring--rings::after {
+    inset: 14%;
+  }
+  .login-skylinelogin .ring--rings {
+    animation: login-pulse-soft 3s ease-in-out infinite;
+  }
+  @keyframes login-pulse-soft {
+    50% {
+      transform: scale(1.06);
+    }
+  }
+  @media (max-width: 900px) {
+    .login-skylinelogin {
+      grid-template-columns: 1fr;
+    }
+    .login-skylinelogin .showcase {
+      display: none;
+    }
+  }
+</style>
+
+<section class="login-skylinelogin">
+  <!-- Form -->
+  <div class="panel">
+    <div class="brand-block">
+      <a href="#" class="logo"
+        ><svg viewBox="0 0 44 34" aria-hidden="true">
+          <ellipse
+            cx="22"
+            cy="18"
+            rx="20"
+            ry="6.5"
+            transform="rotate(-18 22 18)"
+            fill="none"
+            stroke="#e0592a"
+            stroke-width="2.6"
+          />
+          <circle cx="22" cy="17" r="11.5" fill="#e0592a" />
+          <path
+            d="M13 15c5-6.5 14-4.5 17.500 2"
+            stroke="#fff"
+            stroke-opacity=".55"
+            stroke-width="2"
+            fill="none"
+            stroke-linecap="round"
+          />
+        </svg>
+        Sitecraft</a
+      >
+      <p class="welcome">Welcome! We're thrilled to have you</p>
+    </div>
+    <form action="#">
+      <label class="label" for="sl-phone">Enter mobile number</label>
+      <div class="input phone">
+        <span class="prefix">+1</span><input id="sl-phone" type="tel" placeholder="89575-36210" />
+      </div>
+      <button class="btn btn--primary" type="submit">Continue</button>
+    </form>
+    <div class="divider">or continue with</div>
+    <div class="socials">
+      <button class="btn btn--outline" type="button">
+        <svg class="brand" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="#4285F4"
+            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+          />
+          <path
+            fill="#34A853"
+            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+          />
+          <path
+            fill="#FBBC05"
+            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+          />
+          <path
+            fill="#EA4335"
+            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+          />
+        </svg>
+        Login with Google
+      </button>
+      <button class="btn btn--outline" type="button">
+        <svg class="brand" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"
+          />
+        </svg>
+        Login with Apple
+      </button>
+    </div>
+  </div>
+
+  <!-- Photo with glass tile overlay -->
+  <div class="showcase">
+    <div class="frame">
+      <!-- IMAGE (Family photo): replace the link in src="" with your own image -->
+      <img
+        src="https://images.unsplash.com/photo-1533777419517-3e4017e2e15a?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+        alt="Family at home"
+        width="1200"
+        height="1300"
+      />
+      <div class="tiles" aria-hidden="true">
+        <span class="tile q-br" style="grid-column: 1 / span 1; grid-row: 1 / span 1"></span
+        ><span class="tile q-bl" style="grid-column: 4 / span 1; grid-row: 1 / span 1"></span
+        ><span class="tile q-bl" style="grid-column: 8 / span 1; grid-row: 1 / span 1"></span
+        ><span class="tile h-r" style="grid-column: 2 / span 1; grid-row: 2 / span 2"></span
+        ><span class="tile h-l" style="grid-column: 7 / span 1; grid-row: 2 / span 2"></span
+        ><span class="tile q-tr" style="grid-column: 1 / span 1; grid-row: 5 / span 1"></span
+        ><span class="tile q-br" style="grid-column: 2 / span 1; grid-row: 6 / span 1"></span
+        ><span class="tile q-tl" style="grid-column: 7 / span 1; grid-row: 6 / span 1"></span
+        ><span class="tile q-tl" style="grid-column: 8 / span 1; grid-row: 5 / span 1"></span
+        ><span class="tile q-tr" style="grid-column: 1 / span 1; grid-row: 7 / span 1"></span
+        ><span class="tile q-br" style="grid-column: 2 / span 1; grid-row: 8 / span 1"></span
+        ><span class="tile q-br" style="grid-column: 4 / span 1; grid-row: 7 / span 1"></span
+        ><span class="tile q-tl" style="grid-column: 7 / span 1; grid-row: 8 / span 1"></span
+        ><span class="tile q-bl" style="grid-column: 5 / span 1; grid-row: 2 / span 1"></span
+        ><span class="ring ring--rings" style="grid-column: 4; grid-row: 2"></span
+        ><span class="ring ring--glass" style="grid-column: 2; grid-row: 5"></span
+        ><span class="ring ring--glass" style="grid-column: 7; grid-row: 5"></span
+        ><span class="ring ring--rings" style="grid-column: 6; grid-row: 7"></span
+        ><span class="ring ring--glass" style="grid-column: 5; grid-row: 8"></span
+        ><span class="ring ring--glass-s" style="grid-column: 4; grid-row: 1"></span>
+      </div>
+    </div>
+  </div>
+</section>

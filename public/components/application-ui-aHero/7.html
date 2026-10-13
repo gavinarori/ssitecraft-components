@@ -1,0 +1,416 @@
+<!--
+  Veluno Watch — hero section
+  HOW TO USE
+  1. Paste this whole file where you want the hero.
+  2. Every image is a placeholder. Search for the IMAGE and AVATAR comments and replace the link inside src="".
+  3. Change the text, links and colors (colors live at the top of the <style> block).
+  Fonts are loaded from Google Fonts by the @import line below.
+-->
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap");
+
+  .hero-veluno-watch,
+  .hero-veluno-watch * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  .hero-veluno-watch {
+    background: #fff;
+    font-family: Inter, system-ui, sans-serif;
+    color: #111;
+  }
+  .hero-veluno-watch a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .hero-veluno-watch ul {
+    list-style: none;
+  }
+  .hero-veluno-watch {
+    position: relative;
+    overflow: hidden;
+    min-height: max(100vh, 640px);
+  }
+
+  /* ---- Navigation ---- */
+  .hero-veluno-watch .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 48px;
+    position: relative;
+    z-index: 5;
+    font-size: 13px;
+  }
+  .hero-veluno-watch .nav ul {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+  .hero-veluno-watch .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 17px;
+  }
+  .hero-veluno-watch .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 500;
+    transition:
+      transform 0.25s,
+      box-shadow 0.25s;
+    cursor: pointer;
+    border: 0;
+    font-family: inherit;
+  }
+  .hero-veluno-watch .pill:hover {
+    transform: translateY(-2px);
+  }
+  .hero-veluno-watch .pill svg,
+  .hero-veluno-watch .icon-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+  .hero-veluno-watch .icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-grid;
+    place-items: center;
+    transition: transform 0.3s;
+  }
+  .hero-veluno-watch .icon-btn:hover {
+    transform: rotate(45deg);
+  }
+  .hero-veluno-watch .avatars {
+    display: flex;
+  }
+  .hero-veluno-watch .avatars img {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    margin-left: -9px;
+  }
+  .hero-veluno-watch .avatars img:first-child {
+    margin-left: 0;
+  }
+  .hero-veluno-watch .card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 20px 40px -18px rgba(0, 0, 0, 0.35);
+  }
+  .hero-veluno-watch .spin {
+    animation: veluno-watch-spin 18s linear infinite;
+  }
+  @keyframes veluno-watch-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes veluno-watch-float {
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  .hero-veluno-watch .float {
+    animation: veluno-watch-float 5s ease-in-out infinite;
+  }
+  .hero-veluno-watch {
+    background: #fff;
+    font-family: Outfit;
+  }
+  .hero-veluno-watch .nav {
+    border-bottom: 1px solid #f1f1f1;
+  }
+  .hero-veluno-watch .nav ul {
+    gap: 34px;
+  }
+  .hero-veluno-watch .search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f3f3f3;
+    border-radius: 99px;
+    padding: 11px 18px;
+    width: 150px;
+    color: #666;
+    font-size: 13px;
+  }
+  .hero-veluno-watch .nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .hero-veluno-watch .nav-icons i {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #f3f3f3;
+    display: grid;
+    place-items: center;
+    font-style: normal;
+    font-size: 13px;
+  }
+  .hero-veluno-watch .nav-icons .user-avatar {
+    background: #c9c9d1;
+  }
+  .hero-veluno-watch .layout {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 20px;
+    padding: 40px 48px 40px;
+    position: relative;
+  }
+  .hero-veluno-watch h1 {
+    font-size: clamp(34px, 4.6vw, 52px);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .hero-veluno-watch .layout p {
+    font-size: 12.5px;
+    color: #555;
+    max-width: 350px;
+    margin: 14px 0 22px;
+    line-height: 1.55;
+  }
+  .hero-veluno-watch .btn-dark {
+    background: #26211e;
+    color: #fff;
+    padding: 8px 8px 8px 22px;
+  }
+  .hero-veluno-watch .btn-dark .icon-btn {
+    background: #fff;
+    color: #111;
+    width: 34px;
+    height: 34px;
+  }
+  .hero-veluno-watch .featured {
+    display: flex;
+    gap: 70px;
+    margin-top: 44px;
+    align-items: flex-end;
+  }
+  .hero-veluno-watch .featured img {
+    width: 210px;
+    height: 128px;
+    border-radius: 12px;
+  }
+  .hero-veluno-watch .featured b {
+    display: block;
+    margin-top: 12px;
+    font-weight: 500;
+    font-size: 17px;
+  }
+  .hero-veluno-watch .featured span {
+    font-size: 12px;
+    color: #777;
+  }
+  .hero-veluno-watch .sale-badge {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    margin-bottom: 6px;
+  }
+  .hero-veluno-watch .sale-badge svg {
+    position: absolute;
+    inset: 0;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    fill: #111;
+  }
+  .hero-veluno-watch .sale-badge .c {
+    position: absolute;
+    inset: 32px;
+    border-radius: 50%;
+    background: #111;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 12px;
+  }
+  .hero-veluno-watch .media {
+    position: relative;
+    border-radius: 28px;
+    min-height: 455px;
+  }
+  .hero-veluno-watch .media:before {
+    content: "";
+    position: absolute;
+    left: -1px;
+    bottom: -1px;
+    width: 118px;
+    height: 168px;
+    background: #fff;
+    border-radius: 0 38px 0 0;
+  }
+  .hero-veluno-watch .slider-dots {
+    position: absolute;
+    right: 28%;
+    bottom: 12px;
+    display: flex;
+    gap: 6px;
+  }
+  .hero-veluno-watch .slider-dots i {
+    width: 40px;
+    height: 4px;
+    border-radius: 9px;
+    background: #ddd;
+  }
+  .hero-veluno-watch .slider-dots i:first-child {
+    width: 90px;
+    background: #ef5b5b;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 820px) {
+    .hero-veluno-watch .nav {
+      padding: 18px 22px;
+    }
+    .hero-veluno-watch .nav ul {
+      display: none;
+    }
+    .hero-veluno-watch .layout {
+      grid-template-columns: 1fr;
+      padding: 28px 22px;
+    }
+    .hero-veluno-watch .featured {
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+  }
+
+  .hero-veluno-watch .media {
+    overflow: hidden;
+  }
+  .hero-veluno-watch .media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .hero-veluno-watch .media:before,
+  .hero-veluno-watch .slider-dots {
+    z-index: 1;
+  }
+  /* ---- Images ---- */
+  .hero-veluno-watch img {
+    display: block;
+    object-fit: cover;
+    background: #cfcfd6;
+  }
+  .hero-veluno-watch .avatars img,
+  .hero-veluno-watch .avatars img,
+  .hero-veluno-watch .th img,
+  .hero-veluno-watch .au img,
+  .hero-veluno-watch .rv img {
+    border-radius: 50%;
+  }
+  .hero-veluno-watch .nav-icons .user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+  }
+</style>
+
+<!-- Icon sprite (arrows, stars, search) - keep this, the buttons use it -->
+<svg width="0" height="0" style="position: absolute">
+  <defs>
+    <symbol id="ar" viewBox="0 0 24 24">
+      <path
+        d="M7 17 17 7M8 7h9v9"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </symbol>
+    <symbol id="st" viewBox="0 0 24 24">
+      <path d="M12 1c1 6 5 10 11 11-6 1-10 5-11 11-1-6-5-10-11-11C7 11 11 7 12 1z" fill="currentColor" />
+    </symbol>
+    <symbol id="sq" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+      <path d="m20 20-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </symbol>
+    <symbol id="pw" viewBox="0 0 24 24">
+      <path d="M12 2 9 9l-7 3 7 3 3 7 3-7 7-3-7-3z" fill="currentColor" />
+    </symbol>
+  </defs>
+</svg>
+<section class="h hero-veluno-watch">
+  <!-- Navigation -->
+  <nav class="nav">
+    <a class="logo" href="#"
+      ><svg width="26" height="26"><use href="#pw" /></svg>sitecraft</a
+    >
+    <ul>
+      <li>Home</li>
+      <li>About</li>
+      <li>Shop</li>
+      <li>New Arrivals</li>
+      <li>Contact Us</li>
+    </ul>
+    <div class="nav-icons">
+      <span class="search"
+        ><svg width="16" height="16"><use href="#sq" /></svg>Search</span
+      ><i>♡</i><i>🛒</i><!-- AVATAR: user photo -->
+      <img class="user-avatar" src="https://placehold.co/72x72/c9c9d1/555555?text=U" alt="User" />
+    </div>
+  </nav>
+  <div class="layout">
+    <div>
+      <h1>Timeless Craft Meets Luxury</h1>
+      <p>
+        Discover premium timepieces crafted with refined details, modern precision, and timeless
+        sophistication for every occasion.
+      </p>
+      <a class="pill btn-dark" href="#"
+        >View All Products
+        <span class="icon-btn"
+          ><svg><use href="#ar" /></svg></span
+      ></a>
+      <div class="featured">
+        <div>
+          <!-- IMAGE (Small product photo): replace the link in src="" with your own image -->
+          <img
+            src="https://plus.unsplash.com/premium_photo-1776594535145-418a131e4713?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+            alt="Chronograph watch"
+            width="420"
+            height="256"
+          /><b>Apex Chronograph Classic</b><span>Precision. Style. Timeless design.</span>
+        </div>
+        <div class="sale-badge spin" style="animation: none">
+          <svg viewBox="0 0 170 170">
+            <defs><path id="cp6" d="M85 85m-70 0a70 70 0 1 1 140 0a70 70 0 1 1-140 0" /></defs>
+            <text><textPath href="#cp6">SUMMER SALE - SUMMER SALE - SUMMER SALE -</textPath></text></svg
+          ><a class="c" href="#"
+            ><svg width="14" height="14"><use href="#ar" /></svg>Shop now</a
+          >
+        </div>
+      </div>
+    </div>
+    <div class="media">
+      <!-- IMAGE (Main product photo): replace the link in src="" with your own image -->
+      <img
+        src="https://images.unsplash.com/photo-1661030418545-fd307b4c6f16?q=80&w=726&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+        alt="Luxury watch on driftwood"
+        width="1000"
+        height="910"
+      />
+      <div class="slider-dots"><i></i><i></i><i></i></div>
+    </div>
+  </div>
+</section>

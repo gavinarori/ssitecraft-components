@@ -1,0 +1,441 @@
+<!--
+  Chainex - dark create-account with notched image card
+  HOW TO USE
+  1. Paste this whole file where you want the page.
+  2. Image slots are marked with IMAGE comments: replace the link inside src="".
+  3. Change the text and links. Colors are CSS variables at the top of the <style> block.
+  - Image card has a real notched corner (no images needed for the notch)
+  - Password show/hide works
+-->
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+  .login-chainexdarkcard * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  .login-chainexdarkcard {
+    box-sizing: border-box;
+    min-height: max(100vh, 640px);
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font), system-ui, sans-serif;
+  }
+  .login-chainexdarkcard a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .login-chainexdarkcard img {
+    display: block;
+    object-fit: cover;
+    background: #cfcfd6;
+  }
+  .login-chainexdarkcard .ico {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .login-chainexdarkcard .label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .login-chainexdarkcard .input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 50px;
+    padding: 0 18px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--field);
+    color: var(--muted);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .login-chainexdarkcard .input:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--ring);
+  }
+  .login-chainexdarkcard .input input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--ink);
+    font:
+      400 14px var(--font),
+      sans-serif;
+  }
+  .login-chainexdarkcard .input input::placeholder {
+    color: var(--muted);
+  }
+  .login-chainexdarkcard .eye {
+    display: grid;
+    place-items: center;
+    padding: 4px;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .login-chainexdarkcard .eye:hover,
+  .login-chainexdarkcard .eye[aria-pressed="true"] {
+    color: var(--ink);
+  }
+  .login-chainexdarkcard .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 50px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font:
+      500 15px var(--font),
+      sans-serif;
+    cursor: pointer;
+    transition:
+      transform 0.2s,
+      box-shadow 0.25s,
+      background 0.2s;
+  }
+  .login-chainexdarkcard .btn:hover {
+    transform: translateY(-1px);
+  }
+  .login-chainexdarkcard .btn--primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .login-chainexdarkcard .btn--primary:hover {
+    box-shadow: 0 14px 26px -14px var(--accent);
+  }
+  .login-chainexdarkcard .btn--outline {
+    border-color: var(--line);
+    background: transparent;
+    color: var(--ink);
+    font-weight: 400;
+  }
+  .login-chainexdarkcard .btn--outline:hover {
+    background: var(--hover);
+  }
+  .login-chainexdarkcard .btn .brand {
+    width: 20px;
+    height: 20px;
+  }
+  .login-chainexdarkcard .divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .login-chainexdarkcard .divider::before,
+  .login-chainexdarkcard .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .login-chainexdarkcard .check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .login-chainexdarkcard .check input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+  }
+  .login-chainexdarkcard .link {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .login-chainexdarkcard .link:hover {
+    text-decoration: underline;
+  }
+  .login-chainexdarkcard .stack {
+    display: grid;
+    gap: 18px;
+  }
+  .login-chainexdarkcard .dots {
+    display: flex;
+    gap: 9px;
+  }
+  .login-chainexdarkcard .dots i {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: transform 0.2s;
+  }
+  .login-chainexdarkcard .dots i:first-child {
+    background: #fff;
+  }
+  .login-chainexdarkcard .dots i:hover {
+    transform: scale(1.25);
+  }
+  @keyframes login-pulse {
+    0% {
+      transform: scale(0.8);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .login-chainexdarkcard * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  .login-chainexdarkcard {
+    --bg: #101015;
+    --ink: #fff;
+    --muted: #8b8b95;
+    --line: #2a2a33;
+    --hover: rgba(255, 255, 255, 0.05);
+    --page: #101015;
+    --field: transparent;
+    --accent: #3fb086;
+    --accent-ink: #fff;
+    --ring: rgba(63, 176, 134, 0.18);
+    --radius: 999px;
+    --font: Inter;
+    display: grid;
+    place-items: center;
+  }
+  .login-chainexdarkcard .wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 360px) minmax(0, 520px);
+    gap: clamp(40px, 8vw, 110px);
+    align-items: center;
+    padding: 48px 24px;
+  }
+  .login-chainexdarkcard .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 17px;
+    font-weight: 600;
+  }
+  .login-chainexdarkcard .logo svg {
+    width: 30px;
+    height: 30px;
+  }
+  .login-chainexdarkcard h1 {
+    margin-top: 44px;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .login-chainexdarkcard .sub {
+    margin: 8px 0 28px;
+    font-size: 14px;
+  }
+  .login-chainexdarkcard .form {
+    display: grid;
+    gap: 14px;
+  }
+  .login-chainexdarkcard .form .label {
+    margin-bottom: 8px;
+  }
+  .login-chainexdarkcard .divider {
+    margin: 20px 0 14px;
+  }
+  .login-chainexdarkcard .card {
+    position: relative;
+    height: min(700px, 86vh);
+    min-height: 520px;
+    border-radius: 24px;
+    overflow: hidden;
+    background: #aaa;
+  }
+  .login-chainexdarkcard .card > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .login-chainexdarkcard .shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.35) 32%, transparent 52%);
+  }
+  .login-chainexdarkcard .copy {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 30px;
+    color: #fff;
+  }
+  .login-chainexdarkcard .copy h2 {
+    font-size: clamp(28px, 3.4vw, 40px);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+  }
+  .login-chainexdarkcard .copy .dots {
+    margin-top: 16px;
+  }
+  .login-chainexdarkcard .notch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 306px;
+    height: 92px;
+    border-radius: 0 0 36px 0;
+    background: var(--page);
+  }
+  .login-chainexdarkcard .notch::before,
+  .login-chainexdarkcard .notch::after {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background: radial-gradient(circle at 100% 100%, transparent 23px, var(--page) 23.5px);
+  }
+  .login-chainexdarkcard .notch::before {
+    top: 0;
+    left: 100%;
+  }
+  .login-chainexdarkcard .notch::after {
+    top: 100%;
+    left: 0;
+  }
+  .login-chainexdarkcard .pill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: 288px;
+    height: 75px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 500;
+    background: var(--page);
+  }
+  @media (max-width: 900px) {
+    .login-chainexdarkcard .wrap {
+      grid-template-columns: minmax(0, 420px);
+    }
+    .login-chainexdarkcard .card {
+      display: none;
+    }
+  }
+</style>
+
+<section class="login-chainexdarkcard">
+  <div class="wrap">
+    <!-- Form -->
+    <div>
+      <a href="#" class="logo"
+        ><svg viewBox="0 0 32 32" aria-hidden="true">
+          <rect width="32" height="32" rx="9" fill="#3fb086" />
+          <path d="M11 9v14M21 9v14M11 16h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" />
+        </svg>
+        Sitecraft</a
+      >
+      <h1>Create your account</h1>
+      <p class="sub">Sign up to start your journey at Sitecraft</p>
+      <form class="form" action="#">
+        <div>
+          <label class="label" for="cc-email">Email</label>
+          <div class="input"><input id="cc-email" type="email" placeholder="hello@skyline.co" /></div>
+        </div>
+        <div>
+          <label class="label" for="cc-pass">Password</label>
+          <div class="input">
+            <input id="cc-pass" type="password" placeholder="••••••••" autocomplete="off" /><button
+              type="button"
+              class="eye"
+              data-toggle-password
+              aria-label="Show password"
+              aria-pressed="false"
+            >
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+                />
+                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <label class="check"><input type="checkbox" /> Remember me</label>
+        <button class="btn btn--primary" type="submit">Create Account</button>
+        <a href="#" class="btn btn--outline">Sign In</a>
+      </form>
+      <div class="divider">or continue with</div>
+      <button class="btn btn--outline" type="button">
+        <svg class="brand" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="#4285F4"
+            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+          />
+          <path
+            fill="#34A853"
+            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+          />
+          <path
+            fill="#FBBC05"
+            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+          />
+          <path
+            fill="#EA4335"
+            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+          />
+        </svg>
+        Google
+      </button>
+    </div>
+
+    <!-- Image card with a notched corner -->
+    <div class="card">
+      <!-- IMAGE (Hero photo): replace the link in src="" with your own image -->
+      <img
+        src="https://images.unsplash.com/photo-1582178538120-06a684adaec5?q=80&w=675&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+        alt="Futuristic portrait"
+        width="1040"
+        height="1400"
+      />
+      <div class="shade"></div>
+      <div class="notch"><span class="pill">Your Crypto platform</span></div>
+      <div class="copy">
+        <h2>The Simplest way<br />to manage your money</h2>
+        <div class="dots"><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  /* Show / hide password. Safe to include more than once. */
+  document.querySelectorAll("[data-toggle-password]").forEach(function (btn) {
+    if (btn.dataset.ready) return;
+    btn.dataset.ready = "1";
+    btn.addEventListener("click", function () {
+      var input = btn.parentElement.querySelector("input");
+      var show = input.type === "password";
+      input.type = show ? "text" : "password";
+      btn.setAttribute("aria-pressed", show);
+    });
+  });
+</script>

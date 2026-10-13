@@ -14,6 +14,7 @@ import PreviewCopy from '@component/PreviewCopy'
 import PreviewIframe from '@component/PreviewIframe'
 import PreviewInteractive from '@component/PreviewInteractive'
 import PreviewTitle from '@component/PreviewTitle'
+import LockedCode from '@component/LockedCode'
 import PreviewView from '@component/PreviewView'
 import PreviewType from '@component/PreviewType'
 
@@ -31,6 +32,9 @@ export default function ComponentPreview({ componentData, componentContainer }) 
   const [previewWidth, setPreviewWidth] = useState('100%')
   const [showPreview, setShowPreview] = useState(true)
   const [loadError, setLoadError] = useState('')
+
+  // Pro components always preview. 'locked' only hides the CODE until this browser has bought the pack.
+  const [codeLocked, setCodeLocked] = useState(false)
 
   const { ref, inView } = useInView({
     threshold: 0,
@@ -106,24 +110,37 @@ export default function ComponentPreview({ componentData, componentContainer }) 
       .filter(Boolean)
       .join('-')
 
-    // Try the slug as written, then lower-case (Vercel's file system is case-sensitive)
-    const folders = [...new Set([`${componentCategory}-${componentSlug}`, `${componentCategory}-${componentSlug}`.toLowerCase()])]
-
     let textResponse = null
     let tried = ''
-    for (const folder of folders) {
-      tried = `/components/${folder}/${componentPath}.html`
-      try {
-        const fetchResponse = await fetch(tried)
-        if (fetchResponse.ok) {
-          const text = await fetchResponse.text()
-          // A missing file can come back as an HTML 404 page with status 200 on some hosts
-          if (text && !/<title>\s*404/i.test(text)) {
-            textResponse = text
-            break
+    let codeLockedNow = false
+
+    if (componentData.pro) {
+      // preview=1: the server always returns the HTML for the live preview, and says in a header
+      // whether this browser may also see and copy the code (buyers and free samples).
+      tried = `/api/code/${componentData.packId}/${componentPath}.html?preview=1`
+      const fetchResponse = await fetch(tried).catch(() => null)
+      if (fetchResponse?.ok) {
+        codeLockedNow = fetchResponse.headers.get('x-code-access') !== 'granted'
+        setCodeLocked(codeLockedNow)
+        textResponse = await fetchResponse.text()
+      }
+    } else {
+      // Try the slug as written, then lower-case (Vercel's file system is case-sensitive)
+      const folders = [...new Set([`${componentCategory}-${componentSlug}`, `${componentCategory}-${componentSlug}`.toLowerCase()])]
+      for (const folder of folders) {
+        tried = `/components/${folder}/${componentPath}.html`
+        try {
+          const fetchResponse = await fetch(tried)
+          if (fetchResponse.ok) {
+            const text = await fetchResponse.text()
+            // A missing file can come back as an HTML 404 page with status 200 on some hosts
+            if (text && !/<title>\s*404/i.test(text)) {
+              textResponse = text
+              break
+            }
           }
-        }
-      } catch {}
+        } catch {}
+      }
     }
 
     if (textResponse === null) {
@@ -139,24 +156,37 @@ export default function ComponentPreview({ componentData, componentContainer }) 
     const transformedJsx = componentPreviewJsx(textResponse)
     const transformedVue = componentPreviewVue(textResponse)
 
-    setPreviewCode(textResponse)
-    setComponentCode(textResponse)
+    // Locked: keep the markup out of the code view, the copy button and the JSX/Vue converters
+    const keepCode = !(componentData.pro && codeLockedNow)
+    setPreviewCode(keepCode ? textResponse : '')
+    setComponentCode(keepCode ? textResponse : '')
     setComponentHtml(transformedHtml)
-    setComponentJsx(transformedJsx)
-    setComponentVue(transformedVue)
+    setComponentJsx(keepCode ? transformedJsx : '')
+    setComponentVue(keepCode ? transformedVue : '')
   }
 
   return (
     <div ref={ref} id={componentHash}>
       <div className="space-y-4">
         <div className="lg:flex lg:items-center">
-          {componentCode && (
+          {componentHtml && (
             <div className="flex flex-wrap items-center  gap-2 sm:gap-4">
               <PreviewView handleSetShowPreview={setShowPreview}  />
 
-              <PreviewType componentId={componentId} handleSetCodeType={setCodeType} />
+              {!codeLocked && <PreviewType componentId={componentId} handleSetCodeType={setCodeType} />}
 
-              <PreviewCopy componentCode={previewCode} codeType={codeType} />
+              {codeLocked ? (
+                <button
+                  type="button"
+                  onClick={() => setShowPreview(false)}
+                  className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-neutral-300 bg-white px-2.5 text-xs font-medium text-neutral-800 shadow-sm hover:bg-neutral-50"
+                >
+                  <svg viewBox="0 0 20 20" fill="currentColor" className="size-3.5" aria-hidden="true"><path fillRule="evenodd" d="M10 1a4 4 0 0 0-4 4v2H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-1V5a4 4 0 0 0-4-4Zm2 6V5a2 2 0 1 0-4 0v2h4Z" clipRule="evenodd" /></svg>
+                  Pro code
+                </button>
+              ) : (
+                <PreviewCopy componentCode={previewCode} codeType={codeType} />
+              )}
 
               {componentHasInteractive && (
                 <PreviewInteractive
@@ -194,6 +224,9 @@ export default function ComponentPreview({ componentData, componentContainer }) 
               previewDark={componentHasDark && isDarkMode}
             />
 
+            {codeLocked ? (
+              <LockedCode hidden={showPreview} pack={componentData.pack} single={componentData.single} />
+            ) : (
             <PreviewCode
               componentId={componentId}
               showPreview={showPreview}
@@ -201,6 +234,7 @@ export default function ComponentPreview({ componentData, componentContainer }) 
               showToggle={!isInteractive}
               componentCode={previewCode}
             />
+            )}
           </div>
         </div>
 
