@@ -15,6 +15,6 @@
       }
     ]
   },
-  "include": ["next-env.d.js", "**/*.js", "**/*.jsx"],
+  "include": ["next-env.d.js", "**/*.js", "**/*.jsx", "src/utils/lib/payments/paystack.js"],
   "exclude": ["node_modules"]
 }

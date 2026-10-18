@@ -1,43 +1,45 @@
 import { NextResponse } from 'next/server'
 
-import { getPurchases, signUnlockLink } from '@util/lib/entitlements'
-import { getPack } from '@util/lib/packs'
-import { getSiteUrl } from '@util/lib/site-url'
+import { resolveItem } from '@util/lib/item'
+import { notifyOwner } from '@util/lib/notify'
+import { createRequest } from '@util/lib/requests'
 import { store } from '@util/lib/store'
-import { sendUnlockEmail } from '@util/lib/unlock-email'
 
 export const runtime = 'nodejs'
 
-const reply = (status = 200) => NextResponse.json({ ok: true }, { status, headers: { 'Cache-Control': 'no-store' } })
+const fail = (error, status = 400) => NextResponse.json({ error }, { status, headers: { 'Cache-Control': 'no-store' } })
+const clean = (value, max) => String(value ?? '').replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, max)
 
-/**
- * "Restore purchases". Always answers the same way, so it cannot be used to find out who is a customer.
- * Limited to 3 emails per address per hour.
- */
+/** A buyer outside Africa asks us to sell them something by hand. */
 export async function POST(request) {
   const body = await request.json().catch(() => null)
-  const email = String(body?.email ?? '').trim().toLowerCase()
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
-    return NextResponse.json({ error: 'Enter a valid email address.' }, { status: 400 })
-  }
+  if (!body) return fail('Invalid request.')
 
-  if ((await store.incr(`restore:${email}`, 3600)) > 3) return reply()
+  // Honeypot: real people never fill this hidden field
+  if (body.website) return NextResponse.json({ ok: true })
 
-  try {
-    const orders = (await getPurchases(email))
-    const live = []
-    for (const order of orders) if (!(await store.get(`revoked:${order.o}`))) live.push(order)
+  const email = clean(body.email, 254).toLowerCase()
+  const name = clean(body.name, 100)
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail('Enter a valid email address.')
+  if (!name) return fail('Please tell us your name.')
 
-    if (live.length) {
-      const titles = (await Promise.all([...new Set(live.map((o) => o.p))].map(getPack))).filter(Boolean).map((p) => p.title)
-      await sendUnlockEmail({
-        to: email,
-        titles,
-        unlockUrl: `${getSiteUrl(request)}/api/unlock/${signUnlockLink(live)}`,
-      })
-    }
-  } catch (error) {
-    console.error('[unlock] restore failed', error)
-  }
-  return reply()
+  const item = await resolveItem(body.item)
+  if (!item) return fail('That item is not available.', 404)
+
+  // At most 5 requests per email per hour
+  if ((await store.incr(`reqlimit:${email}`, 3600)) > 5) return fail('Too many requests. Please try again later.', 429)
+
+  const record = await createRequest({
+    name,
+    email,
+    message: clean(body.message, 1000),
+    country: request.headers.get('x-vercel-ip-country') || request.headers.get('cf-ipcountry') || null,
+    item,
+  })
+
+  await notifyOwner(
+    `New purchase request ${record.id}\n${name} <${email}>${record.country ? ` (${record.country})` : ''}\n${item.title} · $${item.usd}${record.message ? `\n"${record.message}"` : ''}`
+  )
+
+  return NextResponse.json({ ok: true, id: record.id }, { headers: { 'Cache-Control': 'no-store' } })
 }

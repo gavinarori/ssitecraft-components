@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server'
 
-import { downloadLinkHours, signDownloadToken } from '@util/lib/download-token'
-import { recordPurchase, signUnlockLink } from '@util/lib/entitlements'
-import { sendDeliveryEmail } from '@util/lib/email'
+import { sendAccessLink } from '@util/lib/access-link'
+import { recordPurchase } from '@util/lib/entitlements'
 import { getPack } from '@util/lib/packs'
-import { sendUnlockEmail } from '@util/lib/unlock-email'
 import { getProvider } from '@util/lib/payments'
 import { getSiteUrl } from '@util/lib/site-url'
 import { store } from '@util/lib/store'
@@ -16,50 +14,50 @@ export const dynamic = 'force-dynamic'
 const DAY = 86_400
 const ok = (body = {}) => NextResponse.json({ ok: true, ...body })
 
-async function unlockPack(event, request) {
-  const pack = event.pack ? await getPack(event.pack) : null
-  if (!event.email || !pack) {
-    console.error('[webhook] pack order is missing email or pack. Unlock manually.', event.orderId, event.pack)
-    return
-  }
-  const componentId = event.kind === 'component' ? event.component : null
-  if (event.kind === 'component' && !pack.hasComponent(componentId)) {
-    console.error('[webhook] component order for unknown component. Unlock manually.', event.orderId, event.pack, componentId)
-    return
-  }
-  const orders = await recordPurchase({ email: event.email, orderId: event.orderId, packId: pack.id, componentId })
-  const mine = orders.filter((order) => order.o === event.orderId)
-  await sendUnlockEmail({
-    to: event.email,
-    titles: [componentId ? `${pack.title} (component ${componentId})` : pack.title],
-    unlockUrl: `${getSiteUrl(request)}/api/unlock/${signUnlockLink(mine)}`,
-  })
-}
-
-async function deliver(event, request) {
-  if (!event.email || !event.slug || !event.tier) {
-    // Retrying cannot fix missing data, so answer 200 and leave a trail to follow up by hand
-    console.error('[webhook] paid order is missing email, slug or tier. Deliver manually.', event.orderId)
-    return
+/** Records what was bought against the buyer's email, then gets them their access link. */
+async function fulfil(event, request, provider) {
+  if (!event.email) {
+    console.error('[webhook] paid order has no email. Fulfil manually.', event.orderId)
+    return {}
   }
 
-  const template = await getTemplateServer(event.slug)
-  if (!template) {
-    console.error(`[webhook] order ${event.orderId} is for unknown template "${event.slug}". Deliver manually.`)
-    return
+  // If the provider reports what was paid, it must cover the price (an underpayment unlocks nothing)
+  const underpaid = (usdPrice) => {
+    if (event.amount == null || !provider.minimumAmount) return false
+    const min = provider.minimumAmount(usdPrice)
+    return event.currency !== min.currency || event.amount < min.amount
   }
 
-  const hours = downloadLinkHours()
-  const token = signDownloadToken({ orderId: event.orderId, slug: event.slug, tier: event.tier })
+  if (event.kind === 'pack' || event.kind === 'component') {
+    const pack = event.pack ? await getPack(event.pack) : null
+    const componentId = event.kind === 'component' ? event.component : null
+    if (!pack || (componentId !== null && !pack.hasComponent(componentId))) {
+      console.error('[webhook] order is for an unknown pack/component. Unlock manually.', event.orderId, event.pack, componentId)
+      return {}
+    }
+    if (underpaid(componentId !== null ? pack.unitPrice(componentId) : pack.price)) {
+      console.error('[webhook] amount paid is below the price. Check and unlock manually.', event.orderId, event.amount, event.currency)
+      return {}
+    }
+    await recordPurchase({ email: event.email, orderId: event.orderId, packId: pack.id, componentId })
+  } else {
+    const template = event.slug ? await getTemplateServer(event.slug) : null
+    if (!template || !event.tier) {
+      console.error(`[webhook] order ${event.orderId} is for an unknown template/tier. Deliver manually.`)
+      return {}
+    }
+    if (underpaid(template.price?.[event.tier])) {
+      console.error('[webhook] amount paid is below the price. Check and deliver manually.', event.orderId, event.amount, event.currency)
+      return {}
+    }
+    await recordPurchase({ email: event.email, orderId: event.orderId, template: { slug: template.slug, tier: event.tier } })
+  }
 
-  await sendDeliveryEmail({
-    to: event.email,
-    name: event.name,
-    templateTitle: template.title,
-    tier: event.tier,
-    downloadUrl: `${getSiteUrl(request)}/api/download/${token}`,
-    expiresInHours: hours,
-  })
+  // Test purchases (from /test-purchase) skip the email and hand the link back instead
+  const test = event.test === true && process.env.ENABLE_TEST_PURCHASES === '1'
+  const result = await sendAccessLink({ email: event.email, siteUrl: getSiteUrl(request), test })
+  if (test && result.link) await store.set(`testlink:${event.orderId}`, result.link, 600)
+  return result
 }
 
 export async function POST(request, { params }) {
@@ -89,7 +87,7 @@ export async function POST(request, { params }) {
   if (!claimed) return ok({ duplicate: true })
 
   try {
-    if (event.type === 'order_paid') await (event.kind === 'pack' || event.kind === 'component' ? unlockPack : deliver)(event, request)
+    if (event.type === 'order_paid') await fulfil(event, request, provider)
     if (event.type === 'order_refunded') await store.set(`revoked:${event.orderId}`, '1')
 
     await store.set(lockKey, 'done', 30 * DAY)
