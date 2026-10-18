@@ -17,6 +17,7 @@ export async function POST(request) {
   const tier = body?.tier
 
   const provider = getProvider()
+  const email = typeof body?.email === 'string' ? body.email.trim().toLowerCase() : ''
 
   // Component pack: { pack: 'application-ui-login' }
   if (typeof body?.pack === 'string') {
@@ -38,8 +39,8 @@ export async function POST(request) {
       const siteUrl = getSiteUrl(request)
       const url =
         single !== null
-          ? await provider.createComponentCheckout({ pack, componentId: single, siteUrl })
-          : await provider.createPackCheckout({ pack, siteUrl })
+          ? await provider.createComponentCheckout({ pack, componentId: single, siteUrl, email })
+          : await provider.createPackCheckout({ pack, siteUrl, email })
       return NextResponse.json({ url }, { headers: { 'Cache-Control': 'no-store' } })
     } catch (error) {
       if (error instanceof PaymentError) return fail(error.publicMessage, error.status)
@@ -50,7 +51,7 @@ export async function POST(request) {
 
   if (typeof slug !== 'string' || !isTier(tier)) return fail('Invalid request.', 400)
 
-  // Server-side record, because only it has the payment variant IDs
+  // Server-side record: prices and payment IDs are never taken from the browser
   const template = await getTemplateServer(slug)
   if (!template) return fail('Template not found.', 404)
   if (template.price[tier] == null) return fail('That license is not available for this template.', 400)
@@ -58,7 +59,7 @@ export async function POST(request) {
   if (!provider) return fail('Checkout is not set up yet. Please try again later.', 503)
 
   try {
-    const url = await provider.createCheckout({ template, tier, siteUrl: getSiteUrl(request) })
+    const url = await provider.createCheckout({ template, tier, siteUrl: getSiteUrl(request), email })
     return NextResponse.json({ url }, { headers: { 'Cache-Control': 'no-store' } })
   } catch (error) {
     if (error instanceof PaymentError) return fail(error.publicMessage, error.status)
